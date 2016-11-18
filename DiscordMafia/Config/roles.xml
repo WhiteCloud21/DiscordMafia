@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<Roles>
+  <Role Id="Commissioner">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>0</MinPlayers>
+  </Role>
+  <Role Id="Doctor">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Wench">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Judge">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Elder">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Highlander">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Homeless">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Sheriff">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Sergeant">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>13</MinPlayers>
+  </Role>
+  <Role Id="Killer">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>9</MinPlayers>
+  </Role>
+  <Role Id="Lawyer">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>9</MinPlayers>
+  </Role>
+  <Role Id="Demoman">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>9</MinPlayers>
+  </Role>
+  <Role Id="Maniac">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>8</MinPlayers>
+  </Role>
+</Roles>

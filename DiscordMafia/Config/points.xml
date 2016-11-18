@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<Points>
+  <Item>
+    <string>Win</string>
+    <PointsInfo>
+      <int>4</int>
+      <string>За победу всем в победившей команде</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>WinAndSurvive</string>
+    <PointsInfo>
+      <int>4</int>
+      <string>За победу всем выжившим в победившей команде (дополнительно к очкам за победу)</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>Survive</string>
+    <PointsInfo>
+      <int>2</int>
+      <string>За выживание всем выжившим в конце игры</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>Draw</string>
+    <PointsInfo>
+      <int>1</int>
+      <string>За ничью всем выжившим (дополнительно к очкам за выживание)</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>CivilKillCivil</string>
+    <PointsInfo>
+      <int>-1</int>
+      <string>Честным за повешение честного (только тем, кто против него голосовал)</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>CivilKillCom</string>
+    <PointsInfo>
+      <int>-3</int>
+      <string>Честным за повешение комиссара (только тем, кто против него голосовал) (прибавляется к очкам за повешение честного)</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>CivilKillMaf</string>
+    <PointsInfo>
+      <int>3</int>
+      <string>=Честным и мафам за повешение якудзы, честным и якудзе за повешение мафа (только тем, кто против него голосовал)</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>ComKillMaf</string>
+    <PointsInfo>
+      <int>3</int>
+      <string>Комиссару/бомжу/шерифу за убийство/вычисление мафа</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>ComKillCivil</string>
+    <PointsInfo>
+      <int>-2</int>
+      <string>Комиссару/шерифу за убийство честного</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>SheriffKillCom</string>
+    <PointsInfo>
+      <int>-1</int>
+      <string>Шерифу за убийство комиссара (прибавляется к очкам за убийство честного)</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>MafKill</string>
+    <PointsInfo>
+      <int>1</int>
+      <string>Мафам и якудзе за любое убийство</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>MafKillOpposite</string>
+    <PointsInfo>
+      <int>3</int>
+      <string>Мафам за убийство якудзы и наоборот (складывается с очками за любое убийство)</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>MafKillCom</string>
+    <PointsInfo>
+      <int>3</int>
+      <string>Мафам, киллеру и якудзе за убийство комиссара (складывается с очками за любое убийство)</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>LawyerCheckCom</string>
+    <PointsInfo>
+      <int>5</int>
+      <string>Адвокату за вычисление комиссара</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>WenchBlockCom</string>
+    <PointsInfo>
+      <int>-2</int>
+      <string>Путане за блокировку комиссара</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>WenchBlockMaf</string>
+    <PointsInfo>
+      <int>3</int>
+      <string>Путане за блокировку мафа</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>DocHealCivil</string>
+    <PointsInfo>
+      <int>3</int>
+      <string>Доктору за спасение честного</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>DocHealCom</string>
+    <PointsInfo>
+      <int>1</int>
+      <string>Доктору за спасение комиссара (прибавляется к очкам за спасение честного)</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>DocHealMaf</string>
+    <PointsInfo>
+      <int>-2</int>
+      <string>Доктору за спасение мафа</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>JudgeJustifyCivil</string>
+    <PointsInfo>
+      <int>3</int>
+      <string>Судье за оправдание честного</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>JudgeJustifyCom</string>
+    <PointsInfo>
+      <int>1</int>
+      <string>Судье за оправдание комиссара (прибавляется к очкам за оправдание честного)</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>JudgeJustifyMaf</string>
+    <PointsInfo>
+      <int>-2</int>
+      <string>Судье за оправдание мафа</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>NeutralKill</string>
+    <PointsInfo>
+      <int>4</int>
+      <string>Нейтральному персонажу за каждое убийство</string>
+    </PointsInfo>
+  </Item>
+</Points>

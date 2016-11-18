@@ -1,0 +1,635 @@
+<?xml version="1.0"?>
+<Messages>
+  <Item>
+    <string>YouKilled</string>
+    <ArrayOfString>
+      <string>Вы были убиты...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ShopDisabled</string>
+    <ArrayOfString>
+      <string>В этом игровом режиме магазин отключен.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Citizen</string>
+    <ArrayOfString>
+      <string>Вы типичный представитель мирного населения города. Ваша задача - ночью спать, а днем попытаться вычислить мафа и на голосовании посадить его.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Commissioner</string>
+    <ArrayOfString>
+      <string>Именно Вы являетесь главной надеждой всего мирного населения на спокойную жизнь. Ваша задача - отстрелять и пересажать всех мафиози. Помните: Вы работаете под прикрытием. Если мафиози Вас вычислят, то убьют при первой же возможности! Каждую ночь можно проверить статус любого игрока. Если он окажется мафом, то будет убит.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Wench</string>
+    <ArrayOfString>
+      <string>Каждую ночь Вы можете соблазнить любого(но не 2 раза подряд). У этого игрока на одну ночь заблокируется спецспособность(если она есть). Благодаря этой блокировке, Вы можете не только не дать выстрелить мафу, но и не дать комиссару проверить очередного подозреваемого. Так что подумайте, прежде чем спать с кем-то:)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Judge</string>
+    <ArrayOfString>
+      <string>Вы - справедливый неподкупный судья. Только Вы можете днем оправдать любого игрока(но не 2 раза подряд и не себя).</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Doctor</string>
+    <ArrayOfString>
+      <string>У Вас есть уникальная способность - каждую ночь Вы можете спасти жизнь одному из игроков. Будьте осторожны, если комиссар проверит спасаемого Вами мафа, то он не убьёт его!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Elder</string>
+    <ArrayOfString>
+      <string>Ваша честность не подвергается сомнению. Поэтому Вас невозможно повесить днем. Вы можете выбрать, кого повесят за Вас. Но, к сожалению, пулям мафиози безразлично, кто Вы...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Highlander</string>
+    <ArrayOfString>
+      <string>У Вас есть бесценный дар - бессмертие. Поэтому Вас не смогут убить. Но днем повесить могут.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Sheriff</string>
+    <ArrayOfString>
+      <string>Вы - почти комиссар. Главное отличие - сначала стреляете, а только потом думаете. Ваш выстрел смертелен, поэтому все-таки советую подумать прежде, чем стрелять. А то мирного убьете:(</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Homeless</string>
+    <ArrayOfString>
+      <string>К сожалению, Ваша квартира сгорела, а государство решило не давать новую. Но благодаря комиссару, у Вас появилась крыша над головой. И в качестве благодарности Вы работаете с ним и подсматриваете за жителями.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Sergeant</string>
+    <ArrayOfString>
+      <string>Вы - помощник комиссара. Знаете статусы проверяемых им игроков, но не можете повлиять на его действия. В случае смерти комиссара, Вы занимаете его место и начинаете отстреливать мафиози.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Mafioso</string>
+    <ArrayOfString>
+      <string>Притворство - вот Ваш конёк. Днём Вы притворяетесь честным жителем, а ночью вместе с другими мафиози отстреливаете граждан по одному. Если найдете комиссара - убивайте, он ваш самый опасный враг!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Killer</string>
+    <ArrayOfString>
+      <string>Вы были отличным мафиози, поэтому Босс Вас повысил. Теперь Вы не налетаете в составе целой банды, а сами убиваете жертву. Быть профи среди мафиози так просто!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Lawyer</string>
+    <ArrayOfString>
+      <string>Ваша задача - защищать мафиози. Каждую ночь Вы можете узнать статус любого жителя. Найдите комиссара и сообщите мафам, кто он!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Demoman</string>
+    <ArrayOfString>
+      <string>На Новый Год Вы любили взрывать петарды. Со временем это хобби переросло в работу.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Yakuza</string>
+    <ArrayOfString>
+      <string>Притворство - вот Ваш конёк. Днём Вы притворяетесь честным жителем, а ночью вместе с другими якудзами отстреливаете граждан и мафов по одному. Если найдете комиссара - убивайте, он ваш самый опасный враг!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Maniac</string>
+    <ArrayOfString>
+      <string>Никто не может понять, что творится у Вас в голове. "Убивай!" - каждую ночь Вы прислушиваетесь к внутреннему голосу и убиваете всех подряд. Мафы, мирные граждане, комиссар... Все они равны перед бензопилой и топором!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_RobinHood</string>
+    <ArrayOfString>
+      <string>Вы не можете успокоиться - социальное неравенство не дает покоя. Все игроки со спецспособностями - Ваши враги. Уничтожайте их каждую ночь по одному и не трогайте мирных граждан без способностей!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>GameStart_Role_Default</string>
+    <ArrayOfString>
+      <string>Ваш статус {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>GameStart_Role_Doctor</string>
+    <ArrayOfString>
+      <string>Ваша задача - спасать жизни. Вы - военный {role}.</string>
+      <string>Ваш статус {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Commissioner</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Вы можете проверить одного игрока. Если проверяемый окажется мафом, то он будет убит.
+        Для проверки игрока введите <b>/пров X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Mafioso</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Выберите с другими мафиози (если они есть) жертву и убейте её.
+        Для убийства игрока введите <b>/убить X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Wench</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Для проверки игрока введите <b>/спать X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Doctor</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Кого вылечим сегодня ночью? (команда <b>/лечить X</b>, где <b>X</b> - номер игрока)]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Highlander</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[На тот случай, если Вас захотят убить, Вы можете выбрать игрока, который будет подстрелен.
+        Для убийства игрока введите <b>/убить X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Homeless</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Кого проверим сегодня ночью? (команда <b>/пров X</b>, где <b>X</b> - номер игрока).]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Sheriff</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Кого подстрелим сегодня ночью?(команда <b>/убить X</b>, где <b>X</b> - номер игрока). Не надо стрелять в мирных! Вы за них играете...]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Killer</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Выберите жертву и убейте её. Вы самостоятельный стрелок, и стреляете отдельно от остальных мафов.
+        Для убийства игрока введите </b>/убить X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Lawyer</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Вы можете проверить одного игрока.
+        Для проверки игрока введите <b>/пров X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Demoman</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Что подорвем сегодня ночью?
+        Введите <b>/подорвать X</b>, где <b>X</b> - число от 0 до 2.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Demoman_ForPlayers</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Куда пойдем сегодня ночью?
+        Введите <b>/пойти X</b>, где <b>X</b> - число от 0 до 2]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Yakuza</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Выберите с другими якудзами (если они есть) жертву и убейте её.
+        Для убийства игрока введите <b>/убить X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Maniac</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Кого заманьячим сегодня ночью? :)
+        Для убийства игрока введите <b>/убить X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayInfo_Elder</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[На тот случай, если вас захотят повесить, вы можете выбрать игрока, который будет повешен.
+        Для осуждения игрока введите <b>/посадить X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayInfo_Judge</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Вы можете оправдать одного игрока. Главное - не оправдывайте мафов.
+        Для оправдания игрока введите <b>!оправдать X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>EndNight</string>
+    <ArrayOfString>
+      <string>После ночи снова наступило утро, кого же найдут в канаве?</string>
+      <string>Ночь прошла, настало утро, на душе плохое чувство... Солнце встало над горизонтом. Но для всех ли?</string>
+      <string>Утром по всей улице раздавались крики... Найдены новые трупы или это криковая терапия?</string>
+      <string>Утро пришло! радость и счастье в дом принесло, но, к сожалению, не всем...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>StartMorning</string>
+    <ArrayOfString>
+      <string>Мирное население обсуждает, кого сегодня судить.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>StartDay</string>
+    <ArrayOfString>
+      <string><![CDATA[Голосуйте, не упустите свой шанс посадить мафа! Голосовать нужно командой <b>/посадить X</b>, где X - номер игрока.]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>StartEvening</string>
+    <ArrayOfString>
+      <string>День багряный вечереет...</string>
+      <string>Наступает ВЕЧЕР...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>StartNight</string>
+    <ArrayOfString>
+      <string>И снова ТЬМА покрывает улицы этого грешного города...</string>
+      <string>Наступает НОЧЬ...</string>
+      <string>Горожане в панике носятся по городу. Ведь уже сумерки, и на улице стало небезопасно.</string>
+      <string>Ночью все не так, как днем... Нехватка света заставляет людей совершать странные поступки.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayKillNoChoice</string>
+    <ArrayOfString>
+      <string>Голоса разделились, жители сегодня так никого и не посадили :(</string>
+      <string>Мирное население в очередной раз не успело никого посадить, проворонив свое счастье.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayKillNoActive</string>
+    <ArrayOfString>
+      <string>Жители видимо не выспались ночью и решили поспать днем...</string>
+      <string>Мирное население в очередной раз не успело никого посадить, проворонив свое счастье.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayKill</string>
+    <ArrayOfString>
+      <string>После непродолжительного суда {name}({role}) был повешен.</string>
+      <string>"Повесить {name}!" - таков был приговор самого гуманного суда в мире. Уже после того, как {name} испустил дух, жители узнали, что он был {role4}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayKillElder</string>
+    <ArrayOfString>
+      <string>Жители хотели посадить {name}, но вовремя одумались: ведь {name} оказался {role4}. </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ElderKill</string>
+    <ArrayOfString>
+      <string>{name} ({role}) был приговорён старейшиной к повешению.</string>
+      <string>"Эх, молодежь..." - голос старейшины звучал явно недовольно. Жители признали свою ошибку и поручили старейшине найти мафиози. И по приказу старейшины был повешен {name}, который оказался {role4}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>JudgeJustify</string>
+    <ArrayOfString>
+      <string>Жители хотели посадить {name}, но он был оправдан судьей.</string>
+      </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafKillNoChoice</string>
+    <ArrayOfString>
+      <string>Мафиози спорили-спорили, но не приняли общего решения и никого не убили.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafKillNoActive</string>
+    <ArrayOfString>
+      <string>Мафиози всю ночь совещались, кого бы убить и обчистить, но настало утро, а они так ничего и не решили и остались дома...</string>
+      <string>Мафы этой ночью почти придумали план! Но внезапно приехала бабушка главаря и за ухо отвела его домой.</string>
+      <string>Мафы в машине всю ночь прождали жертву в машине, но она так и не появилась...</string>
+      <string>Не было уже ставших родными: воя сирен, и грохота выстрелов со скрипом тормозов и оглушительным звоном разбитых стекол, из логова Мафов доносился лишь дикий и громкий храп!!!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafKill</string>
+    <ArrayOfString>
+      <string>Мафиози сегодня зверски расправились с {name}, который оказался {role4}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafKillHelpDoc</string>
+    <ArrayOfString>
+      <string>Мафиози чуть было не убили {name}, но доктор провел успешную операцию.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafKillHighlander</string>
+    <ArrayOfString>
+      <string>Мафиози хотели сделать решето из жителя, но тот оказался {role4} и выжил.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaKillNoChoice</string>
+    <ArrayOfString>
+      <string>Японцы спорили-спорили, но не приняли общего решения и никого не убили.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaKillNoActive</string>
+    <ArrayOfString>
+      <string>Японцы всю ночь совещались, кого бы убить и обчистить, но настало утро, а они так ничего и не решили и остались дома...</string>
+      <string>Японская мафия решила поспать ночью. А ведь правильно, ночь якудзе для этого и нужна!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaKill</string>
+    <ArrayOfString>
+      <string>Японская мафия сегодня зверски расправились с {name}, который оказался {role4}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaKillHelpDoc</string>
+    <ArrayOfString>
+      <string>Якудза чуть было не убила {name}, но доктор провел успешную операцию.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaKillHighlander</string>
+    <ArrayOfString>
+      <string>Японская мафия хотели сделать решето из жителя, но тот оказался {role4} и выжил.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComNoActive</string>
+    <ArrayOfString>
+      <string>Видимо, комиссар решил вздремнуть сегодня...</string>
+      <string>Комиссара бросила жена и забрала детей... Утром грязного и небритого его нашли возле бара. </string>
+      <string>Комиссар не мог себе отказать в удовольствии выспаться в эту ночь. Тем более, отпуска у него уже не было 20 лет.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComCheckCivil</string>
+    <ArrayOfString>
+      <string>Комиссар заглянул в окно к мирному жителю...</string>
+      <string>Комиссар заглянул в окно мирного жителя,мирный житель как раз выкидывал мусор из окна... </string>
+      <string>Комиссар ошибся и чуть не завалил мирного жителя :)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>HomelessCheck</string>
+    <ArrayOfString>
+      <string>Бомж, собирая бутылки, заметил странно ведущего себя жителя. Проследив за {role4}, бомж узнал, кем является житель на самом деле.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>LawyerCheck</string>
+    <ArrayOfString>
+      <string>Результат проверки: Статус {name} - {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>SheriffKillHighlander</string>
+    <ArrayOfString>
+      <string>Шериф, никого не спрашивая, подстрелил горца, но тот был в хорошем настроении и не стал мстить, а просто вынул пулю:)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>SheriffKillHelpDoc</string>
+    <ArrayOfString>
+      <string>Шериф подстрелил {name}, но доктор оказался не согласен с решением шерифа... Он извлек пулю и остановил кровь.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>SheriffKill</string>
+    <ArrayOfString>
+      <string>Шериф, никого не спрашивая, подстрелил {name}, который оказался {role4}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>KillerKillHighlander</string>
+    <ArrayOfString>
+      <string>Киллер - профи, но ему не повезло, т.к. его "жертва" оказалась {role4}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>KillerKillHelpDoc</string>
+    <ArrayOfString>
+      <string>Киллер чуть было не убил {name}, но доктор провел успешную операцию.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>KillerKill</string>
+    <ArrayOfString>
+      <string>Киллер выстрелом в голову убил {name}, который оказался {role4}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKillMaf</string>
+    <ArrayOfString>
+      <string>Комиссар провел ночь не зря, он вычислил и убил {name}, который оказался {role4}.</string>
+      <string>Комиссар Каттани бегал вокруг логова мафов и стучал по водосточным трубам, пока один из них не вышел посмотреть в чем дело. Каттани пристрелил {name} на месте,и с диким хохотом убежал восвояси. Ах да, его статус - {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKillManiac</string>
+    <ArrayOfString>
+      <string>{role} в темной подворотне встретил даму преклонных лет с щетиной на лице, ему и невдомек было, что это переодетый Комиссар Каттани... "Ни с места!"-прохрипел Каттани и пристрелил мерзавца {name}!</string>
+      <string>Каттани знал, что маньяка голыми руками не взять! Поэтому он одел перчатки, и придушил {role1} {name}...</string>
+      <string>Комиссар Каттани вычислил {role1} и решил огреть его сзади трубой по голове и задержать... Но, к сожалению, перестарался и принес в участок уже труп {name}...</string>
+      <string>{role} пробрался в офис Комиссара Каттани и вырубил электричество в тот самый момент, когда в его любимой мыльной опере Хуан Карлос должен был признаться Терезе в том, что он троюродный брат её двоюродной сестры, погибшей шесть лет назад от рук родного брата Хуана Карлоса, который был мужем ее тети. Каттани не мог простить это Маньяку и убил подлеца {name}...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKillMafHelpDoc</string>
+    <ArrayOfString>
+      <string>Комиссар расстрелял мафа, но доктор того вылечил. Интересно, зачем...</string>
+      <string>Комиссар расстрелял мафа. "Кажется, он умер" - подумал он и ушел искать остальных. Но мимо проходил Док... Дальше вы и сами знаете :(</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKillManiacHelpDoc</string>
+    <ArrayOfString>
+      <string>Комиссар расстрелял маньяка, но доктор того вылечил.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKillMafPrivate</string>
+    <ArrayOfString>
+      <string>Вы убили мафа. Поздравляю :)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ManiacKillHighlander</string>
+    <ArrayOfString>
+      <string>=Маньяк изрезал, распилил, а потом расстрелял жителя. Но, к сожалению для маньяка, этот житель - {role}..</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ManiacKillHelpDoc</string>
+    <ArrayOfString>
+      <string>Маньяк изрезал {name}, но доктор собрал кусочки обратно и вдохнул в них жизнь.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ManiacKill</string>
+    <ArrayOfString>
+      <string>Маньяк сделал салат из {name}, который оказался {role4}.</string>
+      <string>{name} ({role0}) ночью был убит маньяком. На это указывает топор, найденный в оторванной голове..</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>WenchBlock</string>
+    <ArrayOfString>
+      <string>{role} пробыл всю ночь у путаны :)</string>
+      <string>Ходят слухи, что путана провела ночь с {role4}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>HighlanderKill</string>
+    <ArrayOfString>
+      <string>Горец извлек из себя пулю, достал приготовленное оружие и подстрелил {name}, который оказался {role4}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>AIDSKill</string>
+    <ArrayOfString>
+      <string>{name} ({role}) умер от смертельной инфекции. Привет от путаны :)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKilled_ToSergeant</string>
+    <ArrayOfString>
+      <string>{role} {name} был убит. Пришло твоё время. Теперь ты - надежда мирного населения!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>Win_None</string>
+    <ArrayOfString>
+      <string><![CDATA[<b>Силы равны. Ничья.</b>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>Win_Civil</string>
+    <ArrayOfString>
+      <string><![CDATA[<b>Победили мирные горожане! Ура!</b>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>Win_Neutral</string>
+    <ArrayOfString>
+      <string><![CDATA[<b>Победа за нейтральным персонажем!</b>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>Win_Mafia</string>
+    <ArrayOfString>
+      <string><![CDATA[<b>Победили мафы!</b>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>Win_Yakuza</string>
+    <ArrayOfString>
+      <string><![CDATA[<b>Победила японская мафия!</b>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Commissioner</string>
+    <ArrayOfString>
+      <string>Комиссар Каттани спланировал сложную операцию по поимке мафов. Посмотрим утром, насколько качественно.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Wench</string>
+    <ArrayOfString>
+      <string>Путана вышла из дома, кому-то сегодня не удастся поспать...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Doctor</string>
+    <ArrayOfString>
+      <string>Доктору не сиделось на месте, он знал, что кому-то нужна его помощь...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Homeless</string>
+    <ArrayOfString>
+      <string>Бомж заглянул в одну из квартир...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Sheriff</string>
+    <ArrayOfString>
+      <string>Шериф отправился на охоту... Не промахнулся бы...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Mafioso</string>
+    <ArrayOfString>
+      <string>Мафиози выбрали очередную жертву...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Killer</string>
+    <ArrayOfString>
+      <string>Киллер отправился выполнять заказ на убийство...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Lawyer</string>
+    <ArrayOfString>
+      <string>Адвокат выиграл очередной суд. Утром у него будет досье на одного из жителей.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Yakuza</string>
+    <ArrayOfString>
+      <string>Японская мафия засела в одной из квартир. Кого-то ждёт сюрприз:)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Maniac</string>
+    <ArrayOfString>
+      <string>Маньяк подготовил всё необходимое: ножницы, бензопилу и, конечно, топор. Кого-то ждет жестокая смерть...</string>
+    </ArrayOfString>
+  </Item>
+</Messages>
