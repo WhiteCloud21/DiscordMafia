@@ -3,4 +3,5 @@
   <Token/>
   <ImageBaseUrl/>
   <DatabasePath>data/mafia-discord.sqlite</DatabasePath>
+  <GameChannel>248174400019496962</GameChannel>
 </Settings>

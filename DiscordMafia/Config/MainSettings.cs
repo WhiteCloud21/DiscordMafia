@@ -14,6 +14,7 @@ namespace DiscordMafia.Config
         public string Token { get; protected set; }
         public string ImageBaseUrl { get; protected set; }
         public string DatabasePath { get; protected set; }
+        public ulong  GameChannel { get; protected set; }
 
         public MainSettings(params string[] filenames)
         {
@@ -65,6 +66,9 @@ namespace DiscordMafia.Config
                             break;
                         case "DatabasePath":
                             DatabasePath = reader.ReadElementContentAsString();
+                            break;
+                        case "GameChannel":
+                            GameChannel = ulong.Parse(reader.ReadElementContentAsString());
                             break;
                         default:
                             reader.Skip();

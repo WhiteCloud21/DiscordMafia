@@ -33,11 +33,11 @@ namespace DiscordMafia
         protected Vote currentYakuzaVote { get; set; }
         public Config.MessageBuilder messageBuilder { get; set; }
         protected KillManager killManager { get; set; }
+        protected int PlayerCollectingRemainingTime = 0;
 
-        public Game(System.Threading.SynchronizationContext syncContext, DiscordClient client)
+        public Game(System.Threading.SynchronizationContext syncContext, DiscordClient client, Config.MainSettings mainSettings)
         {
-            // TODO Костыль
-            gameChannel = 248174400019496962;
+            gameChannel = mainSettings.GameChannel;
 
             this.syncContext = syncContext;
             this.client = client;
@@ -685,7 +685,8 @@ namespace DiscordMafia
                 message += Environment.NewLine + "<b>/join</b> (<b>/я</b>) - Присоединиться к игре";
                 messageBuilder.Text(message, false).SendPublic(gameChannel);
                 currentState = GameState.PlayerCollecting;
-                timer.Interval = settings.PlayerCollectingTime;
+                timer.Interval = Math.Min(settings.PlayerCollectingTime, 60000);
+                PlayerCollectingRemainingTime = (int)(settings.PlayerCollectingTime - timer.Interval);
                 timer.Start();
                 client.SetGame("Мафия (ожидание игроков)");
             }
@@ -730,6 +731,17 @@ namespace DiscordMafia
 
         private void StopPlayerCollecting()
         {
+            if (PlayerCollectingRemainingTime > 1000)
+            {
+                var message = String.Format("Осталось <b>{0}</b> секунд. Ещё есть шанс поиграть!", PlayerCollectingRemainingTime / 1000);
+                message += Environment.NewLine + "<b>/join</b> (<b>/я</b>) - Присоединиться к игре";
+                messageBuilder.Text(message, false).SendPublic(gameChannel);
+
+                timer.Interval = Math.Min(settings.PlayerCollectingTime, 60000);
+                PlayerCollectingRemainingTime -= (int)timer.Interval;
+                timer.Start();
+                return;
+            }
             if (currentState == GameState.PlayerCollecting && currentPlayers.Count >= settings.MinPlayers)
             {
                 messageBuilder.Text(String.Format("Набор игроков окончен. Участвуют: {0}", currentPlayers.Count)).SendPublic(gameChannel);

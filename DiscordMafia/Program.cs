@@ -34,10 +34,10 @@ namespace DiscordMafia
             connection = new SQLiteConnection($"Data Source={settings.DatabasePath};Version=3;");
             connection.Open();
 
-            var _client = new DiscordClient();
-            game = new Game(syncContext, _client);
+            var client = new DiscordClient();
+            game = new Game(syncContext, client, Settings);
 
-            _client.MessageReceived += (s, e) =>
+            client.MessageReceived += (s, e) =>
             {
                 syncContext.Post((state) =>
                 {
@@ -48,8 +48,8 @@ namespace DiscordMafia
                 }, null);
             };
 
-            await _client.Connect(settings.Token, TokenType.Bot);
-            _client.SetGame(null);
+            await client.Connect(settings.Token, TokenType.Bot);
+            client.SetGame(null);
         }
 
         private static void ProcessMessage(MessageEventArgs e)

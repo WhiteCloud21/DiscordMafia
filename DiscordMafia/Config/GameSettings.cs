@@ -45,11 +45,11 @@ namespace DiscordMafia.Config
             NightTime = 60000;
             InfectionChancePercent = 33;
             ShowNightActions = true;
-            Messages = Messages.getInstance("config/messages.xml");
+            Messages = Messages.getInstance("Config/messages.xml");
             Console.WriteLine("Сообщения загружены");
-            Points = Points.getInstance("config/points.xml");
+            Points = Points.getInstance("Config/points.xml");
             Console.WriteLine("Конфигурация очков загружена");
-            Roles = Roles.getInstance("config/roles.xml");
+            Roles = Roles.getInstance("Config/roles.xml");
             Console.WriteLine("Конфигурация ролей загружена");
         }
     }
