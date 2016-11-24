@@ -50,6 +50,7 @@ namespace DiscordMafia.Roles
                     throw new System.ArgumentException("Себя можно лечить только один раз за игру.");
                 }
                 healActivity?.Cancel();
+                healActivity = null;
                 if (value != null)
                 {
                     healActivity = new HealActivity(Player, value);

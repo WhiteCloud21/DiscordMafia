@@ -50,6 +50,7 @@ namespace DiscordMafia.Roles
                     throw new System.ArgumentException("Нельзя оправдать себя.");
                 }
                 justifyActivity?.Cancel();
+                justifyActivity = null;
                 if (value != null)
                 {
                     justifyActivity = new JustifyActivity(Player, value);
