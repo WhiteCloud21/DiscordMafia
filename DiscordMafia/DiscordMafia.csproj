@@ -117,6 +117,7 @@
     <Compile Include="Items\Mask.cs" />
     <Compile Include="KillManager.cs" />
     <Compile Include="Lib\SerializableDictionary.cs" />
+    <Compile Include="Messages\ChannelExtensions.cs" />
     <Compile Include="Messages\MessageBuilder.cs" />
     <Compile Include="Config\Storage.cs" />
     <Compile Include="Program.cs" />
