@@ -2,11 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using DiscordMafia.Client;
-using DiscordMafia.Config;
+using DiscordMafia.Messages;
 
 namespace DiscordMafia.Config
 {
@@ -88,31 +86,24 @@ namespace DiscordMafia.Config
             return this;
         }
 
-        public Message SendPrivate(InGamePlayerInfo player, bool clear = true, bool tts = false)
+        public Message[] SendPrivate(InGamePlayerInfo player, bool clear = true, bool tts = false)
         {
             return SendPrivate(player.user.Id, clear, tts);
         }
 
-        public Message SendPrivate(ulong userId, bool clear = true, bool tts = false)
+        public Message[] SendPrivate(ulong userId, bool clear = true, bool tts = false)
         {
-            Message message = null;
+            Message[] messages = null;
             if (string.IsNullOrEmpty(builtMessage))
             {
                 return null;
             }
-            if (tts)
-            {
-                message = GetPrivateChannel(userId).SendTTSMessage(Markup(builtMessage)).Result;
-            }
-            else
-            {
-                message = GetPrivateChannel(userId).SendMessage(Markup(builtMessage)).Result;
-            }
+            messages = GetPrivateChannel(userId).SplitAndSend(Markup(builtMessage), tts).Result;
             if (clear)
             {
                 Clear();
             }
-            return message;
+            return messages;
         }
 
         protected Channel GetPrivateChannel(ulong userId)
@@ -133,29 +124,22 @@ namespace DiscordMafia.Config
             return Channels[channelId];
         }
         
-        public Message SendPublic(Channel channel, bool clear = true, bool tts = false)
+        public Message[] SendPublic(Channel channel, bool clear = true, bool tts = false)
         {
-            Message message = null;
+            Message[] messages = null;
             if (string.IsNullOrEmpty(builtMessage))
             {
                 return null;
             }
-            if (tts)
-            {
-                message = channel.SendTTSMessage(Markup(builtMessage)).Result;
-            }
-            else
-            {
-                message = channel.SendMessage(Markup(builtMessage)).Result;
-            }
+            messages = channel.SplitAndSend(Markup(builtMessage), tts).Result;
             if (clear)
             {
                 Clear();
             }
-            return message;
+            return messages;
         }
 
-        public Message SendPublic(ulong chatId, bool clear = true, bool tts = false)
+        public Message[] SendPublic(ulong chatId, bool clear = true, bool tts = false)
         {
             return SendPublic(GetChannel(chatId), clear, tts);
         }
