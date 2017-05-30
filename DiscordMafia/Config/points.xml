@@ -46,28 +46,28 @@
     <string>CivilKillMaf</string>
     <PointsInfo>
       <int>3</int>
-      <string>=Честным и мафам за повешение якудзы, честным и якудзе за повешение мафа (только тем, кто против него голосовал)</string>
+      <string>Честным и мафам за повешение якудзы, честным и якудзе за повешение мафа (только тем, кто против него голосовал)</string>
     </PointsInfo>
   </Item>
   <Item>
     <string>ComKillMaf</string>
     <PointsInfo>
       <int>3</int>
-      <string>Комиссару/бомжу/шерифу за убийство/вычисление мафа</string>
+      <string>Комиссару/бомжу/шерифу/горцу за убийство/вычисление мафа</string>
     </PointsInfo>
   </Item>
   <Item>
     <string>ComKillCivil</string>
     <PointsInfo>
       <int>-2</int>
-      <string>Комиссару/шерифу за убийство честного</string>
+      <string>Комиссару/шерифу/горцу за убийство честного</string>
     </PointsInfo>
   </Item>
   <Item>
     <string>SheriffKillCom</string>
     <PointsInfo>
       <int>-1</int>
-      <string>Шерифу за убийство комиссара (прибавляется к очкам за убийство честного)</string>
+      <string>Шерифу/горцу за убийство комиссара (прибавляется к очкам за убийство честного)</string>
     </PointsInfo>
   </Item>
   <Item>

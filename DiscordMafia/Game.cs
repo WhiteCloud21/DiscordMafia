@@ -1582,6 +1582,20 @@ namespace DiscordMafia
                     var highlander = player.role as Highlander;
                     if (highlander.WasAttacked && highlander.PlayerToKill != null)
                     {
+                        switch (highlander.PlayerToKill.role.Team)
+                        {
+                            case Team.Civil:
+                                player.AddPoints("ComKillCivil");
+                                if (highlander.PlayerToKill.role is Commissioner)
+                                {
+                                    player.AddPoints("SheriffKillCom");
+                                }
+                                break;
+                            case Team.Mafia:
+                            case Team.Yakuza:
+                                player.AddPoints("ComKillMaf");
+                                break;
+                        }
                         messageBuilder.PrepareTextReplacePlayer("HighlanderKill", highlander.PlayerToKill).SendPublic(gameChannel);
                         killManager.Kill(highlander.PlayerToKill);
                     }
