@@ -33,11 +33,13 @@ namespace DiscordMafia
         protected Vote currentYakuzaVote { get; set; }
         public Config.MessageBuilder messageBuilder { get; set; }
         protected KillManager killManager { get; set; }
+        protected Achievement.AchievementManager achievementManager { get; set; }
         protected int PlayerCollectingRemainingTime = 0;
 
         public Game(System.Threading.SynchronizationContext syncContext, DiscordClient client, Config.MainSettings mainSettings)
         {
             gameChannel = mainSettings.GameChannel;
+            achievementManager = new Achievement.AchievementManager(this);
 
             this.syncContext = syncContext;
             this.client = client;
@@ -74,9 +76,6 @@ namespace DiscordMafia
                 var parts = text.Split(' ');
                 switch (parts[0])
                 {
-                    case "/test":
-                        messageBuilder.Text("Test is OK").SendPublic(channel, tts: true);
-                        return;
                     case "/help":
                     case "/хелп":
                         Help(user);

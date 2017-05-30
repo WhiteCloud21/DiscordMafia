@@ -164,7 +164,7 @@ namespace DiscordMafia.Config
             builtMessage = "";
         }
 
-        protected string Format(string format, IDictionary<string, object> values)
+        public string Format(string format, IDictionary<string, object> values)
         {
             var matches = Regex.Matches(format, @"\{(.+?)\}");
             List<string> words = (from Match match in matches select match.Groups[1].Value).ToList();

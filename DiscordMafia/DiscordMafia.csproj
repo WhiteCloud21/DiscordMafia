@@ -99,6 +99,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Achievement\Achievement.cs" />
+    <Compile Include="Achievement\AchievementManager.cs" />
     <Compile Include="Activity\JustifyActivity.cs" />
     <Compile Include="Activity\HealActivity.cs" />
     <Compile Include="Activity\VoteActivity.cs" />
@@ -108,6 +110,7 @@
     <Compile Include="Config\MainSettings.cs" />
     <Compile Include="Config\Roles.cs" />
     <Compile Include="Config\Points.cs" />
+    <Compile Include="DB\Achievement.cs" />
     <Compile Include="DB\User.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Config\GameSettings.cs" />

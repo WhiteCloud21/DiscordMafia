@@ -632,4 +632,10 @@
       <string>Маньяк подготовил всё необходимое: ножницы, бензопилу и, конечно, топор. Кого-то ждет жестокая смерть...</string>
     </ArrayOfString>
   </Item>
+  <Item>
+    <string>AchievementUnlocked</string>
+    <ArrayOfString>
+      <string>{name} заработал достижение {achievement}!</string>
+    </ArrayOfString>
+  </Item>
 </Messages>
