@@ -26,8 +26,7 @@ namespace DiscordMafia.Client
 
         public bool IsAdmin()
         {
-            // TODO Сделать нормально
-            return FirstName == "WhiteCloud";
+            return Id == Program.Settings.AdminID;
         }
     }
 }
