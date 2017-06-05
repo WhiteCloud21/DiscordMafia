@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
+using Mono.Data.Sqlite;
 using System.Linq;
 using DiscordMafia.Client;
 
@@ -20,13 +20,13 @@ namespace DiscordMafia.DB
                 field = allowedFields.First();
             }
             howMany = Math.Min(Math.Max(howMany, 1), 300);
-            var parameters = new SQLiteParameter[] { new SQLiteParameter(":limit", howMany) };
+            var parameters = new SqliteParameter[] { new SqliteParameter(":limit", howMany) };
             return User.findAllByCondition($"ORDER BY {field} DESC LIMIT :limit", parameters);
         }
 
         public static void RecalculateAll()
         {
-            var users = User.findAllByCondition($"", new SQLiteParameter[0]);
+            var users = User.findAllByCondition($"", new SqliteParameter[0]);
             foreach (var user in users)
             {
                 user.RecalculateStats();

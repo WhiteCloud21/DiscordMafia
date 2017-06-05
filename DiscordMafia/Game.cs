@@ -94,7 +94,11 @@ namespace DiscordMafia
                         StartGame();
                         return;
                     case "/погнали":
-                        StopPlayerCollecting();
+                    case "/го":
+                        if (user.IsAdmin())
+                        {
+                             StopPlayerCollecting();
+                        }
                         return;
                     case "/stop":
                     case "/стоп":
@@ -110,18 +114,21 @@ namespace DiscordMafia
                         return;
                     case "/отмена":
                     case "/cancel": // TODO Разделить и писать про отмену в публичный канал
+                    case "/нея":
                         if (currentState == GameState.PlayerCollecting)
                         {
                             UnRegisterPlayer(user);
                             return;
                         }
-                        if (currentPlayer != null && currentPlayer.role != null)
+                        if (currentPlayer != null && currentPlayer.role != null &&
+                            (currentState == GameState.Night || currentState == GameState.Day))
                         {
                             currentPlayer.CancelActivity();
                             messageBuilder.Text("Ваш голос отменен").SendPublic(gameChannel);
                         }
                         return;
                     case "/посадить":
+                    case "/повесить":
                     case "/imprison":
                         if (parts.Length > 1)
                         {

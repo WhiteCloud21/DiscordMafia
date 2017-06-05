@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SQLite;
+using Mono.Data.Sqlite;
 
 namespace DiscordMafia.DB
 {
@@ -26,7 +26,7 @@ namespace DiscordMafia.DB
             return !achievement.isNewRecord ? achievement : null;
         }
 
-        public static IEnumerable<Achievement> findAllByCondition(string condition, SQLiteParameter[] parameters)
+        public static IEnumerable<Achievement> findAllByCondition(string condition, SqliteParameter[] parameters)
         {
             var connection = Program.connection;
             var command = connection.CreateCommand();
@@ -50,7 +50,7 @@ namespace DiscordMafia.DB
 
         public static IEnumerable<Achievement> findAllByCondition(string condition)
         {
-            return findAllByCondition(condition, new SQLiteParameter[0]);
+            return findAllByCondition(condition, new SqliteParameter[0]);
         }
 
         protected Achievement populateRecord(DbDataReader reader)

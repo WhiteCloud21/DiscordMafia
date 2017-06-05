@@ -71,7 +71,7 @@ namespace DiscordMafia.Roles
                 {
                     if (player.isAlive && player.role.Team != Team.Mafia)
                     {
-                        game.messageBuilder.PrepareText("NightInfo_" + GetType().Name + "_ForPlayers").SendPrivate(player);
+                        game.messageBuilder.PrepareText("NightInfo_" + GetType().Name + "_ForPlayers").AddImage("roles/whereToGo.png").SendPrivate(player);
                     }
                 }
             }

@@ -37,12 +37,12 @@ namespace DiscordMafia.Config
             MinPlayers = 3;
             MafPercent = 34;
             StartFromNight = true;
-            PlayerCollectingTime = 60000;
+            PlayerCollectingTime = 90000;
             PauseTime = 1000;
             MorningTime = 2000;
-            DayTime = 60000;
+            DayTime = 90000;
             EveningTime = 10000;
-            NightTime = 60000;
+            NightTime = 90000;
             InfectionChancePercent = 33;
             ShowNightActions = true;
             Messages = Messages.getInstance("Config/messages.xml");

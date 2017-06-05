@@ -1,4 +1,4 @@
-﻿using System.Data.SQLite;
+﻿using Mono.Data.Sqlite;
 using Discord;
 using System.Threading;
 using DiscordMafia.Config;
@@ -10,7 +10,7 @@ namespace DiscordMafia
         public static BotSynchronizationContext syncContext = new BotSynchronizationContext();
         private static MainSettings settings;
         private static Game game;
-        public static SQLiteConnection connection;
+        public static SqliteConnection connection;
 
         public static MainSettings Settings
         {
@@ -31,7 +31,7 @@ namespace DiscordMafia
 
         static async void Run()
         {
-            connection = new SQLiteConnection($"Data Source={settings.DatabasePath};Version=3;");
+            connection = new SqliteConnection($"Data Source={settings.DatabasePath};Version=3;");
             connection.Open();
 
             var client = new DiscordClient();

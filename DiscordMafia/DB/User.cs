@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SQLite;
+using Mono.Data.Sqlite;
 
 namespace DiscordMafia.DB
 {
@@ -31,7 +31,7 @@ namespace DiscordMafia.DB
             return user;
         }
 
-        public static IEnumerable<User> findAllByCondition(string condition, SQLiteParameter[] parameters)
+        public static IEnumerable<User> findAllByCondition(string condition, SqliteParameter[] parameters)
         {
             var connection = Program.connection;
             var command = connection.CreateCommand();
@@ -55,7 +55,7 @@ namespace DiscordMafia.DB
 
         public static IEnumerable<User> findAllByCondition(string condition)
         {
-            return findAllByCondition(condition, new SQLiteParameter[0]);
+            return findAllByCondition(condition, new SqliteParameter[0]);
         }
 
         protected User populateRecord(DbDataReader reader)
