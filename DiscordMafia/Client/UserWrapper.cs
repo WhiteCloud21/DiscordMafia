@@ -26,8 +26,7 @@ namespace DiscordMafia.Client
 
         public bool IsAdmin()
         {
-            // TODO Сделать нормально
-            return Id == 247110702177845249L || Id == 174971163124957184L || Id == 137234657623277568L;
+            return Id == Program.Settings.AdminID;
         }
     }
 }

@@ -4,4 +4,5 @@
   <ImageBaseUrl/>
   <DatabasePath>data/mafia-discord.sqlite</DatabasePath>
   <GameChannel>248174400019496962</GameChannel>
+  <AdminID>137234657623277568</AdminID>
 </Settings>
