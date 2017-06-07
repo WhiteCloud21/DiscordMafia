@@ -40,14 +40,14 @@ namespace DiscordMafia.DB
             var index = 0;
             foreach (var user in GetTop("total_points", howMany))
             {
-                message += String.Format("{0}. {1} - {2}" + Environment.NewLine, ++index, messageBuilder.FormatName(user.firstName, user.lastName, user.username), user.totalPoints);
+                message += String.Format("{0}. `{1}` - {2}" + Environment.NewLine, ++index, messageBuilder.FormatName(user.firstName, user.lastName, user.username), user.totalPoints);
             }
 
             message += Environment.NewLine + "Лучшие игроки по рейтингу: " + Environment.NewLine;
             index = 0;
             foreach (var user in GetTop("rate", howMany))
             {
-                message += String.Format("{0}. {1} - {2}" + Environment.NewLine, ++index, messageBuilder.FormatName(user.firstName, user.lastName, user.username), user.rate.ToString("0.00"));
+                message += String.Format("{0}. `{1}` - {2}" + Environment.NewLine, ++index, messageBuilder.FormatName(user.firstName, user.lastName, user.username), user.rate.ToString("0.00"));
             }
             return message;
         }

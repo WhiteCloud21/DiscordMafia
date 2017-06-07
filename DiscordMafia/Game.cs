@@ -73,6 +73,7 @@ namespace DiscordMafia
             var currentPlayer = GetPlayerInfo(user.Id);
             if (text.StartsWith("/"))
             {
+                text = text.ToLower();
                 var parts = text.Split(' ');
                 switch (parts[0])
                 {
@@ -95,6 +96,7 @@ namespace DiscordMafia
                         return;
                     case "/погнали":
                     case "/го":
+                    case "/go":
                         if (user.IsAdmin())
                         {
                              StopPlayerCollecting();
@@ -115,6 +117,7 @@ namespace DiscordMafia
                     case "/отмена":
                     case "/cancel": // TODO Разделить и писать про отмену в публичный канал
                     case "/нея":
+                    case "/нет":
                         if (currentState == GameState.PlayerCollecting)
                         {
                             UnRegisterPlayer(user);
@@ -124,7 +127,7 @@ namespace DiscordMafia
                             (currentState == GameState.Night || currentState == GameState.Day))
                         {
                             currentPlayer.CancelActivity();
-                            messageBuilder.Text("Ваш голос отменен").SendPublic(gameChannel);
+                            messageBuilder.Text(currentPlayer.GetName() + " отменил свой голос").SendPublic(gameChannel);
                         }
                         return;
                     case "/посадить":
@@ -307,7 +310,7 @@ namespace DiscordMafia
                             }
                             return;
                         }
-                        if (parts.Length > 1)
+                        if (parts.Length > 1 && currentState == GameState.Night)
                         {
                             Vote(currentPlayer, parts[1]);
                             CheckNextCheckpoint();
@@ -765,10 +768,10 @@ namespace DiscordMafia
                     switch (player.role.Team)
                     {
                         case Team.Mafia:
-                            mafiaMessage += String.Format("{0} - {1}", messageBuilder.FormatName(player), messageBuilder.FormatRole(player.role.Name)) + Environment.NewLine;
+                            mafiaMessage += String.Format("{0} (`{1}`) - {2}", messageBuilder.FormatName(player), player.user.Username, messageBuilder.FormatRole(player.role.Name)) + Environment.NewLine;
                             break;
                         case Team.Yakuza:
-                            yakuzaMessage += String.Format("{0} - {1}", messageBuilder.FormatName(player), messageBuilder.FormatRole(player.role.Name)) + Environment.NewLine;
+                            yakuzaMessage += String.Format("{0} (`{1}`) - {2}", messageBuilder.FormatName(player), player.user.Username, messageBuilder.FormatRole(player.role.Name)) + Environment.NewLine;
                             break;
                     }
                 }
@@ -908,7 +911,7 @@ namespace DiscordMafia
             {
                 if (player.isAlive)
                 {
-                    message += i + " - " + messageBuilder.FormatName(player) + Environment.NewLine;
+                    message += i + " - " + messageBuilder.FormatName(player) + " (`" + player.user.Username + "`)" + Environment.NewLine;
                 }
                 i++;
             }
