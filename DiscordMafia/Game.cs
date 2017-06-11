@@ -73,7 +73,7 @@ namespace DiscordMafia
             var currentPlayer = GetPlayerInfo(user.Id);
             if (text.StartsWith("/"))
             {
-                var parts = text.Split(' ');
+                var parts = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 switch (parts[0])
                 {
                     case "/help":
@@ -140,7 +140,7 @@ namespace DiscordMafia
             var currentPlayer = GetPlayerInfo(user.Id);
             if (text.StartsWith("/"))
             {
-                var parts = text.Split(' ');
+                var parts = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 switch (parts[0])
                 {
                     case "/test":
