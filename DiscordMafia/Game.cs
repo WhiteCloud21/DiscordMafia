@@ -522,7 +522,7 @@ namespace DiscordMafia
                     {
                         if (player.role.Team == currentPlayer.role.Team && !player.isBot && player.user.Id != update.User.Id)
                         {
-                            update.Channel.SendMessage($"{currentPlayer.GetName()}: {text}");
+                            messageBuilder.Text($"{currentPlayer.GetName()}: {text}").SendPrivate(player);
                         }
                     }
                 }
