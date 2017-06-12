@@ -205,7 +205,7 @@ namespace DiscordMafia
                             {
                                 var item = BaseItem.AvailableItems[i];
                                 var itemInPlayer = currentPlayer.GetItem(item);
-                                message += item.Name + " - предмет ";
+                                message += String.Format("{0}. <b>{1}</b> - предмет ", i + 1, item.Name);
                                 if (itemInPlayer != null)
                                 {
                                     if (itemInPlayer.IsActive)
@@ -864,9 +864,9 @@ namespace DiscordMafia
         protected BaseItem GetItemInfo(string request)
         {
             int itemNum = 0;
-            if (int.TryParse(request, out itemNum) && itemNum >= 0 && itemNum < BaseItem.AvailableItems.Length)
+            if (int.TryParse(request, out itemNum) && itemNum > 0 && itemNum <= BaseItem.AvailableItems.Length)
             {
-                return BaseItem.AvailableItems[itemNum].GetType().GetConstructor(Type.EmptyTypes).Invoke(new object[0]) as BaseItem;
+                return BaseItem.AvailableItems[itemNum - 1].GetType().GetConstructor(Type.EmptyTypes).Invoke(new object[0]) as BaseItem;
             }
             return null;
         }
