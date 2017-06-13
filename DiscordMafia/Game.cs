@@ -74,7 +74,7 @@ namespace DiscordMafia
             if (text.StartsWith("/"))
             {
                 text = text.ToLower();
-                var parts = text.Split(' ');
+                var parts = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 switch (parts[0])
                 {
                     case "/help":
@@ -150,7 +150,7 @@ namespace DiscordMafia
             var currentPlayer = GetPlayerInfo(user.Id);
             if (text.StartsWith("/"))
             {
-                var parts = text.Split(' ');
+                var parts = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 switch (parts[0])
                 {
                     case "/test":
@@ -215,7 +215,7 @@ namespace DiscordMafia
                             {
                                 var item = BaseItem.AvailableItems[i];
                                 var itemInPlayer = currentPlayer.GetItem(item);
-                                message += item.Name + " - предмет ";
+                                message += String.Format("{0}. <b>{1}</b> - предмет ", i + 1, item.Name);
                                 if (itemInPlayer != null)
                                 {
                                     if (itemInPlayer.IsActive)
@@ -263,10 +263,17 @@ namespace DiscordMafia
                             var playerToKill = GetPlayerInfo(parts[1]);
                             if (playerToKill != null && highlander.PlayerToKill == null)
                             {
-                                highlander.PlayerToKill = playerToKill;
-                                NightAction(currentPlayer.role);
-                                messageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                CheckNextCheckpoint();
+                                try
+                                {
+                                    highlander.PlayerToKill = playerToKill;
+                                    NightAction(currentPlayer.role);
+                                    messageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
+                                    CheckNextCheckpoint();
+                                }
+                                catch (Exception ex)
+                                {
+                                    messageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
+                                }
                             }
                             return;
                         }
@@ -532,7 +539,7 @@ namespace DiscordMafia
                     {
                         if (player.role.Team == currentPlayer.role.Team && !player.isBot && player.user.Id != update.User.Id)
                         {
-                            update.Channel.SendMessage($"{currentPlayer.GetName()}: {text}");
+                            messageBuilder.Text($"{currentPlayer.GetName()}: {text}").SendPrivate(player);
                         }
                     }
                 }
@@ -810,6 +817,13 @@ namespace DiscordMafia
                     if (player.isAlive)
                     {
                         isAllReady = player.IsReady(currentState);
+                        if (player.role is Demoman)
+                        {
+                            if ((player.role as Demoman).Counter == 0)
+                            {
+                                isAllReady = false;
+                            }
+                        }
                         if (!isAllReady)
                         {
                             break;
@@ -867,9 +881,9 @@ namespace DiscordMafia
         protected BaseItem GetItemInfo(string request)
         {
             int itemNum = 0;
-            if (int.TryParse(request, out itemNum) && itemNum >= 0 && itemNum < BaseItem.AvailableItems.Length)
+            if (int.TryParse(request, out itemNum) && itemNum > 0 && itemNum <= BaseItem.AvailableItems.Length)
             {
-                return BaseItem.AvailableItems[itemNum].GetType().GetConstructor(Type.EmptyTypes).Invoke(new object[0]) as BaseItem;
+                return BaseItem.AvailableItems[itemNum - 1].GetType().GetConstructor(Type.EmptyTypes).Invoke(new object[0]) as BaseItem;
             }
             return null;
         }
