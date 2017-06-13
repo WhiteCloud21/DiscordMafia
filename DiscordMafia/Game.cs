@@ -253,10 +253,17 @@ namespace DiscordMafia
                             var playerToKill = GetPlayerInfo(parts[1]);
                             if (playerToKill != null && highlander.PlayerToKill == null)
                             {
-                                highlander.PlayerToKill = playerToKill;
-                                NightAction(currentPlayer.role);
-                                messageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                CheckNextCheckpoint();
+                                try
+                                {
+                                    highlander.PlayerToKill = playerToKill;
+                                    NightAction(currentPlayer.role);
+                                    messageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
+                                    CheckNextCheckpoint();
+                                }
+                                catch (Exception ex)
+                                {
+                                    messageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
+                                }
                             }
                             return;
                         }
