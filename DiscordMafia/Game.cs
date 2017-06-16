@@ -1056,7 +1056,7 @@ namespace DiscordMafia
                             {
                                 leader.AddPoints("CivilDayKillCom");
                             }
-                            switch (leader.role.Team)
+                            switch (elder.PlayerToKill.role.Team)
                             {
                                 case Team.Civil:
                                     leader.AddPoints("CivilKillCivil");
