@@ -2,6 +2,7 @@
 using Discord;
 using System.Threading;
 using DiscordMafia.Config;
+using System;
 
 namespace DiscordMafia
 {
@@ -26,7 +27,16 @@ namespace DiscordMafia
                 
             SynchronizationContext.SetSynchronizationContext(syncContext);
             syncContext.Post(obj => Run(), null);
-            syncContext.RunMessagePump();
+            try
+            {
+                syncContext.RunMessagePump();
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format("[{0:s}] {1}", DateTime.Now, ex);
+                Console.Error.WriteLine(message);
+                System.IO.File.AppendAllText("error.log", message);
+            }
         }
 
         static async void Run()

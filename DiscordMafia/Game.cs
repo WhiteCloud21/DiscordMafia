@@ -143,9 +143,6 @@ namespace DiscordMafia
                 var parts = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 switch (parts[0])
                 {
-                    case "/test":
-                        client.SetGame("Test");
-                        return;
                     case "/хелп":
                     case "/help":
                         Help(user);
