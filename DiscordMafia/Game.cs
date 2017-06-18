@@ -322,9 +322,16 @@ namespace DiscordMafia
                             var playerToKill = GetPlayerInfo(parts[1]);
                             if (playerToKill != null && elder.PlayerToKill == null)
                             {
-                                elder.PlayerToKill = playerToKill;
-                                messageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                CheckNextCheckpoint();
+                                try
+                                {
+                                    elder.PlayerToKill = playerToKill;
+                                    messageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
+                                    CheckNextCheckpoint();
+                                }
+                                catch (Exception ex)
+                                {
+                                    messageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
+                                }
                             }
                             return;
                         }
