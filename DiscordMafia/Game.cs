@@ -811,7 +811,7 @@ namespace DiscordMafia
                     if (player.isAlive)
                     {
                         isAllReady = player.IsReady(currentState);
-                        if (player.role is Demoman)
+                        if (player.role is Demoman && currentState == GameState.Night)
                         {
                             if ((player.role as Demoman).Counter == 0)
                             {
