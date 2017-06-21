@@ -74,7 +74,7 @@ namespace DiscordMafia
             if (text.StartsWith("/"))
             {
                 var parts = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                switch (parts[0])
+                switch (parts[0].ToLower())
                 {
                     case "/help":
                     case "/хелп":
@@ -141,7 +141,7 @@ namespace DiscordMafia
             if (text.StartsWith("/"))
             {
                 var parts = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                switch (parts[0])
+                switch (parts[0].ToLower())
                 {
                     case "/хелп":
                     case "/help":
