@@ -11,12 +11,13 @@ namespace DiscordMafia
         IList<InGamePlayerInfo> players;
         private int remainingPlayerCount = 0;
         private int remainingMafCount = 0;
+        private int totalMafCount = 0;
 
         public void AssignRoles(IList<InGamePlayerInfo> players, Config.GameSettings settings)
         {
             this.players = players;
             remainingPlayerCount = players.Count;
-            remainingMafCount = (int)Math.Truncate(players.Count * (double)settings.MafPercent / 100);
+            totalMafCount = remainingMafCount = (int)Math.Truncate(players.Count * (double)settings.MafPercent / 100);
             Console.WriteLine("Количество мафиози: {0}", remainingMafCount);
 
             foreach (var player in players)
@@ -46,6 +47,10 @@ namespace DiscordMafia
             {
                 Console.WriteLine("Недостаточно игроков для назначения роли {0}.", role.Name);
                 return;
+            }
+            if (role is Warlock)
+            {
+                (role as Warlock).AvailableCursesCount = totalMafCount;
             }
             var playerIndex = random.Next(remainingPlayerCount);
             Console.WriteLine("Assined: {0} {1}", playerIndex, role.Name);

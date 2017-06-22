@@ -312,6 +312,32 @@ namespace DiscordMafia
                             CheckNextCheckpoint();
                         }
                         return;
+                    case "/проклясть":
+                    case "/curse":
+                        if (currentPlayer == null)
+                        {
+                            return;
+                        }
+                        if (currentPlayer.role is Warlock && parts.Length > 1 && currentState == GameState.Night)
+                        {
+                            var warlock = (currentPlayer.role as Warlock);
+                            var playerToCurse = GetPlayerInfo(parts[1]);
+                            if (playerToCurse != null && warlock.PlayerToCurse == null)
+                            {
+                                try
+                                {
+                                    warlock.PlayerToCurse = playerToCurse;
+                                    NightAction(currentPlayer.role);
+                                    messageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
+                                    CheckNextCheckpoint();
+                                }
+                                catch (Exception ex)
+                                {
+                                    messageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
+                                }
+                            }
+                        }
+                        return;
                     case "/посадить":
                     case "/imprison":
                         if (currentPlayer == null)
@@ -1464,6 +1490,36 @@ namespace DiscordMafia
                             messageBuilder.PrepareTextReplacePlayer("ManiacKill", role.PlayerToKill).SendPublic(gameChannel);
                         }
                         Pause();
+                    }
+                }
+                #endregion
+
+                #region Чернокнижник
+                if (player.role is Warlock)
+                {
+                    var role = player.role as Warlock;
+                    if (role.PlayerToCurse != null)
+                    {
+                        role.AvailableCursesCount--;
+                        var killedPlayersMessage = "Неудачно сегодня закончилась ночь для ";
+                        var killedPlayers = new List<InGamePlayerInfo>();
+                        foreach (var target in playersList)
+                        {
+                            if (target.isAlive && target != player && target.HasActivityAgainst(role.PlayerToCurse))
+                            {
+                                killedPlayers.Add(target);
+                                killManager.Kill(target);
+                                player.AddPoints("NeutralKill");
+                                killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                            }
+                        }
+
+                        if (killedPlayers.Count > 0)
+                        {
+                            killedPlayersMessage += "не надо было трогать проклятого " + messageBuilder.FormatTextReplacePlayer("{role4}", player) + " игрока...";
+                            messageBuilder.Text(killedPlayersMessage, false).SendPublic(gameChannel);
+                            Pause();
+                        }
                     }
                 }
                 #endregion

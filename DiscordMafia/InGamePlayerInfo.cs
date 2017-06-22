@@ -127,6 +127,18 @@ namespace DiscordMafia
             return false;
         }
 
+        public bool HasActivityAgainst(InGamePlayerInfo target)
+        {
+            foreach (var item in activityList)
+            {
+                if (item.HasActivityAgainst(target))
+                {
+                    return true;
+                }
+            }
+            return role != null ? role.HasActivityAgainst(target) : false;
+        }
+
         public override bool Equals(object obj)
         {
             return this == obj as InGamePlayerInfo;

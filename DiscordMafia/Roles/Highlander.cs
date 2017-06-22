@@ -77,5 +77,10 @@
             }
             return base.IsReady(currentState);
         }
+
+        public override bool HasActivityAgainst(InGamePlayerInfo target)
+        {
+            return target == PlayerToKill;
+        }
     }
 }

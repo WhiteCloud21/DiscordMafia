@@ -62,7 +62,12 @@
   </Role>
   <Role Id="Maniac">
     <IsEnabled>true</IsEnabled>
-    <IsRandom>false</IsRandom>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>8</MinPlayers>
+  </Role>
+  <Role Id="Warlock">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
     <MinPlayers>8</MinPlayers>
   </Role>
 </Roles>

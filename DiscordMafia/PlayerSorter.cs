@@ -25,6 +25,7 @@ namespace DiscordMafia
                 typeof(Lawyer).Name,
                 typeof(Doctor).Name,
                 typeof(Demoman).Name,
+                typeof(Warlock).Name,
             };
             daySortPositions = new string[] {
                 typeof(Judge).Name,

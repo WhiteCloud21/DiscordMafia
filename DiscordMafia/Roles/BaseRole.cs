@@ -43,6 +43,11 @@ namespace DiscordMafia.Roles
                     return false;
             }
         }
+
+        public virtual bool HasActivityAgainst(InGamePlayerInfo target)
+        {
+            return false;
+        }
     }
 
     public enum Team
