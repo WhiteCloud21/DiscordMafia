@@ -109,16 +109,18 @@ namespace DiscordMafia
                         RegisterPlayer(user, fromPrivate: false);
                         return;
                     case "/отмена":
-                    case "/cancel": // TODO Разделить и писать про отмену в публичный канал
+                    case "/cancel":
                         if (currentState == GameState.PlayerCollecting)
                         {
                             UnRegisterPlayer(user);
                             return;
                         }
-                        if (currentPlayer != null && currentPlayer.role != null)
+                        if (currentPlayer != null && currentState == GameState.Day)
                         {
-                            currentPlayer.CancelActivity();
-                            messageBuilder.Text("Ваш голос отменен").SendPublic(gameChannel);
+                            if (currentPlayer.CancelVote())
+                            {
+                                messageBuilder.Text(currentPlayer.GetName() + " отменил свой голос").SendPublic(gameChannel);
+                            }
                         }
                         return;
                     case "/посадить":
@@ -231,7 +233,7 @@ namespace DiscordMafia
                         }
                         return;
                     case "/отмена":
-                    case "/cancel": // TODO Разделить и писать про отмену в публичный канал
+                    case "/cancel":
                         if (currentPlayer != null)
                         {
                             currentPlayer.CancelActivity();
@@ -599,7 +601,7 @@ namespace DiscordMafia
         {
             if (currentState == GameState.PlayerCollecting && !currentPlayers.ContainsKey(player.Id))
             {
-                var playerInfo = new InGamePlayerInfo(player, settings);
+                var playerInfo = new InGamePlayerInfo(player, this);
                 playerInfo.dbUser.Save();
                 playerInfo.isBot = isBot;
                 currentPlayers.Add(player.Id, playerInfo);
@@ -941,7 +943,7 @@ namespace DiscordMafia
         {
             foreach (var player in playersList)
             {
-                player.CancelActivity();
+                player.ClearActivity();
             }
             timer.Interval = settings.MorningTime;
             messageBuilder.PrepareText("StartMorning").SendPublic(gameChannel);

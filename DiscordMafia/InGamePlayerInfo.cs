@@ -18,7 +18,7 @@ namespace DiscordMafia
         public bool isBot { get; set; }
         public long currentGamePoints { get; set; }
         public int? delayedDeath { get; set; }
-        protected Config.GameSettings settings { get; set; }
+        protected Game game { get; set; }
         protected List<BaseActivity> activityList { get; set; }
         public VoteActivity voteFor { get; set; }
         public HealActivity healedBy { get; set; }
@@ -26,13 +26,13 @@ namespace DiscordMafia
         public Place placeToGo { get; set; }
         public List<BaseItem> ownedItems { get; set; }
 
-        public InGamePlayerInfo(UserWrapper user, Config.GameSettings settings)
+        public InGamePlayerInfo(UserWrapper user, Game game)
         {
             this.user = user;
             this.isBot = false;
             this.isAlive = true;
             this.currentGamePoints = 0;
-            this.settings = settings;
+            this.game = game;
             this.activityList = new List<BaseActivity>();
             dbUser = DB.User.findById(user.Id);
             placeToGo = Place.AvailablePlaces[0];
@@ -41,7 +41,7 @@ namespace DiscordMafia
 
         public void AddPoints(string strategy)
         {
-            var howMany = settings.Points.GetPoints(strategy);
+            var howMany = game.settings.Points.GetPoints(strategy);
             currentGamePoints += howMany;
         }
 
@@ -97,12 +97,34 @@ namespace DiscordMafia
             }
             else
             {
+                var itemsToRemove = new List<BaseActivity>();
                 foreach (var item in activityList)
                 {
+                    // Дневное голосование отменяется через CancelVote
+                    if (game.currentState == GameState.Day && item == voteFor)
+                    {
+                        continue;
+                    }
                     item.Cancel();
+                    itemsToRemove.Add(item);
                 }
-                activityList.Clear();
+                foreach (var item in itemsToRemove)
+                {
+                    activityList.Remove(item);
+                }
             }
+        }
+
+        public bool CancelVote()
+        {
+            var voteActivity = voteFor;
+            if (voteActivity != null)
+            {
+                voteActivity.Cancel();
+                activityList.Remove(voteActivity);
+                return true;
+            }
+            return false;
         }
 
         public override bool Equals(object obj)
