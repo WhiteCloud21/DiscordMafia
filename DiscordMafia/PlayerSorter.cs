@@ -16,6 +16,8 @@ namespace DiscordMafia
         {
             nightSortPositions = new string[]
             {
+                typeof(Ninja).Name,
+                typeof(Hoodlum).Name,
                 typeof(Wench).Name,
                 typeof(Maniac).Name,
                 typeof(Homeless).Name,

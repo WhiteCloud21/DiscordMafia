@@ -469,6 +469,35 @@ namespace DiscordMafia
                             }
                         }
                         return;
+                    case "/блок":
+                    case "/block":
+                        {
+                            if (currentPlayer == null)
+                            {
+                                return;
+                            }
+                            if (currentPlayer.role is Hoodlum && parts.Length > 1 && currentState == GameState.Night)
+                            {
+                                var hoodlum = (currentPlayer.role as Hoodlum);
+                                var playerToBlock = GetPlayerInfo(parts[1]);
+                                if (playerToBlock != null && hoodlum.PlayerToBlock == null)
+                                {
+                                    try
+                                    {
+                                        hoodlum.PlayerToBlock = playerToBlock;
+                                        NightAction(currentPlayer.role);
+                                        var message = String.Format("Громила {0} выбрал {1} для блокировки!", currentPlayer.GetName(), hoodlum.PlayerToBlock.GetName());
+                                        messageBuilder.Text(message).SendToTeam(Team.Yakuza);
+                                        CheckNextCheckpoint();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        messageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
+                                    }
+                                }
+                            }
+                        }
+                        return;
                     case "/лечить":
                     case "/heal":
                         {
@@ -1225,6 +1254,45 @@ namespace DiscordMafia
 
             foreach (var player in PlayerSorter.SortForActivityCheck(playersList, GameState.Night))
             {
+                #region Ниндзя
+                if (player.role is Ninja)
+                {
+                    foreach (var playerToCancelActivity in playersList)
+                    {
+                        if (player != playerToCancelActivity)
+                        {
+                            player.CancelActivity(playerToCancelActivity);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Громила
+                if (player.role is Hoodlum)
+                {
+                    var role = player.role as Hoodlum;
+                    if (role.PlayerToBlock != null)
+                    {
+                        role.LastPlayerToBlock = role.PlayerToBlock;
+                        if (role.PlayerToBlock != player)
+                        {
+                            // Блокируем проверяемого
+                            role.PlayerToBlock.CancelActivity();
+                        }
+                        if (role.PlayerToBlock.role is Commissioner)
+                        {
+                            player.AddPoints("HoodlumBlockCom");
+                        }
+                        else if (role.PlayerToBlock.role.Team == Team.Mafia)
+                        {
+                            player.AddPoints("HoodlumBlockMaf");
+                        }
+                        messageBuilder.PrepareTextReplacePlayer("HoodlumBlock", role.PlayerToBlock).SendPublic(gameChannel);
+                        Pause();
+                    }
+                }
+                #endregion
+
                 #region Путана
                 if (player.role is Wench)
                 {

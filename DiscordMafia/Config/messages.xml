@@ -103,6 +103,18 @@
     </ArrayOfString>
   </Item>
   <Item>
+    <string>RoleHelp_Hoodlum</string>
+    <ArrayOfString>
+      <string>Каждую ночь Вы можете заблокировать любого и узнать его роль (но не 2 раза подряд). У этого игрока на одну ночь заблокируется спецспособность (если она есть). Вас, в свою очередь, заблокировать нельзя.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Ninja</string>
+    <ArrayOfString>
+      <string>Против вас нельзя ничего сделать ночью. Вы как бы есть, но Вас как бы нет. А в остальном вы такой же участник японской мафии, отстреливаете граждан и мафов по одному.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>RoleHelp_Maniac</string>
     <ArrayOfString>
       <string>Никто не может понять, что творится у Вас в голове. "Убивай!" - каждую ночь Вы прислушиваетесь к внутреннему голосу и убиваете всех подряд. Мафы, мирные граждане, комиссар... Все они равны перед бензопилой и топором!</string>
@@ -230,6 +242,23 @@
   </Item>
   <Item>
     <string>NightInfo_Yakuza</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Выберите с другими якудзами (если они есть) жертву и убейте её.
+        Для убийства игрока введите <b>/убить X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Hoodlum</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Для блокировки игрока введите <b>/блок X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Ninja</string>
     <ArrayOfString>
       <string>
         <![CDATA[Выберите с другими якудзами (если они есть) жертву и убейте её.
@@ -540,6 +569,13 @@
     </ArrayOfString>
   </Item>
   <Item>
+    <string>HoodlumBlock</string>
+    <ArrayOfString>
+      <string>{role} был избит громилой.</string>
+      <string>Под утро {role3} нашли рядом с больницей. Его избил громила.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>HighlanderKill</string>
     <ArrayOfString>
       <string>Горец извлек из себя пулю, достал приготовленное оружие и подстрелил {name}, который оказался {role4}.</string>
@@ -639,6 +675,12 @@
     <string>NightAction_Yakuza</string>
     <ArrayOfString>
       <string>Японская мафия засела в одной из квартир. Кого-то ждёт сюрприз:)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Hoodlum</string>
+    <ArrayOfString>
+      <string>Громила вышел на улицу, жители попытались убежать...</string>
     </ArrayOfString>
   </Item>
   <Item>

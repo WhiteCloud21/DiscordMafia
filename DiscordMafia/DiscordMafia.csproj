@@ -140,9 +140,11 @@
     <Compile Include="Roles\Judge.cs" />
     <Compile Include="Roles\Elder.cs" />
     <Compile Include="Roles\Highlander.cs" />
+    <Compile Include="Roles\Hoodlum.cs" />
     <Compile Include="Roles\Wench.cs" />
     <Compile Include="Roles\Commissioner.cs" />
     <Compile Include="PlayerSorter.cs" />
+    <Compile Include="Roles\Ninja.cs" />
     <Compile Include="Roles\Yakuza.cs" />
     <Compile Include="Roles\Mafioso.cs" />
     <Compile Include="Roles\Citizen.cs" />
@@ -161,6 +163,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Config\Gametypes\yakuza\gameSettings.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Gametypes\yakuza\roles.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

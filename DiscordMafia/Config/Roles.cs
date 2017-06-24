@@ -18,7 +18,7 @@ namespace DiscordMafia.Config
 #pragma warning disable CA2235 // Mark all non-serializable fields.
         private static Dictionary<string, Roles> instances = new Dictionary<string, Roles>();
 
-        private static Dictionary<string, System.Reflection.ConstructorInfo> typeCache = null;
+        private Dictionary<string, System.Reflection.ConstructorInfo> typeCache = null;
 
         private static readonly XmlSerializer valueSerializer =
                                         new XmlSerializer(typeof(Roles));
