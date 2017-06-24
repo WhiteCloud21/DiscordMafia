@@ -6,6 +6,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using DiscordMafia.Lib;
 using DiscordMafia.Roles;
+using System.Text;
 
 namespace DiscordMafia.Config
 {
@@ -128,6 +129,25 @@ namespace DiscordMafia.Config
                     }
                 }
             }
+        }
+
+        public string RolesHelp()
+        {
+            fillCache();
+            var result = new StringBuilder();
+            foreach (var kvp in this)
+            {
+                if (typeCache.ContainsKey(kvp.Key))
+                {
+                    var constructor = typeCache[kvp.Key];
+                    var role = constructor.Invoke(new object[0]) as BaseRole;
+                    result.Append($"<b>{role.Name}</b> - ");
+                    result.Append(kvp.Value.IsEnabled ? "доступна, " : "недоступна, ");
+                    result.Append(kvp.Value.IsRandom ? "одна из случайных, " : "в игре при достаточном количестве игроков, ");
+                    result.AppendLine($"минимум игроков для появления - {kvp.Value.MinPlayers}");
+                }
+            }
+            return result.ToString();
         }
 
         public void ReadXml(XmlReader reader)

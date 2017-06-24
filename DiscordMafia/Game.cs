@@ -54,9 +54,9 @@ namespace DiscordMafia
             killManager = new KillManager(this);
         }
 
-        private void LoadSettings()
+        private void LoadSettings(string gametype = null)
         {
-            settings = new Config.GameSettings();
+            settings = new Config.GameSettings(gametype);
             messageBuilder = new Config.MessageBuilder(settings, client, playersList);
             Console.WriteLine("Settings loaded");
         }
@@ -129,6 +129,33 @@ namespace DiscordMafia
                         {
                             Vote(currentPlayer, parts[1]);
                             CheckNextCheckpoint();
+                        }
+                        return;
+                    case "/gametype":
+                    case "/gamemode":
+                    case "/режим":
+                        if (user.IsAdmin() && parts.Length > 1)
+                        {
+                            if (currentState == GameState.Stopped)
+                            {
+                                if (settings.IsValidGametype(parts[1]))
+                                {
+                                    LoadSettings(parts[1]);
+                                    messageBuilder.Text("Режим игры успешно изменен.").SendPublic(gameChannel);
+                                }
+                                else
+                                {
+                                    messageBuilder.Text("Неизвестный режим игры.").SendPublic(gameChannel);
+                                }
+                            }
+                            else
+                            {
+                                messageBuilder.Text("Менять режим игры нельзя, пока игра не завершена.").SendPublic(gameChannel);
+                            }
+                        }
+                        else
+                        {
+                            messageBuilder.Text($"Текущий режим игры: {settings.GameType}").SendPublic(gameChannel);
                         }
                         return;
                 }
@@ -571,7 +598,7 @@ namespace DiscordMafia
         private void Help(UserWrapper user)
         {
             var currentPlayer = currentPlayers.ContainsKey(user.Id) ? currentPlayers[user.Id] : null;
-            var message = "============Игровые команды============" + Environment.NewLine;
+            var message = "<b>==========Игровые команды==========</b>" + Environment.NewLine;
             message += "/help - вывод этой справки (в приват боту);" + Environment.NewLine;
             message += "/join, /я - регистрация в игре (во время набора игроков);" + Environment.NewLine;
             message += "/cancel, /отмена - выход из игры (во время набора игроков);" + Environment.NewLine;
@@ -583,8 +610,8 @@ namespace DiscordMafia
 
             if (currentPlayer != null && currentPlayer.isAlive && currentPlayer.role != null)
             {
-                message += Environment.NewLine;
-                message += "=========== Помощь по статусу===========" + Environment.NewLine;
+                message += " " + Environment.NewLine;
+                message += "<b>=========== Помощь по статусу===========</b>" + Environment.NewLine;
                 message += "Ваш статус - " + messageBuilder.FormatRole(currentPlayer.role.Name) + Environment.NewLine;
                 switch (currentPlayer.role.Team)
                 {
@@ -605,8 +632,16 @@ namespace DiscordMafia
                 message += messageBuilder.GetText(string.Format("RoleHelp_{0}", currentPlayer.role.GetType().Name)) + Environment.NewLine;
             }
 
-            message += Environment.NewLine;
-            message += "======Помощь по начислению очков======" + Environment.NewLine;
+            message += " " + Environment.NewLine;
+            message += "<b>========Помощь по режиму игры========</b>" + Environment.NewLine;
+            message += $"Текущий режим игры: {settings.GameType}" + Environment.NewLine;
+            message += $"Якудза: {settings.IsYakuzaEnabled}" + Environment.NewLine;
+            message += $"Мафов из каждой группировки: {settings.MafPercent}%" + Environment.NewLine;
+            message += "<u><b>Доступные роли</b></u>" + Environment.NewLine;
+            message += settings.Roles.RolesHelp();
+
+            message += " " + Environment.NewLine;
+            message += "<b>======Помощь по начислению очков======</b>" + Environment.NewLine;
             foreach (var pointConfig in settings.Points.Values)
             {
                 message += String.Format("{0}: {1}", pointConfig.Description, pointConfig.Points) + Environment.NewLine;

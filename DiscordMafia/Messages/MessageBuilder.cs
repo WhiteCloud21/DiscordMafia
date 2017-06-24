@@ -32,7 +32,7 @@ namespace DiscordMafia.Config
 
         public string Markup(string str)
         {
-            return str.Replace("<b>", "**").Replace("</b>", "**").Replace("<i>", "_").Replace("</i>", "_");
+            return str.Replace("<b>", "**").Replace("</b>", "**").Replace("<i>", "_").Replace("</i>", "_").Replace("<u>", "__").Replace("</u>", "__");
         }
 
         public MessageBuilder PrepareTextReplacePlayer(string key, InGamePlayerInfo player, string fallbackKey = null)

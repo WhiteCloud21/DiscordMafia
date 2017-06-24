@@ -55,11 +55,14 @@ namespace DiscordMafia.DB
         public static string GetStatAsString(UserWrapper user)
         {
             var dbUser = User.findById(user.Id);
+            var winsPercent = dbUser.gamesPlayed > 0 ? 100.0 * dbUser.wins / dbUser.gamesPlayed : 0.0;
+            var survivalsPercent = dbUser.gamesPlayed > 0 ? 100.0 * dbUser.survivals / dbUser.gamesPlayed : 0.0;
+            var pointsAverage = dbUser.gamesPlayed > 0 ? 1.0 * dbUser.totalPoints / dbUser.gamesPlayed : 0.0;
             var message = "Ваша статистика:" + Environment.NewLine;
             message += $"Всего игр: {dbUser.gamesPlayed}{Environment.NewLine}";
-            message += $"Пережил игр: {dbUser.survivals}{Environment.NewLine}";
-            message += $"Побед: {dbUser.wins}{Environment.NewLine}";
-            message += $"Очков: {dbUser.totalPoints}{Environment.NewLine}";
+            message += $"Пережил игр: {dbUser.survivals} ({survivalsPercent}%){Environment.NewLine}";
+            message += $"Побед: {dbUser.wins} ({winsPercent}%){Environment.NewLine}";
+            message += $"Очков: {dbUser.totalPoints} (в среднем за игру {pointsAverage.ToString("0.00")}){Environment.NewLine}";
             message += $"Рейтинг: {dbUser.rate.ToString("0.00")}{Environment.NewLine}";
             return message;
         }
