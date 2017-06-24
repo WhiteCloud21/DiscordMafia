@@ -130,6 +130,9 @@
     <Compile Include="RoleAssigner.cs" />
     <Compile Include="Roles\BaseRole.cs" />
     <Compile Include="Roles\Demoman.cs" />
+    <Compile Include="Roles\NeutralKiller.cs" />
+    <Compile Include="Roles\RobinHood.cs" />
+    <Compile Include="Roles\Warlock.cs" />
     <Compile Include="Roles\Places\Place.cs" />
     <Compile Include="Roles\Sergeant.cs" />
     <Compile Include="Roles\Lawyer.cs" />
@@ -141,9 +144,11 @@
     <Compile Include="Roles\Judge.cs" />
     <Compile Include="Roles\Elder.cs" />
     <Compile Include="Roles\Highlander.cs" />
+    <Compile Include="Roles\Hoodlum.cs" />
     <Compile Include="Roles\Wench.cs" />
     <Compile Include="Roles\Commissioner.cs" />
     <Compile Include="PlayerSorter.cs" />
+    <Compile Include="Roles\Ninja.cs" />
     <Compile Include="Roles\Yakuza.cs" />
     <Compile Include="Roles\Mafioso.cs" />
     <Compile Include="Roles\Citizen.cs" />
@@ -157,6 +162,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config\gameSettings.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Gametypes\yakuza\gameSettings.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\Gametypes\yakuza\roles.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Config\mainSettings.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -44,5 +44,10 @@ namespace DiscordMafia.Activity
         {
             OnCancel(onlyAgainstTarget);
         }
+
+        public virtual bool HasActivityAgainst(InGamePlayerInfo target)
+        {
+            return false;
+        }
     }
 }

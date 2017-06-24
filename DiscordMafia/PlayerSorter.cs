@@ -16,8 +16,11 @@ namespace DiscordMafia
         {
             nightSortPositions = new string[]
             {
+                typeof(Ninja).Name,
+                typeof(Hoodlum).Name,
                 typeof(Wench).Name,
                 typeof(Maniac).Name,
+                typeof(RobinHood).Name,
                 typeof(Homeless).Name,
                 typeof(Commissioner).Name,
                 typeof(Sheriff).Name,
@@ -38,7 +41,7 @@ namespace DiscordMafia
             players = new List<InGamePlayerInfo>(players);
 
             Comparison<InGamePlayerInfo> comparer = null;
-            players.RemoveAll(delegate (InGamePlayerInfo player) { return !player.isAlive || !(player.role is UniqueRole); });
+            players.RemoveAll(delegate (InGamePlayerInfo player) { return !player.isAlive; });
             switch (state)
             {
                 case GameState.Night:

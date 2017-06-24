@@ -1,12 +1,12 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Wench : UniqueRole
+    public class Hoodlum : UniqueRole
     {
         public override string Name
         {
             get
             {
-                return "Путана";
+                return "Громила";
             }
         }
 
@@ -15,12 +15,12 @@
             get
             {
                 return new string[] {
-                    "путана",
-                    "путаны",
-                    "путане",
-                    "путану",
-                    "путаной",
-                    "путане",
+                    "громила",
+                    "громилы",
+                    "громиле",
+                    "громилу",
+                    "громилой",
+                    "громиле",
                 };
             }
         }
@@ -29,33 +29,33 @@
         {
             get
             {
-                return Team.Civil;
+                return Team.Yakuza;
             }
         }
 
-        private InGamePlayerInfo playerToCheck;
-        public InGamePlayerInfo PlayerToCheck
+        private InGamePlayerInfo playerToBlock;
+        public InGamePlayerInfo PlayerToBlock
         {
-            get { return playerToCheck; }
+            get { return playerToBlock; }
             set {
-                if (value != null && value == LastPlayerToCheck)
+                if (value != null && value == LastPlayerToBlock)
                 {
-                    throw new System.ArgumentException("Нельзя ходить к одному игроку 2 раза подряд.");
+                    throw new System.ArgumentException("Нельзя блокировать одного игрока 2 раза подряд.");
                 }
                 if (value == Player)
                 {
-                    throw new System.ArgumentException("Нельзя ходить к себе.");
+                    throw new System.ArgumentException("Нельзя блокировать себя.");
                 }
-                playerToCheck = value;
+                playerToBlock = value;
             }
         }
-        public InGamePlayerInfo LastPlayerToCheck { get; set; }
+        public InGamePlayerInfo LastPlayerToBlock { get; set; }
         
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToCheck == onlyAgainstTarget)
+            if (onlyAgainstTarget == null || PlayerToBlock == onlyAgainstTarget)
             {
-                PlayerToCheck = null;
+                PlayerToBlock = null;
                 base.ClearActivity(cancel);
             }
         }
@@ -63,7 +63,7 @@
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
         {
             base.NightInfo(game, currentPlayer);
-            game.GetAlivePlayersMesssage(true, true, currentPlayer, "/спать");
+            game.GetAlivePlayersMesssage(true, true, currentPlayer, "/блок");
         }
 
         public override bool IsReady(GameState currentState)
@@ -71,7 +71,7 @@
             switch (currentState)
             {
                 case GameState.Night:
-                    if (PlayerToCheck == null)
+                    if (PlayerToBlock == null)
                     {
                         return false;
                     }
@@ -82,7 +82,7 @@
 
         public override bool HasActivityAgainst(InGamePlayerInfo target)
         {
-            return target == PlayerToCheck;
+            return target == PlayerToBlock;
         }
     }
 }

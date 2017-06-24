@@ -25,5 +25,10 @@ namespace DiscordMafia.Activity
                 base.OnCancel(onlyAgainstTarget);
             }
         }
+
+        public override bool HasActivityAgainst(InGamePlayerInfo target)
+        {
+            return target == Accused;
+        }
     }
 }
