@@ -861,10 +861,10 @@ namespace DiscordMafia
                     switch (player.role.Team)
                     {
                         case Team.Mafia:
-                            mafiaMessage += String.Format("{0} - {1}", messageBuilder.FormatName(player), messageBuilder.FormatRole(player.role.Name)) + Environment.NewLine;
+                            mafiaMessage += String.Format("{0} - {1} (`{2}`)", messageBuilder.FormatName(player), messageBuilder.FormatRole(player.role.Name), player.GetName()) + Environment.NewLine;
                             break;
                         case Team.Yakuza:
-                            yakuzaMessage += String.Format("{0} - {1}", messageBuilder.FormatName(player), messageBuilder.FormatRole(player.role.Name)) + Environment.NewLine;
+                            yakuzaMessage += String.Format("{0} - {1} (`{2}`)", messageBuilder.FormatName(player), messageBuilder.FormatRole(player.role.Name), player.GetName()) + Environment.NewLine;
                             break;
                     }
                 }
@@ -1011,7 +1011,7 @@ namespace DiscordMafia
             {
                 if (player.isAlive)
                 {
-                    message += i + " - " + messageBuilder.FormatName(player) + Environment.NewLine;
+                    message += i + " - " + messageBuilder.FormatName(player) + $" (`{player.GetName()}`)" + Environment.NewLine;
                 }
                 i++;
             }
@@ -1261,7 +1261,7 @@ namespace DiscordMafia
                     {
                         if (player != playerToCancelActivity)
                         {
-                            player.CancelActivity(playerToCancelActivity);
+                            playerToCancelActivity.CancelActivity(player);
                         }
                     }
                 }
@@ -1647,70 +1647,6 @@ namespace DiscordMafia
                     }
                 }
                 #endregion
-
-                #region Чернокнижник
-                if (player.role is Warlock)
-                {
-                    var role = player.role as Warlock;
-                    if (role.PlayerToCurse != null)
-                    {
-                        role.AvailableCursesCount--;
-                        var killedPlayersMessage = "Неудачно сегодня закончилась ночь для ";
-                        var killedPlayers = new List<InGamePlayerInfo>();
-                        var mafiosoList = new List<InGamePlayerInfo>();
-                        var yakuzaList = new List<InGamePlayerInfo>();
-                        foreach (var target in playersList)
-                        {
-                            if (target.isAlive && target != player && target.HasActivityAgainst(role.PlayerToCurse))
-                            {
-                                if (target.role is Mafioso)
-                                {
-                                    mafiosoList.Add(target);
-                                    continue;
-                                }
-                                if (target.role is Yakuza)
-                                {
-                                    yakuzaList.Add(target);
-                                    continue;
-                                }
-                                killedPlayers.Add(target);
-                                killManager.Kill(target);
-                                player.AddPoints("NeutralKill");
-                                killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
-                            }
-                        }
-
-                        // TODO Переделать, вынести в функцию, хоть что-то сделать :(
-                        if (mafiosoList.Count > 0)
-                        {
-                            var playerToKillIdx = randomGenerator.Next(mafiosoList.Count);
-                            var target = mafiosoList[playerToKillIdx];
-                            killedPlayers.Add(target);
-                            killManager.Kill(target);
-                            player.AddPoints("NeutralKill");
-                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
-                        }
-
-                        // TODO Переделать, вынести в функцию, хоть что-то сделать :(
-                        if (yakuzaList.Count > 0)
-                        {
-                            var playerToKillIdx = randomGenerator.Next(yakuzaList.Count);
-                            var target = yakuzaList[playerToKillIdx];
-                            killedPlayers.Add(target);
-                            killManager.Kill(target);
-                            player.AddPoints("NeutralKill");
-                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
-                        }
-
-                        if (killedPlayers.Count > 0)
-                        {
-                            killedPlayersMessage += "не надо было трогать проклятого " + messageBuilder.FormatTextReplacePlayer("{role4}", player) + " игрока...";
-                            messageBuilder.Text(killedPlayersMessage, false).SendPublic(gameChannel);
-                            Pause();
-                        }
-                    }
-                }
-                #endregion
             }
 
             #region Мафия
@@ -1817,7 +1753,7 @@ namespace DiscordMafia
                                     {
                                         player.AddPoints(pointsStrategy);
                                     }
-                                    player.AddPoints(pointsStrategy);
+                                    player.AddPoints("MafKill");
                                 }
                             }
                             messageBuilder.PrepareTextReplacePlayer("YakuzaKill", leader).SendPublic(gameChannel);
@@ -1864,6 +1800,75 @@ namespace DiscordMafia
                         killManager.Kill(highlander.PlayerToKill);
                     }
                 }
+                
+                #region Чернокнижник
+                if (player.role is Warlock)
+                {
+                    var role = player.role as Warlock;
+                    if (role.PlayerToCurse != null)
+                    {
+                        role.AvailableCursesCount--;
+                        var killedPlayersMessage = "Неудачно сегодня закончилась ночь для ";
+                        var killedPlayers = new List<InGamePlayerInfo>();
+                        var mafiosoList = new List<InGamePlayerInfo>();
+                        var yakuzaList = new List<InGamePlayerInfo>();
+                        foreach (var target in playersList)
+                        {
+                            if (target.isAlive && target != player && target.HasActivityAgainst(role.PlayerToCurse))
+                            {
+                                if (target.role is Mafioso)
+                                {
+                                    mafiosoList.Add(target);
+                                    continue;
+                                }
+                                if (target.role is Yakuza)
+                                {
+                                    yakuzaList.Add(target);
+                                    continue;
+                                }
+                                if (target.role is Highlander && !(target.role as Highlander).WasAttacked)
+                                {
+                                    continue;
+                                }
+                                killedPlayers.Add(target);
+                                killManager.Kill(target);
+                                player.AddPoints("NeutralKill");
+                                killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                            }
+                        }
+
+                        // TODO Переделать, вынести в функцию, хоть что-то сделать :(
+                        if (mafiosoList.Count > 0)
+                        {
+                            var playerToKillIdx = randomGenerator.Next(mafiosoList.Count);
+                            var target = mafiosoList[playerToKillIdx];
+                            killedPlayers.Add(target);
+                            killManager.Kill(target);
+                            player.AddPoints("NeutralKill");
+                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                        }
+
+                        // TODO Переделать, вынести в функцию, хоть что-то сделать :(
+                        if (yakuzaList.Count > 0)
+                        {
+                            var playerToKillIdx = randomGenerator.Next(yakuzaList.Count);
+                            var target = yakuzaList[playerToKillIdx];
+                            killedPlayers.Add(target);
+                            killManager.Kill(target);
+                            player.AddPoints("NeutralKill");
+                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                        }
+
+                        if (killedPlayers.Count > 0)
+                        {
+                            killedPlayersMessage += "не надо было трогать проклятого " + messageBuilder.FormatTextReplacePlayer("{role4}", player) + " игрока...";
+                            messageBuilder.Text(killedPlayersMessage, false).SendPublic(gameChannel);
+                            Pause();
+                        }
+                    }
+                }
+                #endregion
+
                 if (player.isAlive && player.delayedDeath != null)
                 {
                     if (player.delayedDeath-- == 0)
