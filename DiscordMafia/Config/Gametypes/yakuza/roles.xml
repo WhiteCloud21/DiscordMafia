@@ -48,17 +48,27 @@
   <Role Id="Killer">
     <IsEnabled>true</IsEnabled>
     <IsRandom>true</IsRandom>
-    <MinPlayers>9</MinPlayers>
+    <MinPlayers>10</MinPlayers>
   </Role>
   <Role Id="Lawyer">
     <IsEnabled>true</IsEnabled>
     <IsRandom>true</IsRandom>
-    <MinPlayers>9</MinPlayers>
+    <MinPlayers>10</MinPlayers>
   </Role>
   <Role Id="Demoman">
     <IsEnabled>true</IsEnabled>
     <IsRandom>true</IsRandom>
-    <MinPlayers>9</MinPlayers>
+    <MinPlayers>10</MinPlayers>
+  </Role>
+  <Role Id="Hoodlum">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>10</MinPlayers>
+  </Role>
+  <Role Id="Ninja">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>10</MinPlayers>
   </Role>
   <Role Id="Maniac">
     <IsEnabled>true</IsEnabled>

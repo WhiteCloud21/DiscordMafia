@@ -54,9 +54,9 @@ namespace DiscordMafia
             killManager = new KillManager(this);
         }
 
-        private void LoadSettings()
+        private void LoadSettings(string gametype = null)
         {
-            settings = new Config.GameSettings();
+            settings = new Config.GameSettings(gametype);
             messageBuilder = new Config.MessageBuilder(settings, client, playersList);
             Console.WriteLine("Settings loaded");
         }
@@ -109,16 +109,18 @@ namespace DiscordMafia
                         RegisterPlayer(user, fromPrivate: false);
                         return;
                     case "/отмена":
-                    case "/cancel": // TODO Разделить и писать про отмену в публичный канал
+                    case "/cancel":
                         if (currentState == GameState.PlayerCollecting)
                         {
                             UnRegisterPlayer(user);
                             return;
                         }
-                        if (currentPlayer != null && currentPlayer.role != null)
+                        if (currentPlayer != null && currentState == GameState.Day)
                         {
-                            currentPlayer.CancelActivity();
-                            messageBuilder.Text("Ваш голос отменен").SendPublic(gameChannel);
+                            if (currentPlayer.CancelVote())
+                            {
+                                messageBuilder.Text(currentPlayer.GetName() + " отменил свой голос").SendPublic(gameChannel);
+                            }
                         }
                         return;
                     case "/посадить":
@@ -127,6 +129,33 @@ namespace DiscordMafia
                         {
                             Vote(currentPlayer, parts[1]);
                             CheckNextCheckpoint();
+                        }
+                        return;
+                    case "/gametype":
+                    case "/gamemode":
+                    case "/режим":
+                        if (user.IsAdmin() && parts.Length > 1)
+                        {
+                            if (currentState == GameState.Stopped)
+                            {
+                                if (settings.IsValidGametype(parts[1]))
+                                {
+                                    LoadSettings(parts[1]);
+                                    messageBuilder.Text("Режим игры успешно изменен.").SendPublic(gameChannel);
+                                }
+                                else
+                                {
+                                    messageBuilder.Text("Неизвестный режим игры.").SendPublic(gameChannel);
+                                }
+                            }
+                            else
+                            {
+                                messageBuilder.Text("Менять режим игры нельзя, пока игра не завершена.").SendPublic(gameChannel);
+                            }
+                        }
+                        else
+                        {
+                            messageBuilder.Text($"Текущий режим игры: {settings.GameType}").SendPublic(gameChannel);
                         }
                         return;
                 }
@@ -231,7 +260,7 @@ namespace DiscordMafia
                         }
                         return;
                     case "/отмена":
-                    case "/cancel": // TODO Разделить и писать про отмену в публичный канал
+                    case "/cancel":
                         if (currentPlayer != null)
                         {
                             currentPlayer.CancelActivity();
@@ -291,9 +320,9 @@ namespace DiscordMafia
                             }
                             return;
                         }
-                        if (currentPlayer.role is Maniac && parts.Length > 1 && currentState == GameState.Night)
+                        if (currentPlayer.role is NeutralKiller && parts.Length > 1 && currentState == GameState.Night)
                         {
-                            var maniac = (currentPlayer.role as Maniac);
+                            var maniac = (currentPlayer.role as NeutralKiller);
                             var playerToKill = GetPlayerInfo(parts[1]);
                             if (playerToKill != null && maniac.PlayerToKill == null)
                             {
@@ -308,6 +337,32 @@ namespace DiscordMafia
                         {
                             Vote(currentPlayer, parts[1]);
                             CheckNextCheckpoint();
+                        }
+                        return;
+                    case "/проклясть":
+                    case "/curse":
+                        if (currentPlayer == null)
+                        {
+                            return;
+                        }
+                        if (currentPlayer.role is Warlock && parts.Length > 1 && currentState == GameState.Night)
+                        {
+                            var warlock = (currentPlayer.role as Warlock);
+                            var playerToCurse = GetPlayerInfo(parts[1]);
+                            if (playerToCurse != null && warlock.PlayerToCurse == null)
+                            {
+                                try
+                                {
+                                    warlock.PlayerToCurse = playerToCurse;
+                                    NightAction(currentPlayer.role);
+                                    messageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
+                                    CheckNextCheckpoint();
+                                }
+                                catch (Exception ex)
+                                {
+                                    messageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
+                                }
+                            }
                         }
                         return;
                     case "/посадить":
@@ -404,6 +459,35 @@ namespace DiscordMafia
                                         wench.PlayerToCheck = playerToCheck;
                                         NightAction(currentPlayer.role);
                                         messageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
+                                        CheckNextCheckpoint();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        messageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
+                                    }
+                                }
+                            }
+                        }
+                        return;
+                    case "/блок":
+                    case "/block":
+                        {
+                            if (currentPlayer == null)
+                            {
+                                return;
+                            }
+                            if (currentPlayer.role is Hoodlum && parts.Length > 1 && currentState == GameState.Night)
+                            {
+                                var hoodlum = (currentPlayer.role as Hoodlum);
+                                var playerToBlock = GetPlayerInfo(parts[1]);
+                                if (playerToBlock != null && hoodlum.PlayerToBlock == null)
+                                {
+                                    try
+                                    {
+                                        hoodlum.PlayerToBlock = playerToBlock;
+                                        NightAction(currentPlayer.role);
+                                        var message = String.Format("Громила {0} выбрал {1} для блокировки!", currentPlayer.GetName(), hoodlum.PlayerToBlock.GetName());
+                                        messageBuilder.Text(message).SendToTeam(Team.Yakuza);
                                         CheckNextCheckpoint();
                                     }
                                     catch (Exception ex)
@@ -543,7 +627,7 @@ namespace DiscordMafia
         private void Help(UserWrapper user)
         {
             var currentPlayer = currentPlayers.ContainsKey(user.Id) ? currentPlayers[user.Id] : null;
-            var message = "============Игровые команды============" + Environment.NewLine;
+            var message = "<b>==========Игровые команды==========</b>" + Environment.NewLine;
             message += "/help - вывод этой справки (в приват боту);" + Environment.NewLine;
             message += "/join, /я - регистрация в игре (во время набора игроков);" + Environment.NewLine;
             message += "/cancel, /отмена - выход из игры (во время набора игроков);" + Environment.NewLine;
@@ -555,8 +639,8 @@ namespace DiscordMafia
 
             if (currentPlayer != null && currentPlayer.isAlive && currentPlayer.role != null)
             {
-                message += Environment.NewLine;
-                message += "=========== Помощь по статусу===========" + Environment.NewLine;
+                message += " " + Environment.NewLine;
+                message += "<b>=========== Помощь по статусу===========</b>" + Environment.NewLine;
                 message += "Ваш статус - " + messageBuilder.FormatRole(currentPlayer.role.Name) + Environment.NewLine;
                 switch (currentPlayer.role.Team)
                 {
@@ -577,8 +661,16 @@ namespace DiscordMafia
                 message += messageBuilder.GetText(string.Format("RoleHelp_{0}", currentPlayer.role.GetType().Name)) + Environment.NewLine;
             }
 
-            message += Environment.NewLine;
-            message += "======Помощь по начислению очков======" + Environment.NewLine;
+            message += " " + Environment.NewLine;
+            message += "<b>========Помощь по режиму игры========</b>" + Environment.NewLine;
+            message += $"Текущий режим игры: {settings.GameType}" + Environment.NewLine;
+            message += $"Якудза: {settings.IsYakuzaEnabled}" + Environment.NewLine;
+            message += $"Мафов из каждой группировки: {settings.MafPercent}%" + Environment.NewLine;
+            message += "<u><b>Доступные роли</b></u>" + Environment.NewLine;
+            message += settings.Roles.RolesHelp();
+
+            message += " " + Environment.NewLine;
+            message += "<b>======Помощь по начислению очков======</b>" + Environment.NewLine;
             foreach (var pointConfig in settings.Points.Values)
             {
                 message += String.Format("{0}: {1}", pointConfig.Description, pointConfig.Points) + Environment.NewLine;
@@ -599,7 +691,7 @@ namespace DiscordMafia
         {
             if (currentState == GameState.PlayerCollecting && !currentPlayers.ContainsKey(player.Id))
             {
-                var playerInfo = new InGamePlayerInfo(player, settings);
+                var playerInfo = new InGamePlayerInfo(player, this);
                 playerInfo.dbUser.Save();
                 playerInfo.isBot = isBot;
                 currentPlayers.Add(player.Id, playerInfo);
@@ -769,10 +861,10 @@ namespace DiscordMafia
                     switch (player.role.Team)
                     {
                         case Team.Mafia:
-                            mafiaMessage += String.Format("{0} - {1}", messageBuilder.FormatName(player), messageBuilder.FormatRole(player.role.Name)) + Environment.NewLine;
+                            mafiaMessage += String.Format("{0} - {1} (`{2}`)", messageBuilder.FormatName(player), messageBuilder.FormatRole(player.role.Name), player.GetName()) + Environment.NewLine;
                             break;
                         case Team.Yakuza:
-                            yakuzaMessage += String.Format("{0} - {1}", messageBuilder.FormatName(player), messageBuilder.FormatRole(player.role.Name)) + Environment.NewLine;
+                            yakuzaMessage += String.Format("{0} - {1} (`{2}`)", messageBuilder.FormatName(player), messageBuilder.FormatRole(player.role.Name), player.GetName()) + Environment.NewLine;
                             break;
                     }
                 }
@@ -919,7 +1011,7 @@ namespace DiscordMafia
             {
                 if (player.isAlive)
                 {
-                    message += i + " - " + messageBuilder.FormatName(player) + Environment.NewLine;
+                    message += i + " - " + messageBuilder.FormatName(player) + $" (`{player.GetName()}`)" + Environment.NewLine;
                 }
                 i++;
             }
@@ -941,7 +1033,7 @@ namespace DiscordMafia
         {
             foreach (var player in playersList)
             {
-                player.CancelActivity();
+                player.ClearActivity();
             }
             timer.Interval = settings.MorningTime;
             messageBuilder.PrepareText("StartMorning").SendPublic(gameChannel);
@@ -1162,6 +1254,45 @@ namespace DiscordMafia
 
             foreach (var player in PlayerSorter.SortForActivityCheck(playersList, GameState.Night))
             {
+                #region Ниндзя
+                if (player.role is Ninja)
+                {
+                    foreach (var playerToCancelActivity in playersList)
+                    {
+                        if (player != playerToCancelActivity)
+                        {
+                            playerToCancelActivity.CancelActivity(player);
+                        }
+                    }
+                }
+                #endregion
+
+                #region Громила
+                if (player.role is Hoodlum)
+                {
+                    var role = player.role as Hoodlum;
+                    if (role.PlayerToBlock != null)
+                    {
+                        role.LastPlayerToBlock = role.PlayerToBlock;
+                        if (role.PlayerToBlock != player)
+                        {
+                            // Блокируем проверяемого
+                            role.PlayerToBlock.CancelActivity();
+                        }
+                        if (role.PlayerToBlock.role is Commissioner)
+                        {
+                            player.AddPoints("HoodlumBlockCom");
+                        }
+                        else if (role.PlayerToBlock.role.Team == Team.Mafia)
+                        {
+                            player.AddPoints("HoodlumBlockMaf");
+                        }
+                        messageBuilder.PrepareTextReplacePlayer("HoodlumBlock", role.PlayerToBlock).SendPublic(gameChannel);
+                        Pause();
+                    }
+                }
+                #endregion
+
                 #region Путана
                 if (player.role is Wench)
                 {
@@ -1240,16 +1371,23 @@ namespace DiscordMafia
                                 }
                                 break;
                             case Team.Neutral:
-                                if (role.PlayerToCheck.healedBy?.Player != null)
+                                if (role.PlayerToCheck.role is RobinHood)
                                 {
-                                    role.PlayerToCheck.healedBy.Player.AddPoints("DocHealMaf");
-                                    messageBuilder.PrepareTextReplacePlayer("ComKillManiacHelpDoc", role.PlayerToCheck).SendPublic(gameChannel);
+                                    messageBuilder.PrepareText("ComCheckCivil").SendPublic(gameChannel);
                                 }
                                 else
                                 {
-                                    player.AddPoints("ComKillMaf");
-                                    messageBuilder.PrepareTextReplacePlayer("ComKillManiac", role.PlayerToCheck).SendPublic(gameChannel);
-                                    killManager.Kill(role.PlayerToCheck);
+                                    if (role.PlayerToCheck.healedBy?.Player != null)
+                                    {
+                                        role.PlayerToCheck.healedBy.Player.AddPoints("DocHealMaf");
+                                        messageBuilder.PrepareTextReplacePlayer("ComKillManiacHelpDoc", role.PlayerToCheck).SendPublic(gameChannel);
+                                    }
+                                    else
+                                    {
+                                        player.AddPoints("ComKillMaf");
+                                        messageBuilder.PrepareTextReplacePlayer("ComKillManiac", role.PlayerToCheck).SendPublic(gameChannel);
+                                        killManager.Kill(role.PlayerToCheck);
+                                    }
                                 }
                                 break;
                         }
@@ -1465,6 +1603,50 @@ namespace DiscordMafia
                     }
                 }
                 #endregion
+                
+                #region Робин Гуд
+                if (player.role is RobinHood)
+                {
+                    var role = player.role as RobinHood;
+                    if (role.PlayerToKill != null)
+                    {
+                        if (role.PlayerToKill.role is Highlander)
+                        {
+                            messageBuilder.PrepareTextReplacePlayer("RobinHoodKillHighlander", role.PlayerToKill).SendPublic(gameChannel);
+                            (role.PlayerToKill.role as Highlander).WasAttacked = true;
+                        }
+                        else if (role.PlayerToKill.role is Citizen)
+                        {
+                            messageBuilder.PrepareTextReplacePlayer("RobinHoodKillCitizen", role.PlayerToKill).SendPublic(gameChannel);
+                        }
+                        else if (role.PlayerToKill.healedBy?.Player != null)
+                        {
+                            switch (role.PlayerToKill.role.Team)
+                            {
+                                case Team.Civil:
+                                    role.PlayerToKill.healedBy.Player.AddPoints("DocHealCivil");
+                                    if (role.PlayerToKill.role is Commissioner)
+                                    {
+                                        role.PlayerToKill.healedBy.Player.AddPoints("DocHealCom");
+                                    }
+                                    break;
+                                case Team.Mafia:
+                                case Team.Yakuza:
+                                    role.PlayerToKill.healedBy.Player.AddPoints("DocHealMaf");
+                                    break;
+                            }
+                            messageBuilder.PrepareTextReplacePlayer("RobinHoodKillHelpDoc", role.PlayerToKill).SendPublic(gameChannel);
+                        }
+                        else
+                        {
+                            player.AddPoints("NeutralKill");
+                            killManager.Kill(role.PlayerToKill);
+                            messageBuilder.PrepareTextReplacePlayer("RobinHoodKill", role.PlayerToKill).SendPublic(gameChannel);
+                        }
+                        Pause();
+                    }
+                }
+                #endregion
             }
 
             #region Мафия
@@ -1571,7 +1753,7 @@ namespace DiscordMafia
                                     {
                                         player.AddPoints(pointsStrategy);
                                     }
-                                    player.AddPoints(pointsStrategy);
+                                    player.AddPoints("MafKill");
                                 }
                             }
                             messageBuilder.PrepareTextReplacePlayer("YakuzaKill", leader).SendPublic(gameChannel);
@@ -1618,6 +1800,75 @@ namespace DiscordMafia
                         killManager.Kill(highlander.PlayerToKill);
                     }
                 }
+                
+                #region Чернокнижник
+                if (player.role is Warlock)
+                {
+                    var role = player.role as Warlock;
+                    if (role.PlayerToCurse != null)
+                    {
+                        role.AvailableCursesCount--;
+                        var killedPlayersMessage = "Неудачно сегодня закончилась ночь для ";
+                        var killedPlayers = new List<InGamePlayerInfo>();
+                        var mafiosoList = new List<InGamePlayerInfo>();
+                        var yakuzaList = new List<InGamePlayerInfo>();
+                        foreach (var target in playersList)
+                        {
+                            if (target.isAlive && target != player && target.HasActivityAgainst(role.PlayerToCurse))
+                            {
+                                if (target.role is Mafioso)
+                                {
+                                    mafiosoList.Add(target);
+                                    continue;
+                                }
+                                if (target.role is Yakuza)
+                                {
+                                    yakuzaList.Add(target);
+                                    continue;
+                                }
+                                if (target.role is Highlander && !(target.role as Highlander).WasAttacked)
+                                {
+                                    continue;
+                                }
+                                killedPlayers.Add(target);
+                                killManager.Kill(target);
+                                player.AddPoints("NeutralKill");
+                                killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                            }
+                        }
+
+                        // TODO Переделать, вынести в функцию, хоть что-то сделать :(
+                        if (mafiosoList.Count > 0)
+                        {
+                            var playerToKillIdx = randomGenerator.Next(mafiosoList.Count);
+                            var target = mafiosoList[playerToKillIdx];
+                            killedPlayers.Add(target);
+                            killManager.Kill(target);
+                            player.AddPoints("NeutralKill");
+                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                        }
+
+                        // TODO Переделать, вынести в функцию, хоть что-то сделать :(
+                        if (yakuzaList.Count > 0)
+                        {
+                            var playerToKillIdx = randomGenerator.Next(yakuzaList.Count);
+                            var target = yakuzaList[playerToKillIdx];
+                            killedPlayers.Add(target);
+                            killManager.Kill(target);
+                            player.AddPoints("NeutralKill");
+                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                        }
+
+                        if (killedPlayers.Count > 0)
+                        {
+                            killedPlayersMessage += "не надо было трогать проклятого " + messageBuilder.FormatTextReplacePlayer("{role4}", player) + " игрока...";
+                            messageBuilder.Text(killedPlayersMessage, false).SendPublic(gameChannel);
+                            Pause();
+                        }
+                    }
+                }
+                #endregion
+
                 if (player.isAlive && player.delayedDeath != null)
                 {
                     if (player.delayedDeath-- == 0)

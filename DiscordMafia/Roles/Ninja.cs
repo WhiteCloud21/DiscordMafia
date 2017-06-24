@@ -1,12 +1,12 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Maniac : NeutralKiller
+    public class Ninja : Yakuza
     {
         public override string Name
         {
             get
             {
-                return "Маньяк";
+                return "Ниндзя";
             }
         }
 
@@ -15,12 +15,12 @@
             get
             {
                 return new string[] {
-                    "маньяк",
-                    "маньяка",
-                    "маньяку",
-                    "маньяка",
-                    "маньяком",
-                    "маньяке",
+                    "ниндзя",
+                    "ниндзя",
+                    "ниндзя",
+                    "ниндзя",
+                    "ниндзя",
+                    "ниндзя",
                 };
             }
         }

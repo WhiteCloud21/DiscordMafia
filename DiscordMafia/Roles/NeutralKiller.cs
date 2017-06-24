@@ -1,40 +1,17 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Killer : UniqueRole
+    public abstract class NeutralKiller : UniqueRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Киллер";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "киллер",
-                    "киллера",
-                    "киллеру",
-                    "киллера",
-                    "киллером",
-                    "киллере",
-                };
-            }
-        }
-
         public override Team Team
         {
             get
             {
-                return Team.Mafia;
+                return Team.Neutral;
             }
         }
 
         public InGamePlayerInfo PlayerToKill { get; set; }
-
+        
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
             if (onlyAgainstTarget == null || PlayerToKill == onlyAgainstTarget)

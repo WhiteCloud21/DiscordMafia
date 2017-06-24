@@ -45,11 +45,11 @@ namespace DiscordMafia.Messages
         {
             if (tts)
             {
-                return await channel.SendMessage(text);
+                return await channel.SendTTSMessage(text);
             }
             else
             {
-                return await channel.SendTTSMessage(text);
+                return await channel.SendMessage(text);
             }
         }
     }

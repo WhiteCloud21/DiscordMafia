@@ -113,6 +113,20 @@
     </PointsInfo>
   </Item>
   <Item>
+    <string>HoodlumBlockCom</string>
+    <PointsInfo>
+      <int>4</int>
+      <string>Громиле за блокировку комиссара</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>HoodlumBlockMaf</string>
+    <PointsInfo>
+      <int>3</int>
+      <string>Громиле за блокировку мафа</string>
+    </PointsInfo>
+  </Item>
+  <Item>
     <string>DocHealCivil</string>
     <PointsInfo>
       <int>3</int>
