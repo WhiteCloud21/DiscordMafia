@@ -128,6 +128,8 @@
     <Compile Include="RoleAssigner.cs" />
     <Compile Include="Roles\BaseRole.cs" />
     <Compile Include="Roles\Demoman.cs" />
+    <Compile Include="Roles\NeutralKiller.cs" />
+    <Compile Include="Roles\RobinHood.cs" />
     <Compile Include="Roles\Warlock.cs" />
     <Compile Include="Roles\Places\Place.cs" />
     <Compile Include="Roles\Sergeant.cs" />

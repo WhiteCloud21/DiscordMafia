@@ -75,6 +75,11 @@
     <IsRandom>true</IsRandom>
     <MinPlayers>8</MinPlayers>
   </Role>
+  <Role Id="RobinHood">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>8</MinPlayers>
+  </Role>
   <Role Id="Warlock">
     <IsEnabled>true</IsEnabled>
     <IsRandom>true</IsRandom>

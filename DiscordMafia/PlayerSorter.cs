@@ -20,6 +20,7 @@ namespace DiscordMafia
                 typeof(Hoodlum).Name,
                 typeof(Wench).Name,
                 typeof(Maniac).Name,
+                typeof(RobinHood).Name,
                 typeof(Homeless).Name,
                 typeof(Commissioner).Name,
                 typeof(Sheriff).Name,

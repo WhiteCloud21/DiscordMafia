@@ -320,9 +320,9 @@ namespace DiscordMafia
                             }
                             return;
                         }
-                        if (currentPlayer.role is Maniac && parts.Length > 1 && currentState == GameState.Night)
+                        if (currentPlayer.role is NeutralKiller && parts.Length > 1 && currentState == GameState.Night)
                         {
-                            var maniac = (currentPlayer.role as Maniac);
+                            var maniac = (currentPlayer.role as NeutralKiller);
                             var playerToKill = GetPlayerInfo(parts[1]);
                             if (playerToKill != null && maniac.PlayerToKill == null)
                             {
@@ -1371,16 +1371,23 @@ namespace DiscordMafia
                                 }
                                 break;
                             case Team.Neutral:
-                                if (role.PlayerToCheck.healedBy?.Player != null)
+                                if (role.PlayerToCheck.role is RobinHood)
                                 {
-                                    role.PlayerToCheck.healedBy.Player.AddPoints("DocHealMaf");
-                                    messageBuilder.PrepareTextReplacePlayer("ComKillManiacHelpDoc", role.PlayerToCheck).SendPublic(gameChannel);
+                                    messageBuilder.PrepareText("ComCheckCivil").SendPublic(gameChannel);
                                 }
                                 else
                                 {
-                                    player.AddPoints("ComKillMaf");
-                                    messageBuilder.PrepareTextReplacePlayer("ComKillManiac", role.PlayerToCheck).SendPublic(gameChannel);
-                                    killManager.Kill(role.PlayerToCheck);
+                                    if (role.PlayerToCheck.healedBy?.Player != null)
+                                    {
+                                        role.PlayerToCheck.healedBy.Player.AddPoints("DocHealMaf");
+                                        messageBuilder.PrepareTextReplacePlayer("ComKillManiacHelpDoc", role.PlayerToCheck).SendPublic(gameChannel);
+                                    }
+                                    else
+                                    {
+                                        player.AddPoints("ComKillMaf");
+                                        messageBuilder.PrepareTextReplacePlayer("ComKillManiac", role.PlayerToCheck).SendPublic(gameChannel);
+                                        killManager.Kill(role.PlayerToCheck);
+                                    }
                                 }
                                 break;
                         }
@@ -1596,6 +1603,50 @@ namespace DiscordMafia
                     }
                 }
                 #endregion
+                
+                #region Робин Гуд
+                if (player.role is RobinHood)
+                {
+                    var role = player.role as RobinHood;
+                    if (role.PlayerToKill != null)
+                    {
+                        if (role.PlayerToKill.role is Highlander)
+                        {
+                            messageBuilder.PrepareTextReplacePlayer("RobinHoodKillHighlander", role.PlayerToKill).SendPublic(gameChannel);
+                            (role.PlayerToKill.role as Highlander).WasAttacked = true;
+                        }
+                        else if (role.PlayerToKill.role is Citizen)
+                        {
+                            messageBuilder.PrepareTextReplacePlayer("RobinHoodKillCitizen", role.PlayerToKill).SendPublic(gameChannel);
+                        }
+                        else if (role.PlayerToKill.healedBy?.Player != null)
+                        {
+                            switch (role.PlayerToKill.role.Team)
+                            {
+                                case Team.Civil:
+                                    role.PlayerToKill.healedBy.Player.AddPoints("DocHealCivil");
+                                    if (role.PlayerToKill.role is Commissioner)
+                                    {
+                                        role.PlayerToKill.healedBy.Player.AddPoints("DocHealCom");
+                                    }
+                                    break;
+                                case Team.Mafia:
+                                case Team.Yakuza:
+                                    role.PlayerToKill.healedBy.Player.AddPoints("DocHealMaf");
+                                    break;
+                            }
+                            messageBuilder.PrepareTextReplacePlayer("RobinHoodKillHelpDoc", role.PlayerToKill).SendPublic(gameChannel);
+                        }
+                        else
+                        {
+                            player.AddPoints("NeutralKill");
+                            killManager.Kill(role.PlayerToKill);
+                            messageBuilder.PrepareTextReplacePlayer("RobinHoodKill", role.PlayerToKill).SendPublic(gameChannel);
+                        }
+                        Pause();
+                    }
+                }
+                #endregion
 
                 #region Чернокнижник
                 if (player.role is Warlock)
@@ -1606,15 +1657,49 @@ namespace DiscordMafia
                         role.AvailableCursesCount--;
                         var killedPlayersMessage = "Неудачно сегодня закончилась ночь для ";
                         var killedPlayers = new List<InGamePlayerInfo>();
+                        var mafiosoList = new List<InGamePlayerInfo>();
+                        var yakuzaList = new List<InGamePlayerInfo>();
                         foreach (var target in playersList)
                         {
                             if (target.isAlive && target != player && target.HasActivityAgainst(role.PlayerToCurse))
                             {
+                                if (target.role is Mafioso)
+                                {
+                                    mafiosoList.Add(target);
+                                    continue;
+                                }
+                                if (target.role is Yakuza)
+                                {
+                                    yakuzaList.Add(target);
+                                    continue;
+                                }
                                 killedPlayers.Add(target);
                                 killManager.Kill(target);
                                 player.AddPoints("NeutralKill");
                                 killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
                             }
+                        }
+
+                        // TODO Переделать, вынести в функцию, хоть что-то сделать :(
+                        if (mafiosoList.Count > 0)
+                        {
+                            var playerToKillIdx = randomGenerator.Next(mafiosoList.Count);
+                            var target = mafiosoList[playerToKillIdx];
+                            killedPlayers.Add(target);
+                            killManager.Kill(target);
+                            player.AddPoints("NeutralKill");
+                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                        }
+
+                        // TODO Переделать, вынести в функцию, хоть что-то сделать :(
+                        if (yakuzaList.Count > 0)
+                        {
+                            var playerToKillIdx = randomGenerator.Next(yakuzaList.Count);
+                            var target = yakuzaList[playerToKillIdx];
+                            killedPlayers.Add(target);
+                            killManager.Kill(target);
+                            player.AddPoints("NeutralKill");
+                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
                         }
 
                         if (killedPlayers.Count > 0)

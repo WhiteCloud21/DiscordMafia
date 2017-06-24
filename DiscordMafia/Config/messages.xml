@@ -276,6 +276,15 @@
     </ArrayOfString>
   </Item>
   <Item>
+    <string>NightInfo_RobinHood</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Кого избавим от несправедливости сегодня ночью? :)
+        Для убийства игрока введите <b>/убить X</b>, где <b>X</b> - номер игрока.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>NightInfo_Warlock</string>
     <ArrayOfString>
       <string>
@@ -520,7 +529,7 @@
       <string>{role} в темной подворотне встретил даму преклонных лет с щетиной на лице, ему и невдомек было, что это переодетый Комиссар Каттани... "Ни с места!"-прохрипел Каттани и пристрелил мерзавца {name}!</string>
       <string>Каттани знал, что маньяка голыми руками не взять! Поэтому он одел перчатки, и придушил {role1} {name}...</string>
       <string>Комиссар Каттани вычислил {role1} и решил огреть его сзади трубой по голове и задержать... Но, к сожалению, перестарался и принес в участок уже труп {name}...</string>
-      <string>{role} пробрался в офис Комиссара Каттани и вырубил электричество в тот самый момент, когда в его любимой мыльной опере Хуан Карлос должен был признаться Терезе в том, что он троюродный брат её двоюродной сестры, погибшей шесть лет назад от рук родного брата Хуана Карлоса, который был мужем ее тети. Каттани не мог простить это Маньяку и убил подлеца {name}...</string>
+      <string>{role} пробрался в офис Комиссара Каттани и вырубил электричество в тот самый момент, когда в его любимой мыльной опере Хуан Карлос должен был признаться Терезе в том, что он троюродный брат её двоюродной сестры, погибшей шесть лет назад от рук родного брата Хуана Карлоса, который был мужем ее тети. Каттани не мог простить это {role2} и убил подлеца {name}...</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -545,7 +554,7 @@
   <Item>
     <string>ManiacKillHighlander</string>
     <ArrayOfString>
-      <string>=Маньяк изрезал, распилил, а потом расстрелял жителя. Но, к сожалению для маньяка, этот житель - {role}..</string>
+      <string>Маньяк изрезал, распилил, а потом расстрелял жителя. Но, к сожалению для маньяка, этот житель - {role}..</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -559,6 +568,30 @@
     <ArrayOfString>
       <string>Маньяк сделал салат из {name}, который оказался {role4}.</string>
       <string>{name} ({role0}) ночью был убит маньяком. На это указывает топор, найденный в оторванной голове..</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RobinHoodKillHighlander</string>
+    <ArrayOfString>
+      <string>Робин гуд попытался убить {role3}. Но тот почему-то не умер...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RobinHoodKillHelpDoc</string>
+    <ArrayOfString>
+      <string>Робин Гуд ранил {name}. Первая мысль Дока: "Разминка":) {name} жив-здоров и может играть дальше.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RobinHoodKill</string>
+    <ArrayOfString>
+      <string>Робин Гуд пристрелил {name}, который оказался {role4}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RobinHoodKillCitizen</string>
+    <ArrayOfString>
+      <string>Робин Гуд уже собрался стрелять, но увидел, что перед ним {role0}, и передумал.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -687,6 +720,12 @@
     <string>NightAction_Maniac</string>
     <ArrayOfString>
       <string>Маньяк подготовил всё необходимое: ножницы, бензопилу и, конечно, топор. Кого-то ждет жестокая смерть...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_RobinHood</string>
+    <ArrayOfString>
+      <string>Робин Гуд отправился убивать и отбирать деньги у богатых... Только, кажется, бедным награбленное раздать забудет...</string>
     </ArrayOfString>
   </Item>
   <Item>
