@@ -26,7 +26,7 @@ namespace DiscordMafia.Client
 
         public bool IsAdmin()
         {
-            return Id == Program.Settings.AdminID;
+            return Program.Settings.AdminID.Contains(Id);
         }
     }
 }

@@ -64,7 +64,7 @@ namespace DiscordMafia
             client.SetGame(null);
         }
 
-        private static void Migrate(SQLiteConnection connection)
+        private static void Migrate(SqliteConnection connection)
         {
             var databaseProvider = new SqliteDatabaseProvider(connection);
             var migrationsAssembly = typeof(Program).Assembly;

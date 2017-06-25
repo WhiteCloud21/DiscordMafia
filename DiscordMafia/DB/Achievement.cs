@@ -31,7 +31,7 @@ namespace DiscordMafia.DB
             return findAllByCondition("WHERE user_id = :userId", new SqliteParameter[] { new SqliteParameter(":userId", userId)});
         }
 
-        public static IList<Achievement> findAllByCondition(string condition, SQLiteParameter[] parameters)
+        public static IList<Achievement> findAllByCondition(string condition, SqliteParameter[] parameters)
         {
             var connection = Program.connection;
             var command = connection.CreateCommand();
