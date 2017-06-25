@@ -1775,7 +1775,7 @@ namespace DiscordMafia
                         messageBuilder.PrepareText("YakuzaKillNoChoice").SendPublic(gameChannel);
                     }
                 }
-                else if (isTeamHavePlayers(Team.Yakuza))
+                else if (playersList.Any(delegate (InGamePlayerInfo value) { return value.role is Yakuza && value.isAlive; }))
                 {
                     // Нет активности
                     messageBuilder.PrepareText("YakuzaKillNoActive").SendPublic(gameChannel);
