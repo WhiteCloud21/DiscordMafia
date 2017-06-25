@@ -33,13 +33,15 @@ namespace DiscordMafia
         protected Vote currentYakuzaVote { get; set; }
         public Config.MessageBuilder messageBuilder { get; set; }
         protected KillManager killManager { get; set; }
-        protected Achievement.AchievementManager achievementManager { get; set; }
+        public Achievement.AchievementManager achievementManager { get; private set; }
+        public Achievement.AchievementAssigner achievementAssigner { get; private set; }
         protected int PlayerCollectingRemainingTime = 0;
 
         public Game(System.Threading.SynchronizationContext syncContext, DiscordClient client, Config.MainSettings mainSettings)
         {
             gameChannel = mainSettings.GameChannel;
             achievementManager = new Achievement.AchievementManager(this);
+            achievementAssigner = new Achievement.AchievementAssigner(this);
 
             this.syncContext = syncContext;
             this.client = client;
@@ -197,6 +199,7 @@ namespace DiscordMafia
                     case "/mystat":
                     case "/мойстат":
                         messageBuilder.Text(Stat.GetStatAsString(user)).SendPrivate(user.Id);
+                        messageBuilder.Text(achievementManager.getAchievementsAsString(user), false).SendPrivate(user.Id);
                         return;
                     case "/recalculate":
                         if (user.IsAdmin())
@@ -806,6 +809,10 @@ namespace DiscordMafia
         private void StopGame()
         {
             timer.Stop();
+
+            achievementAssigner.afterGame();
+            achievementManager.apply();
+
             currentPlayers.Clear();
             playersList.Clear();
             currentState = GameState.Stopped;
@@ -1448,6 +1455,7 @@ namespace DiscordMafia
                                     if (role.PlayerToKill.role is Commissioner)
                                     {
                                         player.AddPoints("SheriffKillCom");
+                                        achievementManager.push(player.user, Achievement.Achievement.IdCivilKillCom);
                                     }
                                     break;
                                 case Team.Mafia:
@@ -1798,6 +1806,7 @@ namespace DiscordMafia
                                 if (highlander.PlayerToKill.role is Commissioner)
                                 {
                                     player.AddPoints("SheriffKillCom");
+                                    achievementManager.push(player.user, Achievement.Achievement.IdCivilKillCom);
                                 }
                                 break;
                             case Team.Mafia:

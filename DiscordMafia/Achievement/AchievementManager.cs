@@ -18,7 +18,11 @@ namespace DiscordMafia.Achievement
 
             var achievementsToRegister = new List<Achievement>
             {
-                new Achievement { Id = "test", Name = "Тест" }
+                new Achievement { Id = Achievement.Id10k, Name = "\U0001F949", Description = "Набрать 10000 очков" },
+                new Achievement { Id = Achievement.Id25k, Name = "\U0001F948", Description = "Набрать 25000 очков" },
+                new Achievement { Id = Achievement.Id50k, Name = "\U0001F947", Description = "Набрать 50000 очков" },
+                new Achievement { Id = Achievement.Id100k, Name = "\U0001F3C6", Description = "Набрать 100000 очков" },
+                new Achievement { Id = Achievement.IdCivilKillCom, Name = "\U0000267F", Description = "Убить комиссара, играя за шерифа или горца" },
             };
             foreach (var achievement in achievementsToRegister)
             {
@@ -42,7 +46,7 @@ namespace DiscordMafia.Achievement
             {
                 var achievement = allowedAchievements[achievementId];
                 DB.Achievement dbAchievement = DB.Achievement.findUserAchievement(user.Id, achievementId);
-                if (achievement == null)
+                if (dbAchievement == null)
                 {
                     dbAchievement = new DB.Achievement();
                     dbAchievement.userId = user.Id;
@@ -72,6 +76,27 @@ namespace DiscordMafia.Achievement
                 addInstantly(achievementPair.Item1, achievementPair.Item2.Id);
             }
             achievements.Clear();
+        }
+
+        public IList<DB.Achievement> getAchievements(UserWrapper user)
+        {
+            return DB.Achievement.findUserAchievements(user.Id);
+        }
+
+        public string getAchievementsAsString(UserWrapper user)
+        {
+            var builder = new System.Text.StringBuilder();
+            var achievements = DB.Achievement.findUserAchievements(user.Id);
+            builder.AppendLine("<b><u>Достижения:</u></b>");
+            foreach (var dbAchievement in achievements)
+            {
+                Achievement achievement;
+                if (allowedAchievements.TryGetValue(dbAchievement.achievementId, out achievement))
+                {
+                    builder.AppendLine($"<b>{achievement.Name}</b> ({achievement.Description}) - заработано {dbAchievement.achievedAt.ToString()}");
+                }
+            }
+            return builder.ToString();
         }
     }
 }
