@@ -3,6 +3,7 @@ using Discord;
 using System.Threading;
 using DiscordMafia.Config;
 using System;
+using SimpleMigrations.DatabaseProvider;
 
 namespace DiscordMafia
 {
@@ -43,6 +44,7 @@ namespace DiscordMafia
         {
             connection = new SQLiteConnection($"Data Source={settings.DatabasePath};Version=3;");
             connection.Open();
+            Migrate(connection);
 
             var client = new DiscordClient();
             game = new Game(syncContext, client, Settings);
@@ -60,6 +62,15 @@ namespace DiscordMafia
 
             await client.Connect(settings.Token, TokenType.Bot);
             client.SetGame(null);
+        }
+
+        private static void Migrate(SQLiteConnection connection)
+        {
+            var databaseProvider = new SqliteDatabaseProvider(connection);
+            var migrationsAssembly = typeof(Program).Assembly;
+            var migrator = new SimpleMigrations.SimpleMigrator(migrationsAssembly, databaseProvider, new SimpleMigrations.Console.ConsoleLogger());
+            migrator.Load();
+            migrator.MigrateToLatest();
         }
 
         private static void ProcessMessage(MessageEventArgs e)

@@ -26,7 +26,12 @@ namespace DiscordMafia.DB
             return !achievement.isNewRecord ? achievement : null;
         }
 
-        public static IEnumerable<Achievement> findAllByCondition(string condition, SQLiteParameter[] parameters)
+        public static IList<Achievement> findUserAchievements(ulong userId)
+        {
+            return findAllByCondition("WHERE user_id = :userId", new SQLiteParameter[] { new SQLiteParameter(":userId", userId)});
+        }
+
+        public static IList<Achievement> findAllByCondition(string condition, SQLiteParameter[] parameters)
         {
             var connection = Program.connection;
             var command = connection.CreateCommand();
@@ -48,7 +53,7 @@ namespace DiscordMafia.DB
             return achievements;
         }
 
-        public static IEnumerable<Achievement> findAllByCondition(string condition)
+        public static IList<Achievement> findAllByCondition(string condition)
         {
             return findAllByCondition(condition, new SQLiteParameter[0]);
         }
