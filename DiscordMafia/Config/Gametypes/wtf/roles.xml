@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<Roles>
+  <Role Id="Sheriff">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>1</MinPlayers>
+  </Role>
+  <Role Id="Killer">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>1</MinPlayers>
+  </Role>
+  <Role Id="Maniac">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>1</MinPlayers>
+  </Role>
+  <Role Id="RobinHood">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>1</MinPlayers>
+  </Role>
+  <Role Id="Warlock">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>1</MinPlayers>
+  </Role>
+</Roles>
