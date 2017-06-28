@@ -1549,7 +1549,7 @@ namespace DiscordMafia
                     var role = player.role as Demoman;
                     if (role.Counter == 0 && role.PlaceToDestroy != null)
                     {
-                        var killedPlayersMessage = "Сегодня был взорван " + role.PlaceToDestroy.Name + ". ";
+                        var killedPlayersMessage = "💣 Сегодня был взорван " + role.PlaceToDestroy.Name + ". ";
                         var killedPlayers = new List<InGamePlayerInfo>();
                         foreach (var target in playersList)
                         {
@@ -1826,7 +1826,7 @@ namespace DiscordMafia
                     if (role.PlayerToCurse != null)
                     {
                         role.AvailableCursesCount--;
-                        var killedPlayersMessage = "Неудачно сегодня закончилась ночь для ";
+                        var killedPlayersMessage = "㊙ Неудачно сегодня закончилась ночь для ";
                         var killedPlayers = new List<InGamePlayerInfo>();
                         var mafiosoList = new List<InGamePlayerInfo>();
                         var yakuzaList = new List<InGamePlayerInfo>();
@@ -1851,7 +1851,7 @@ namespace DiscordMafia
                                 killedPlayers.Add(target);
                                 killManager.Kill(target);
                                 player.AddPoints("NeutralKill");
-                                killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                                killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[1]) + " " + messageBuilder.FormatName(target) + ", ";
                             }
                         }
 
@@ -1863,7 +1863,7 @@ namespace DiscordMafia
                             killedPlayers.Add(target);
                             killManager.Kill(target);
                             player.AddPoints("NeutralKill");
-                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[1]) + " " + messageBuilder.FormatName(target) + ", ";
                         }
 
                         // TODO Переделать, вынести в функцию, хоть что-то сделать :(
@@ -1874,7 +1874,7 @@ namespace DiscordMafia
                             killedPlayers.Add(target);
                             killManager.Kill(target);
                             player.AddPoints("NeutralKill");
-                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[3]) + " " + messageBuilder.FormatName(target) + ", ";
+                            killedPlayersMessage += messageBuilder.FormatRole(target.role.NameCases[1]) + " " + messageBuilder.FormatName(target) + ", ";
                         }
 
                         if (killedPlayers.Count > 0)
