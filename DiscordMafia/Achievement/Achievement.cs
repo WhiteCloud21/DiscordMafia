@@ -7,9 +7,20 @@
         public const string Id50k = "50k";
         public const string Id100k = "100k";
 
+        public const string IdRatingBronze = "ratingBronze";
+        public const string IdRatingSilver = "ratingSilver";
+        public const string IdRatingGold = "ratingGold";
+        public const string IdRatingChampion = "ratingChamp";
+
         public const string IdCivilKillCom = "civilkillcom";
 
         public string Id
+        {
+            get;
+            set;
+        }
+
+        public string Icon
         {
             get;
             set;

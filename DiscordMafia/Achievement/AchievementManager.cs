@@ -18,11 +18,15 @@ namespace DiscordMafia.Achievement
 
             var achievementsToRegister = new List<Achievement>
             {
-                new Achievement { Id = Achievement.Id10k, Name = "\U0001F949", Description = "Набрать 10000 очков" },
-                new Achievement { Id = Achievement.Id25k, Name = "\U0001F948", Description = "Набрать 25000 очков" },
-                new Achievement { Id = Achievement.Id50k, Name = "\U0001F947", Description = "Набрать 50000 очков" },
-                new Achievement { Id = Achievement.Id100k, Name = "\U0001F3C6", Description = "Набрать 100000 очков" },
-                new Achievement { Id = Achievement.IdCivilKillCom, Name = "\U0000267F", Description = "Убить комиссара, играя за шерифа или горца" },
+                new Achievement { Id = Achievement.Id10k, Icon = "\U0001F949", Name = "Первая зарплата", Description = "Набрать 10000 очков" },
+                new Achievement { Id = Achievement.Id25k, Icon = "\U0001F948", Name = "Толстосум", Description = "Набрать 25000 очков" },
+                new Achievement { Id = Achievement.Id50k, Icon = "\U0001F947", Name = "Мешок золота", Description = "Набрать 50000 очков" },
+                new Achievement { Id = Achievement.Id100k, Icon = "\U0001F3C6", Name = "Финансовый воротила", Description = "Набрать 100000 очков" },
+                new Achievement { Id = Achievement.IdRatingBronze, Icon = "\U0001F949", Name = "Первые шаги", Description = "Набрать 2000 рейтинга" },
+                new Achievement { Id = Achievement.IdRatingSilver, Icon = "\U0001F948", Name = "Знаток правил", Description = "Набрать 3500 рейтинга" },
+                new Achievement { Id = Achievement.IdRatingGold, Icon = "\U0001F947", Name = "Профи", Description = "Набрать 5000 рейтинга" },
+                new Achievement { Id = Achievement.IdRatingChampion, Icon = "\U0001F3C6", Name = "Безусловный чемпион", Description = "Набрать 10000 рейтинга" },
+                new Achievement { Id = Achievement.IdCivilKillCom, Icon = "\U0000267F", Name = "Одно убийство — одно разочарование", Description = "Убить комиссара, играя за шерифа или горца" },
             };
             foreach (var achievement in achievementsToRegister)
             {
@@ -57,7 +61,7 @@ namespace DiscordMafia.Achievement
                     {
                         var messageBuilder = game.messageBuilder;
                         var message = messageBuilder.GetText("AchievementUnlocked");
-                        var achievementText = "<b>" + achievement.Name + "</b>";
+                        var achievementText = $"<b>{achievement.Icon} {achievement.Name}</b>";
                         var replaces = new Dictionary<string, object> { { "name", messageBuilder.FormatName(user) }, { "achievement", achievementText } };
                         messageBuilder
                             .Text(messageBuilder.Format(message, replaces), false)
@@ -93,7 +97,7 @@ namespace DiscordMafia.Achievement
                 Achievement achievement;
                 if (allowedAchievements.TryGetValue(dbAchievement.achievementId, out achievement))
                 {
-                    builder.AppendLine($"<b>{achievement.Name}</b> ({achievement.Description}) - заработано {dbAchievement.achievedAt.ToString()}");
+                    builder.AppendLine($"<b>{achievement.Icon} {achievement.Name}</b> ({achievement.Description}) - заработано {dbAchievement.achievedAt.ToString()}");
                 }
             }
             return builder.ToString();
