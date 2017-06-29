@@ -340,6 +340,12 @@
     </ArrayOfString>
   </Item>
   <Item>
+    <string>EveningVoteInfo</string>
+    <ArrayOfString>
+      <string><![CDATA[Посадить или оправдать, вот в чем вопрос! Голосовать нужно командами <b>/да</b> - посадить и <b>/нет</b> - оправдать.]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>StartNight</string>
     <ArrayOfString>
       <string>🌛 И снова ТЬМА покрывает улицы этого грешного города...</string>
