@@ -1,88 +1,96 @@
-﻿using System.Data.SQLite;
+﻿using Microsoft.Data.Sqlite;
 using Discord;
 using System.Threading;
 using DiscordMafia.Config;
 using System;
+using System.Reflection;
+using System.Threading.Tasks;
+using Discord.WebSocket;
 using SimpleMigrations.DatabaseProvider;
 
 namespace DiscordMafia
 {
-    class Program
+    internal class Program
     {
-        public static BotSynchronizationContext syncContext = new BotSynchronizationContext();
-        private static MainSettings settings;
-        private static Game game;
-        public static SQLiteConnection connection;
+        public static BotSynchronizationContext SyncContext = new BotSynchronizationContext();
+        private static Game _game;
+        public static SqliteConnection Connection;
 
-        public static MainSettings Settings
+        public static MainSettings Settings { get; private set; }
+        
+        private static void Main(string[] args)
         {
-            get
-            {
-                return settings;
-            }
-        }
-
-        static void Main(string[] args)
-        {
-            settings = new MainSettings("Config/mainSettings.xml", "Config/Local/mainSettings.xml");
+            Settings = new MainSettings("Config/mainSettings.xml", "Config/Local/mainSettings.xml");
                 
-            SynchronizationContext.SetSynchronizationContext(syncContext);
-            syncContext.Post(obj => Run(), null);
+            SynchronizationContext.SetSynchronizationContext(SyncContext);
+            SyncContext.Post(obj => Run(), null);
             try
             {
-                syncContext.RunMessagePump();
+                SyncContext.RunMessagePump();
             }
             catch (Exception ex)
             {
-                var message = String.Format("[{0:s}] {1}", DateTime.Now, ex);
+                var message = $"[{DateTime.Now:s}] {ex}";
                 Console.Error.WriteLine(message);
                 System.IO.File.AppendAllText("error.log", message);
             }
         }
-
-        static async void Run()
+        
+        private static Task Log(LogMessage msg)
         {
-            connection = new SQLiteConnection($"Data Source={settings.DatabasePath};Version=3;");
-            connection.Open();
-            Migrate(connection);
-
-            var client = new DiscordClient();
-            game = new Game(syncContext, client, Settings);
-
-            client.MessageReceived += (s, e) =>
-            {
-                syncContext.Post((state) =>
-                {
-                    if (!e.Message.IsAuthor)
-                    {
-                        ProcessMessage(e);
-                    }
-                }, null);
-            };
-
-            await client.Connect(settings.Token, TokenType.Bot);
-            client.SetGame(null);
+            Console.WriteLine(msg.ToString());
+            return Task.CompletedTask;
         }
 
-        private static void Migrate(SQLiteConnection connection)
+        private static async void Run()
+        {
+            Connection = new SqliteConnection($"Data Source={Settings.DatabasePath};");
+            Connection.Open();
+            Migrate(Connection);
+
+            var client = new DiscordSocketClient();
+            client.Log += Log;
+            _game = new Game(SyncContext, client, Settings);
+
+            client.MessageReceived += (message) =>
+            {
+                return Task.Run(() =>
+                {
+                    SyncContext.Post((state) =>
+                    {
+                        if (message.Author.Id != client.CurrentUser.Id)
+                        {
+                            ProcessMessage(message);
+                        }
+                    }, null);
+                });
+            };
+
+            await client.LoginAsync(TokenType.Bot, Settings.Token);
+            await client.StartAsync();
+            await client.SetGameAsync(null);
+        }
+
+        private static void Migrate(SqliteConnection connection)
         {
             var databaseProvider = new SqliteDatabaseProvider(connection);
-            var migrationsAssembly = typeof(Program).Assembly;
-            var migrator = new SimpleMigrations.SimpleMigrator(migrationsAssembly, databaseProvider, new SimpleMigrations.Console.ConsoleLogger());
+            var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly;
+            var migrator = new SimpleMigrations.SimpleMigrator(migrationsAssembly, databaseProvider);
             migrator.Load();
             migrator.MigrateToLatest();
         }
 
-        private static void ProcessMessage(MessageEventArgs e)
+        private static void ProcessMessage(SocketMessage message)
         {
-            if (e.Channel.IsPrivate)
+            if (message.Channel is SocketDMChannel)
             {
-                game.OnPrivateMessage(e);
+                _game.OnPrivateMessage(message);
             }
             else
             {
-                game.OnPublicMessage(e);
+                _game.OnPublicMessage(message);
             }
         }
     }
 }
+

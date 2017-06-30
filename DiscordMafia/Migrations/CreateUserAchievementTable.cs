@@ -6,7 +6,7 @@ namespace DiscordMafia.Migrations
     [Migration(2)]
     class CreateUserAchievementTable : Migration
     {
-        public override void Up()
+        protected override void Up()
         {
             Execute(@"CREATE TABLE IF NOT EXISTS user_achievement (
                 id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL,
@@ -16,7 +16,7 @@ namespace DiscordMafia.Migrations
             );");
         }
 
-        public override void Down()
+        protected override void Down()
         {
             Execute("DROP TABLE user_achievement");
         }

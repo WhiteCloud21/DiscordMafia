@@ -1,32 +1,31 @@
 ﻿using Discord;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DiscordMafia.Messages
 {
     static class ChannelExtensions
     {
-        const int MAX_LENGTH = 1800;
-        public static async Task<Message[]> SplitAndSend(this Channel channel, string text, bool tts = false)
+        const int MaxLength = 1800;
+
+        public static IMessage[] SplitAndSend(this IMessageChannel channel, string text, bool tts = false)
         {
-            var result = new List<Message>();
-            if (text.Length <= MAX_LENGTH)
+            var result = new List<IMessage>();
+            if (text.Length <= MaxLength)
             {
-                result.Add(await channel.Send(text, tts));
+                result.Add(channel.SendMessageAsync(text, tts).Result);
             }
             else
             {
-                var textParts = text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                var textParts = text.Split(new string[] {"\r\n", "\n"}, StringSplitOptions.RemoveEmptyEntries);
                 var totalLength = 0;
                 var message = "";
                 foreach (var textPart in textParts)
                 {
-                    if (textPart.Length + totalLength > MAX_LENGTH)
+                    if (textPart.Length + totalLength > MaxLength)
                     {
-                        result.Add(await channel.Send(message, tts));
+                        result.Add(channel.SendMessageAsync(message, tts).Result);
                         totalLength = 0;
                         message = "";
                     }
@@ -35,22 +34,10 @@ namespace DiscordMafia.Messages
                 }
                 if (message != "")
                 {
-                    result.Add(await channel.Send(message, tts));
+                    result.Add(channel.SendMessageAsync(message, tts).Result);
                 }
             }
             return result.ToArray();
-        }
-
-        private async static Task<Message> Send(this Channel channel, string text, bool tts)
-        {
-            if (tts)
-            {
-                return await channel.SendTTSMessage(text);
-            }
-            else
-            {
-                return await channel.SendMessage(text);
-            }
         }
     }
 }
