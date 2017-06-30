@@ -110,6 +110,7 @@
     <Compile Include="Achievement\AchievementManager.cs" />
     <Compile Include="Activity\JustifyActivity.cs" />
     <Compile Include="Activity\HealActivity.cs" />
+    <Compile Include="Activity\BooleanVoteActivity.cs" />
     <Compile Include="Activity\VoteActivity.cs" />
     <Compile Include="Activity\Activity.cs" />
     <Compile Include="BotSynchronizationContext.cs" />
@@ -161,7 +162,9 @@
     <Compile Include="Roles\Citizen.cs" />
     <Compile Include="Roles\UniqueRole.cs" />
     <Compile Include="DB\Stat.cs" />
+    <Compile Include="Voting\BooleanVote.cs" />
     <Compile Include="Voting\Vote.cs" />
+    <Compile Include="Voting\BooleanVoteResult.cs" />
     <Compile Include="Voting\VoteResult.cs" />
   </ItemGroup>
   <ItemGroup>
