@@ -91,7 +91,10 @@ namespace DiscordMafia
                 foreach (var item in activityList)
                 {
                     item.Cancel(onlyAgainstTarget);
-                    itemsToRemove.Add(item);
+                    if (item.IsCanceled)
+                    {
+                        itemsToRemove.Add(item);
+                    }
                 }
                 foreach (var item in itemsToRemove)
                 {

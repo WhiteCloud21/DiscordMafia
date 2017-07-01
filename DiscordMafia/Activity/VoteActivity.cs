@@ -25,6 +25,7 @@ namespace DiscordMafia.Activity
                     Player.voteFor = null;
                     Vote.Remove(Player);
                 }
+                IsCanceled = true;
                 base.OnCancel(onlyAgainstTarget);
             }
         }
