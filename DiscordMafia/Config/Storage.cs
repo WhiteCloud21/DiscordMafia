@@ -67,10 +67,5 @@ namespace DiscordMafia.Config
         public MessageDictionary() : base()
         {
         }
-
-        protected MessageDictionary(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
-            : base(serializationInfo, streamingContext)
-        {
-        }
     }
 }

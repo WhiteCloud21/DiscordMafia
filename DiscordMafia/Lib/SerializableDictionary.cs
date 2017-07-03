@@ -23,11 +23,6 @@ namespace DiscordMafia.Lib
         {
         }
 
-        protected SerializableDictionary(SerializationInfo info, StreamingContext context)
-                : base(info, context)
-        {
-        }
-
         protected virtual string ItemTagName
         {
             get { return "Item"; }
@@ -61,7 +56,7 @@ namespace DiscordMafia.Lib
 
             try
             {
-                while (reader.NodeType != XmlNodeType.EndElement)
+                while (reader.MoveToContent() != XmlNodeType.EndElement)
                 {
                     if (ItemTagName.Length > 0)
                     {
@@ -113,8 +108,6 @@ namespace DiscordMafia.Lib
                             reader.ReadEndElement();
                         }
                     }
-
-                    reader.MoveToContent();
                 }
             }
             finally

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Discord.WebSocket;
 using DiscordMafia.Client;
 using DiscordMafia.Messages;
 
@@ -11,14 +12,14 @@ namespace DiscordMafia.Config
     public class MessageBuilder
     {
         protected Messages storage;
-        protected DiscordClient client;
+        protected DiscordSocketClient client;
         private IList<InGamePlayerInfo> playersList;
-        protected Dictionary<ulong, Channel> privateChannels = new Dictionary<ulong, Channel>();
-        protected Dictionary<ulong, Channel> Channels = new Dictionary<ulong, Channel>();
+        protected Dictionary<ulong, IDMChannel> privateChannels = new Dictionary<ulong, IDMChannel>();
+        protected Dictionary<ulong, ISocketMessageChannel> Channels = new Dictionary<ulong, ISocketMessageChannel>();
 
         protected string builtMessage = "";
 
-        public MessageBuilder(GameSettings settings, DiscordClient client, IList<InGamePlayerInfo> playersList)
+        public MessageBuilder(GameSettings settings, DiscordSocketClient client, IList<InGamePlayerInfo> playersList)
         {
             this.storage = settings.Messages;
             this.client = client;
@@ -27,7 +28,7 @@ namespace DiscordMafia.Config
 
         public string Encode(string str)
         {
-            return System.Web.HttpUtility.HtmlEncode(str);
+            return System.Net.WebUtility.HtmlEncode(str);
         }
 
         public string Markup(string str)
@@ -90,19 +91,19 @@ namespace DiscordMafia.Config
             return this;
         }
 
-        public Message[] SendPrivate(InGamePlayerInfo player, bool clear = true, bool tts = false)
+        public IMessage[] SendPrivate(InGamePlayerInfo player, bool clear = true, bool tts = false)
         {
-            return SendPrivate(player.user.Id, clear, tts);
+            return SendPrivate(player.user, clear, tts);
         }
 
-        public Message[] SendPrivate(ulong userId, bool clear = true, bool tts = false)
+        public IMessage[] SendPrivate(UserWrapper user, bool clear = true, bool tts = false)
         {
-            Message[] messages = null;
+            IMessage[] messages = null;
             if (string.IsNullOrEmpty(builtMessage))
             {
                 return null;
             }
-            messages = GetPrivateChannel(userId).SplitAndSend(Markup(builtMessage), tts).Result;
+            messages = GetPrivateChannel(user).SplitAndSend(Markup(builtMessage), tts);
             if (clear)
             {
                 Clear();
@@ -110,32 +111,32 @@ namespace DiscordMafia.Config
             return messages;
         }
 
-        protected Channel GetPrivateChannel(ulong userId)
+        protected IDMChannel GetPrivateChannel(UserWrapper user)
         {
-            if (!privateChannels.ContainsKey(userId))
+            if (!privateChannels.ContainsKey(user.Id))
             {
-                privateChannels.Add(userId, client.CreatePrivateChannel(userId).Result);
+                privateChannels.Add(user.Id, user.GetDmChannel());
             }
-            return privateChannels[userId];
+            return privateChannels[user.Id];
         }
 
-        protected Channel GetChannel(ulong channelId)
+        protected ISocketMessageChannel GetChannel(ulong channelId)
         {
             if (!Channels.ContainsKey(channelId))
             {
-                Channels.Add(channelId, client.GetChannel(channelId));
+                Channels.Add(channelId, client.GetChannel(channelId) as ISocketMessageChannel);
             }
             return Channels[channelId];
         }
         
-        public Message[] SendPublic(Channel channel, bool clear = true, bool tts = false)
+        public IMessage[] SendPublic(IMessageChannel channel, bool clear = true, bool tts = false)
         {
-            Message[] messages = null;
+            IMessage[] messages = null;
             if (string.IsNullOrEmpty(builtMessage))
             {
                 return null;
             }
-            messages = channel.SplitAndSend(Markup(builtMessage), tts).Result;
+            messages = channel.SplitAndSend(Markup(builtMessage), tts);
             if (clear)
             {
                 Clear();
@@ -143,7 +144,7 @@ namespace DiscordMafia.Config
             return messages;
         }
 
-        public Message[] SendPublic(ulong chatId, bool clear = true, bool tts = false)
+        public IMessage[] SendPublic(ulong chatId, bool clear = true, bool tts = false)
         {
             return SendPublic(GetChannel(chatId), clear, tts);
         }

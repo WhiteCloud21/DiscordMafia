@@ -25,11 +25,11 @@ namespace DiscordMafia.Config
                 {
                     using (Stream stream = new FileStream(filename, FileMode.Open))
                     {
-                        var reader = new XmlTextReader(stream);
-                        reader.WhitespaceHandling = WhitespaceHandling.None;
-                        reader.ReadToFollowing("Settings");
-                        ReadXml(reader);
-                        reader.Close();
+                        using (var reader = XmlReader.Create(stream))
+                        {
+                            reader.ReadToFollowing("Settings");
+                            ReadXml(reader);
+                        }
                     }
                 }
                 else
@@ -52,9 +52,8 @@ namespace DiscordMafia.Config
 
             try
             {
-                while (reader.NodeType != XmlNodeType.EndElement)
+                while (reader.MoveToContent() != XmlNodeType.EndElement)
                 {
-                    reader.MoveToContent();
                     var name = reader.Name;
                     // TODO Сделать нормальный парсер (на атрибутах свойств?)
                     switch (name)
