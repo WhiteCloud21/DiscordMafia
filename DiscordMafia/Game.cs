@@ -2,15 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
+using Discord.WebSocket;
 using DiscordMafia.Client;
 using DiscordMafia.Items;
 using DiscordMafia.Roles;
 using DiscordMafia.Roles.Places;
 using DiscordMafia.Voting;
 using DiscordMafia.DB;
+using DiscordMafia.Lib;
 
 namespace DiscordMafia
 {
@@ -19,7 +21,7 @@ namespace DiscordMafia
         protected System.Threading.SynchronizationContext syncContext;
         protected Random randomGenerator = new Random();
         protected Timer timer;
-        private DiscordClient client;
+        private DiscordSocketClient client;
         public Config.GameSettings settings { get; protected set; }
 
         public GameState currentState { get; protected set; }
@@ -29,7 +31,7 @@ namespace DiscordMafia
         protected RoleAssigner roleAssigner { get; private set; }
         protected Vote currentDayVote { get; set; }
         protected BooleanVote currentEveningVote { get; set; }
-        protected Message currentDayVoteMessage { get; set; }
+        protected IMessage currentDayVoteMessage { get; set; }
         protected Vote currentMafiaVote { get; set; }
         protected Vote currentYakuzaVote { get; set; }
         public Config.MessageBuilder messageBuilder { get; set; }
@@ -38,7 +40,7 @@ namespace DiscordMafia
         public Achievement.AchievementAssigner achievementAssigner { get; private set; }
         protected int PlayerCollectingRemainingTime = 0;
 
-        public Game(System.Threading.SynchronizationContext syncContext, DiscordClient client, Config.MainSettings mainSettings)
+        public Game(System.Threading.SynchronizationContext syncContext, DiscordSocketClient client, Config.MainSettings mainSettings)
         {
             gameChannel = mainSettings.GameChannel;
             achievementManager = new Achievement.AchievementManager(this);
@@ -64,11 +66,11 @@ namespace DiscordMafia
             Console.WriteLine("Settings loaded");
         }
 
-        public void OnPublicMessage(MessageEventArgs update)
+        public void OnPublicMessage(SocketMessage message)
         {
-            string text = update.Message.Text;
-            Channel channel = update.Channel;
-            UserWrapper user = update.User;
+            string text = message.Content;
+            var channel = message.Channel;
+            UserWrapper user = message.Author;
             if (channel.Id != gameChannel)
             {
                 return;
@@ -201,10 +203,10 @@ namespace DiscordMafia
             }
         }
 
-        public void OnPrivateMessage(MessageEventArgs update)
+        public void OnPrivateMessage(SocketMessage message)
         {
-            string text = update.Message.Text;
-            UserWrapper user = update.User;
+            string text = message.Content;
+            UserWrapper user = message.Author;
             var currentPlayer = GetPlayerInfo(user.Id);
             if (text.StartsWith("/"))
             {
@@ -222,18 +224,18 @@ namespace DiscordMafia
                         {
                             int.TryParse(parts[1], out topCount);
                         }
-                        messageBuilder.Text(Stat.GetTopAsString(messageBuilder, topCount), false).SendPrivate(user.Id);
+                        messageBuilder.Text(Stat.GetTopAsString(messageBuilder, topCount), false).SendPrivate(user);
                         return;
                     case "/mystat":
                     case "/мойстат":
-                        messageBuilder.Text(Stat.GetStatAsString(user)).SendPrivate(user.Id);
-                        messageBuilder.Text(achievementManager.getAchievementsAsString(user), false).SendPrivate(user.Id);
+                        messageBuilder.Text(Stat.GetStatAsString(user)).SendPrivate(user);
+                        messageBuilder.Text(achievementManager.getAchievementsAsString(user), false).SendPrivate(user);
                         return;
                     case "/recalculate":
                         if (user.IsAdmin())
                         {
                             Stat.RecalculateAll();
-                            messageBuilder.Text("OK").SendPrivate(user.Id);
+                            messageBuilder.Text("OK").SendPrivate(user);
                         }
                         return;
                     case "/я":
@@ -266,33 +268,33 @@ namespace DiscordMafia
                         }
                         if (BaseItem.AvailableItems.Length > 0)
                         {
-                            var message = "Предметы, доступные для покупки: " + Environment.NewLine;
+                            var response = "Предметы, доступные для покупки: " + Environment.NewLine;
                             for (var i = 0; i < BaseItem.AvailableItems.Length; i++)
                             {
                                 var item = BaseItem.AvailableItems[i];
                                 var itemInPlayer = currentPlayer.GetItem(item);
-                                message += String.Format("{0}. <b>{1}</b> - предмет ", i + 1, item.Name);
+                                response += String.Format("{0}. <b>{1}</b> - предмет ", i + 1, item.Name);
                                 if (itemInPlayer != null)
                                 {
                                     if (itemInPlayer.IsActive)
                                     {
-                                        message += "будет использован этой ночью";
+                                        response += "будет использован этой ночью";
                                     }
                                     else
                                     {
-                                        message += "уже использован";
+                                        response += "уже использован";
                                     }
                                 }
                                 else
                                 {
-                                    message += "доступен для покупки";
+                                    response += "доступен для покупки";
                                 }
-                                message += ". Цена: " + item.Cost + Environment.NewLine;
-                                message += "<i>" + item.Description + "</i>";
-                                message += Environment.NewLine;
-                                message += Environment.NewLine;
+                                response += ". Цена: " + item.Cost + Environment.NewLine;
+                                response += "<i>" + item.Description + "</i>";
+                                response += Environment.NewLine;
+                                response += Environment.NewLine;
                             }
-                            messageBuilder.Text(message, false).SendPrivate(currentPlayer);
+                            messageBuilder.Text(response, false).SendPrivate(currentPlayer);
                         }
                         else
                         {
@@ -365,8 +367,8 @@ namespace DiscordMafia
                             {
                                 killer.PlayerToKill = playerToKill;
                                 NightAction(currentPlayer.role);
-                                var message = String.Format("Киллер {0} выбрал в качестве жертвы {1}!", currentPlayer.GetName(), playerToKill.GetName());
-                                messageBuilder.Text(message).SendToTeam(Team.Mafia);
+                                var response = String.Format("Киллер {0} выбрал в качестве жертвы {1}!", currentPlayer.GetName(), playerToKill.GetName());
+                                messageBuilder.Text(response).SendToTeam(Team.Mafia);
                                 CheckNextCheckpoint();
                             }
                             return;
@@ -481,8 +483,8 @@ namespace DiscordMafia
                                 {
                                     lawyer.PlayerToCheck = playerToCheck;
                                     NightAction(currentPlayer.role);
-                                    var message = String.Format("Адвокат {0} выбрал {1} для проверки!", currentPlayer.GetName(), lawyer.PlayerToCheck.GetName());
-                                    messageBuilder.Text(message).SendToTeam(Team.Mafia);
+                                    var response = String.Format("Адвокат {0} выбрал {1} для проверки!", currentPlayer.GetName(), lawyer.PlayerToCheck.GetName());
+                                    messageBuilder.Text(response).SendToTeam(Team.Mafia);
                                     CheckNextCheckpoint();
                                 }
                             }
@@ -533,8 +535,8 @@ namespace DiscordMafia
                                     {
                                         hoodlum.PlayerToBlock = playerToBlock;
                                         NightAction(currentPlayer.role);
-                                        var message = String.Format("Громила {0} выбрал {1} для блокировки!", currentPlayer.GetName(), hoodlum.PlayerToBlock.GetName());
-                                        messageBuilder.Text(message).SendToTeam(Team.Yakuza);
+                                        var response = String.Format("Громила {0} выбрал {1} для блокировки!", currentPlayer.GetName(), hoodlum.PlayerToBlock.GetName());
+                                        messageBuilder.Text(response).SendToTeam(Team.Yakuza);
                                         CheckNextCheckpoint();
                                     }
                                     catch (Exception ex)
@@ -662,7 +664,7 @@ namespace DiscordMafia
                 {
                     foreach (var player in playersList)
                     {
-                        if (player.role.Team == currentPlayer.role.Team && !player.isBot && player.user.Id != update.User.Id)
+                        if (player.role.Team == currentPlayer.role.Team && !player.isBot && player.user.Id != message.Author.Id)
                         {
                             messageBuilder.Text($"{currentPlayer.GetName()}: {text}").SendPrivate(player);
                         }
@@ -720,10 +722,10 @@ namespace DiscordMafia
             message += "<b>======Помощь по начислению очков======</b>" + Environment.NewLine;
             foreach (var pointConfig in settings.Points.Values)
             {
-                message += String.Format("{0}: {1}", pointConfig.Description, pointConfig.Points) + Environment.NewLine;
+                message += $"{pointConfig.Description}: {pointConfig.Points}" + Environment.NewLine;
             }
 
-            messageBuilder.Text(message, false).SendPrivate(user.Id);
+            messageBuilder.Text(message, false).SendPrivate(user);
         }
 
         private void NightAction(BaseRole role)
@@ -877,14 +879,14 @@ namespace DiscordMafia
         {
             if (currentState == GameState.Stopped)
             {
-                var message = String.Format("Начинаю набор игроков. У вас <b>{0}</b> секунд.", settings.PlayerCollectingTime / 1000);
+                var message = $"Начинаю набор игроков. У вас <b>{settings.PlayerCollectingTime / 1000}</b> секунд.";
                 message += Environment.NewLine + "<b>/join</b> (<b>/я</b>) - Присоединиться к игре";
                 messageBuilder.Text(message, false).SendPublic(gameChannel);
                 currentState = GameState.PlayerCollecting;
                 timer.Interval = Math.Min(settings.PlayerCollectingTime, 60000);
                 PlayerCollectingRemainingTime = (int)(settings.PlayerCollectingTime - timer.Interval);
                 timer.Start();
-                client.SetGame("Мафия (ожидание игроков)");
+                client.SetGameAsync("Мафия (ожидание игроков)"); // todo think
             }
         }
 
@@ -898,10 +900,10 @@ namespace DiscordMafia
             currentPlayers.Clear();
             playersList.Clear();
             currentState = GameState.Stopped;
-            client.SetGame(null);
+            client.SetGameAsync(null); // todo think
         }
 
-        private void OnTimer(object sender, ElapsedEventArgs e)
+        private void OnTimer(object sender)
         {
             timer.Stop();
             syncContext.Post(new System.Threading.SendOrPostCallback(
@@ -982,7 +984,7 @@ namespace DiscordMafia
                 {
                     StartMorning();
                 }
-                client.SetGame("Мафия");
+                client.SetGameAsync("Мафия"); // todo think
             }
             else
             {
@@ -1075,7 +1077,7 @@ namespace DiscordMafia
             int itemNum = 0;
             if (int.TryParse(request, out itemNum) && itemNum > 0 && itemNum <= BaseItem.AvailableItems.Length)
             {
-                return BaseItem.AvailableItems[itemNum - 1].GetType().GetConstructor(Type.EmptyTypes).Invoke(new object[0]) as BaseItem;
+                return BaseItem.AvailableItems[itemNum - 1].GetType().GetTypeInfo().GetConstructor(Type.EmptyTypes).Invoke(new object[0]) as BaseItem;
             }
             return null;
         }

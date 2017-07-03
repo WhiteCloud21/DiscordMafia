@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using Mono.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 
 namespace DiscordMafia.DB
 {
@@ -15,7 +15,7 @@ namespace DiscordMafia.DB
 
         public static Achievement findUserAchievement(ulong userId, string achievementId)
         {
-            var connection = Program.connection;
+            var connection = Program.Connection;
             var command = connection.CreateCommand();
             command.CommandText = getSelect() + "WHERE user_id = :userId AND achievement_id = :achievementId";
             command.Parameters.AddWithValue(":userId", userId);
@@ -33,7 +33,7 @@ namespace DiscordMafia.DB
 
         public static IList<Achievement> findAllByCondition(string condition, SqliteParameter[] parameters)
         {
-            var connection = Program.connection;
+            var connection = Program.Connection;
             var command = connection.CreateCommand();
             var achievements = new List<Achievement>();
             command.CommandText = getSelect() + condition;
@@ -78,7 +78,7 @@ namespace DiscordMafia.DB
 
         public bool Save()
         {
-            var connection = Program.connection;
+            var connection = Program.Connection;
             var command = connection.CreateCommand();
             if (isNewRecord)
             {

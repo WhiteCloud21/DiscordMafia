@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mono.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 using System.Linq;
 using DiscordMafia.Client;
 

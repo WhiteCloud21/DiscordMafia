@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -42,11 +43,6 @@ namespace DiscordMafia.Config
                 instances.Add(filename, instance);
             }
             return instances[filename];
-        }
-
-        protected Roles(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
-            : base(serializationInfo, streamingContext)
-        {
         }
 
         public List<BaseRole> getTemporaryRoles(int playersCount)
@@ -119,7 +115,7 @@ namespace DiscordMafia.Config
                     {
                         try
                         {
-                            var constructor = roleType.GetConstructor(Type.EmptyTypes);
+                            var constructor = roleType.GetTypeInfo().GetConstructor(Type.EmptyTypes);
                             typeCache.Add(roleName, constructor);
                         }
                         catch (Exception ex)
@@ -163,15 +159,13 @@ namespace DiscordMafia.Config
 
             try
             {
-                while (reader.NodeType != XmlNodeType.EndElement)
+                while (reader.MoveToContent() != XmlNodeType.EndElement)
                 {
                     var key = reader.GetAttribute("Id");
                     var value = new RoleConfig();
                     value.ReadXml(reader);
 
                     Add(key, value);
-
-                    reader.MoveToContent();
                 }
             }
             finally

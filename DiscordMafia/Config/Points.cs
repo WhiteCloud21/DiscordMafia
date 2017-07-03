@@ -63,11 +63,6 @@ namespace DiscordMafia.Config
             }
             return instances[filename];
         }
-
-        protected Points(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
-            : base(serializationInfo, streamingContext)
-        {
-        }
     }
 
     [Serializable]

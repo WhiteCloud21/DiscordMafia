@@ -6,7 +6,7 @@ namespace DiscordMafia.Migrations
     [Migration(1)]
     class CreateUserTable : Migration
     {
-        public override void Up()
+        protected override void Up()
         {
             Execute(@"CREATE TABLE IF NOT EXISTS user (
                 id INTEGER UNSIGNED PRIMARY KEY  NOT NULL  DEFAULT (null),
@@ -23,7 +23,7 @@ namespace DiscordMafia.Migrations
             );");
         }
 
-        public override void Down()
+        protected override void Down()
         {
             Execute("DROP TABLE user");
         }
