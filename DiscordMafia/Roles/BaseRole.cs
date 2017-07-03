@@ -38,6 +38,10 @@ namespace DiscordMafia.Roles
                     }
                     return true;
                 case GameState.Evening:
+                    if (Player.eveningVoteActivity == null)
+                    {
+                        return false;
+                    }
                     return false;
                 default:
                     return false;

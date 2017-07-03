@@ -22,6 +22,7 @@ namespace DiscordMafia.Activity
                 {
                     Accused.justifiedBy = null;
                 }
+                IsCanceled = true;
                 base.OnCancel(onlyAgainstTarget);
             }
         }

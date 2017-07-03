@@ -21,10 +21,12 @@ namespace DiscordMafia
         protected Game game { get; set; }
         protected List<BaseActivity> activityList { get; set; }
         public VoteActivity voteFor { get; set; }
+        public BooleanVoteActivity eveningVoteActivity { get; set; }
         public HealActivity healedBy { get; set; }
         public JustifyActivity justifiedBy { get; set; }
         public Place placeToGo { get; set; }
         public List<BaseItem> ownedItems { get; set; }
+        protected bool isTurnSkipped { get; set; }
 
         public InGamePlayerInfo(UserWrapper user, Game game)
         {
@@ -71,6 +73,7 @@ namespace DiscordMafia
 
         public void ClearActivity()
         {
+            isTurnSkipped = false;
             role?.ClearActivity();
             foreach (var item in activityList)
             {
@@ -88,7 +91,10 @@ namespace DiscordMafia
                 foreach (var item in activityList)
                 {
                     item.Cancel(onlyAgainstTarget);
-                    itemsToRemove.Add(item);
+                    if (item.IsCanceled)
+                    {
+                        itemsToRemove.Add(item);
+                    }
                 }
                 foreach (var item in itemsToRemove)
                 {
@@ -97,11 +103,12 @@ namespace DiscordMafia
             }
             else
             {
+                isTurnSkipped = false;
                 var itemsToRemove = new List<BaseActivity>();
                 foreach (var item in activityList)
                 {
-                    // Дневное голосование отменяется через CancelVote
-                    if (game.currentState == GameState.Day && item == voteFor)
+                    // Дневное и вечернее голосование отменяется через CancelVote
+                    if (game.currentState == GameState.Day && item == voteFor || game.currentState == GameState.Evening && item == eveningVoteActivity)
                     {
                         continue;
                     }
@@ -117,7 +124,19 @@ namespace DiscordMafia
 
         public bool CancelVote()
         {
-            var voteActivity = voteFor;
+            isTurnSkipped = false;
+            BaseActivity voteActivity;
+            switch (game.currentState)
+            {
+                case GameState.Day:
+                    voteActivity = voteFor;
+                    break;
+                case GameState.Evening:
+                    voteActivity = eveningVoteActivity;
+                    break;
+                default:
+                    return false;
+            }
             if (voteActivity != null)
             {
                 voteActivity.Cancel();
@@ -189,7 +208,17 @@ namespace DiscordMafia
 
         public bool IsReady(GameState currentState)
         {
-            return role?.IsReady(currentState) ?? false;
+            return isTurnSkipped || (role?.IsReady(currentState) ?? false);
+        }
+
+        public bool SkipTurn(bool value = true)
+        {
+            if (isTurnSkipped == value)
+            {
+                return false;
+            }
+            isTurnSkipped = true;
+            return true;
         }
     }
 }

@@ -30,6 +30,7 @@ namespace DiscordMafia
         public ulong gameChannel { get; protected set; }
         protected RoleAssigner roleAssigner { get; private set; }
         protected Vote currentDayVote { get; set; }
+        protected BooleanVote currentEveningVote { get; set; }
         protected IMessage currentDayVoteMessage { get; set; }
         protected Vote currentMafiaVote { get; set; }
         protected Vote currentYakuzaVote { get; set; }
@@ -127,11 +128,38 @@ namespace DiscordMafia
                             }
                         }
                         return;
+                    case "/пропустить":
+                    case "/skip":
+                        if (currentPlayer != null)
+                        {
+                            if (currentPlayer.SkipTurn())
+                            {
+                                messageBuilder.Text(currentPlayer.GetName() + " пропустил ход").SendPublic(gameChannel);
+                                CheckNextCheckpoint();
+                            }
+                        }
+                        return;
                     case "/посадить":
                     case "/imprison":
                         if (parts.Length > 1)
                         {
-                            Vote(currentPlayer, parts[1]);
+                            DayVote(currentPlayer, parts[1]);
+                            CheckNextCheckpoint();
+                        }
+                        return;
+                    case "/да":
+                    case "/yes":
+                        if (currentState == GameState.Evening)
+                        {
+                            EveningVote(currentPlayer, true);
+                            CheckNextCheckpoint();
+                        }
+                        return;
+                    case "/нет":
+                    case "/no":
+                        if (currentState == GameState.Evening)
+                        {
+                            EveningVote(currentPlayer, false);
                             CheckNextCheckpoint();
                         }
                         return;
@@ -272,6 +300,17 @@ namespace DiscordMafia
                             messageBuilder.Text("Ваш голос отменен").SendPrivate(currentPlayer);
                         }
                         return;
+                    case "/пропустить":
+                    case "/skip":
+                        if (currentPlayer != null)
+                        {
+                            if (currentPlayer.SkipTurn())
+                            {
+                                messageBuilder.Text("Вы пропустили ход.").SendPrivate(currentPlayer);
+                                CheckNextCheckpoint();
+                            }
+                        }
+                        return;
                     case "/убить":
                     case "/kill":
                         if (currentPlayer == null)
@@ -340,7 +379,7 @@ namespace DiscordMafia
                         }
                         if (parts.Length > 1)
                         {
-                            Vote(currentPlayer, parts[1]);
+                            NightVote(currentPlayer, parts[1]);
                             CheckNextCheckpoint();
                         }
                         return;
@@ -394,10 +433,6 @@ namespace DiscordMafia
                                 }
                             }
                             return;
-                        }
-                        if (parts.Length > 1)
-                        {
-                            Vote(currentPlayer, parts[1]);
                         }
                         return;
                     case "/пров":
@@ -716,7 +751,7 @@ namespace DiscordMafia
             }
         }
 
-        private void Vote(InGamePlayerInfo player, string voteForRequest)
+        private void DayVote(InGamePlayerInfo player, string voteForRequest)
         {
             if (player == null)
             {
@@ -739,7 +774,54 @@ namespace DiscordMafia
                     }
                 }
             }
-            else if (currentState == GameState.Night)
+        }
+
+        private void EveningVote(InGamePlayerInfo player, bool voteValue)
+        {
+            if (player == null)
+            {
+                return;
+            }
+            if (currentState == GameState.Evening)
+            {
+                try
+                {
+                    var result = currentDayVote?.GetResult();
+                    if (result != null && result.HasOneLeader)
+                    {
+                        var leader = currentPlayers[result.Leader.Value];
+                        if (leader != player)
+                        {
+                            currentEveningVote.Add(player, voteValue);
+                            if (voteValue)
+                            {
+                                messageBuilder.Text(String.Format("{0} уверен в виновности {1} ({2})!", player.GetName(), leader.GetName(), currentEveningVote.GetResult().YesCount)).SendPublic(gameChannel);
+                            }
+                            else
+                            {
+                                messageBuilder.Text(String.Format("{0} требует оправдания {1} ({2})!", player.GetName(), leader.GetName(), currentEveningVote.GetResult().NoCount)).SendPublic(gameChannel);
+                            }
+                        }
+                        else
+                        {
+                            messageBuilder.Text(String.Format("{0} - нельзя голосовать за себя!", player.GetName())).SendPublic(gameChannel);
+                        }
+                    }
+                }
+                catch (ArgumentException)
+                {
+                    // Игрок уже голосовал
+                }
+            }
+        }
+
+        private void NightVote(InGamePlayerInfo player, string voteForRequest)
+        {
+            if (player == null)
+            {
+                return;
+            }
+            if (currentState == GameState.Night)
             {
                 var voteFor = GetPlayerInfo(voteForRequest);
                 if (voteFor != null)
@@ -904,9 +986,10 @@ namespace DiscordMafia
 
         protected void CheckNextCheckpoint()
         {
-            if (currentState == GameState.Day || currentState == GameState.Night)
+            if (currentState == GameState.Day || currentState == GameState.Evening || currentState == GameState.Night)
             {
                 var isAllReady = true;
+                var dayVoteResult = currentDayVote?.GetResult();
                 foreach (var player in playersList)
                 {
                     if (player.isAlive)
@@ -917,6 +1000,13 @@ namespace DiscordMafia
                             if ((player.role as Demoman).Counter == 0)
                             {
                                 isAllReady = false;
+                            }
+                        }
+                        if (currentState == GameState.Evening && dayVoteResult != null && dayVoteResult.HasOneLeader)
+                        {
+                            if (currentPlayers[dayVoteResult.Leader.Value] == player)
+                            {
+                                isAllReady = true;
                             }
                         }
                         if (!isAllReady)
@@ -1073,8 +1163,22 @@ namespace DiscordMafia
         {
             messageBuilder.PrepareText("StartEvening").SendPublic(gameChannel);
 
-            timer.Interval = settings.EveningTime;
+            var dayVoteResult = currentDayVote?.GetResult();
+            if (dayVoteResult != null && dayVoteResult.HasOneLeader)
+            {
+                messageBuilder.PrepareText("EveningVoteInfo").SendPublic(gameChannel);
+                timer.Interval = settings.EveningTime;
+                foreach (var player in playersList)
+                {
+                    player.SkipTurn(false);
+                }
+            }
+            else
+            {
+                timer.Interval = 1;
+            }
             currentState = GameState.Evening;
+            currentEveningVote = new BooleanVote();
             timer.Start();
         }
 
@@ -1101,6 +1205,7 @@ namespace DiscordMafia
         {
             Console.WriteLine("EndEvening");
             var result = currentDayVote?.GetResult();
+            var eveningResult = currentEveningVote?.GetResult();
 
             foreach (var player in PlayerSorter.SortForActivityCheck(playersList, GameState.Day))
             {
@@ -1119,7 +1224,7 @@ namespace DiscordMafia
 
             if (result != null && !result.IsEmpty)
             {
-                if (result.HasOneLeader)
+                if (result.HasOneLeader && (settings.EveningTime == 0 || (eveningResult != null && eveningResult.Result.HasValue && eveningResult.Result.Value)))
                 {
                     var leader = currentPlayers[result.Leader.Value];
                     if (leader.justifiedBy != null)

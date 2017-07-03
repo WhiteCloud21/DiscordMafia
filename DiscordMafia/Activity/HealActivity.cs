@@ -22,6 +22,7 @@ namespace DiscordMafia.Activity
                 {
                     Patient.healedBy = null;
                 }
+                IsCanceled = true;
                 base.OnCancel(onlyAgainstTarget);
             }
         }
