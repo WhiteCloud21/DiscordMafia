@@ -9,12 +9,12 @@ namespace DiscordMafia
 {
     public static class PlayerSorter
     {
-        private static string[] nightSortPositions;
-        private static string[] daySortPositions;
+        private static string[] _nightSortPositions;
+        private static string[] _daySortPositions;
 
         static PlayerSorter()
         {
-            nightSortPositions = new string[]
+            _nightSortPositions = new string[]
             {
                 typeof(Ninja).Name,
                 typeof(Hoodlum).Name,
@@ -29,7 +29,7 @@ namespace DiscordMafia
                 typeof(Doctor).Name,
                 typeof(Demoman).Name,
             };
-            daySortPositions = new string[] {
+            _daySortPositions = new string[] {
                 typeof(Judge).Name,
                 typeof(Elder).Name,
             };
@@ -41,7 +41,7 @@ namespace DiscordMafia
             players = new List<InGamePlayerInfo>(players);
 
             Comparison<InGamePlayerInfo> comparer = null;
-            players.RemoveAll(delegate (InGamePlayerInfo player) { return !player.isAlive; });
+            players.RemoveAll(delegate (InGamePlayerInfo player) { return !player.IsAlive; });
             switch (state)
             {
                 case GameState.Night:
@@ -60,12 +60,12 @@ namespace DiscordMafia
 
         private static int ActivityCheckNightComparer(InGamePlayerInfo player1, InGamePlayerInfo player2)
         {
-            var idx1 = Array.IndexOf(nightSortPositions, player1.role.GetType().Name);
+            var idx1 = Array.IndexOf(_nightSortPositions, player1.Role.GetType().Name);
             if (idx1 < 0)
             {
                 idx1 = int.MaxValue;
             }
-            var idx2 = Array.IndexOf(nightSortPositions, player2.role.GetType().Name);
+            var idx2 = Array.IndexOf(_nightSortPositions, player2.Role.GetType().Name);
             if (idx2 < 0)
             {
                 idx2 = int.MaxValue;
@@ -75,12 +75,12 @@ namespace DiscordMafia
 
         private static int ActivityCheckDayComparer(InGamePlayerInfo player1, InGamePlayerInfo player2)
         {
-            var idx1 = Array.IndexOf(daySortPositions, player1.role.GetType().Name);
+            var idx1 = Array.IndexOf(_daySortPositions, player1.Role.GetType().Name);
             if (idx1 < 0)
             {
                 idx1 = int.MaxValue;
             }
-            var idx2 = Array.IndexOf(daySortPositions, player2.role.GetType().Name);
+            var idx2 = Array.IndexOf(_daySortPositions, player2.Role.GetType().Name);
             if (idx2 < 0)
             {
                 idx2 = int.MaxValue;

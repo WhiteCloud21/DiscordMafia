@@ -44,7 +44,7 @@
             switch (currentState)
             {
                 case GameState.Night:
-                    if (Player.voteFor == null)
+                    if (Player.VoteFor == null)
                     {
                         return false;
                     }

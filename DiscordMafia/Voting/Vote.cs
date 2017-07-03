@@ -5,7 +5,7 @@ namespace DiscordMafia.Voting
 {
     public class Vote
     {
-        protected Dictionary<ulong, VoteActivity> votes = new Dictionary<ulong, VoteActivity>();
+        protected Dictionary<ulong, VoteActivity> Votes = new Dictionary<ulong, VoteActivity>();
 
         /// <summary>
         /// Был ли хоть один проголосовавший (даже отменивший голос)
@@ -19,7 +19,7 @@ namespace DiscordMafia.Voting
 
         public VoteResult GetResult()
         {
-            return new VoteResult(votes);
+            return new VoteResult(Votes);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace DiscordMafia.Voting
         {
             HasVotes = true;
             var activity = new VoteActivity(voter, this, forWho);
-            votes.Add(voter.user.Id, activity);
+            Votes.Add(voter.User.Id, activity);
             voter.AddActivity(activity);
         }
 
@@ -42,10 +42,10 @@ namespace DiscordMafia.Voting
         /// <param name="voter"></param>
         public void Remove(InGamePlayerInfo voter)
         {
-            if (votes.ContainsKey(voter.user.Id))
+            if (Votes.ContainsKey(voter.User.Id))
             {
-                var activity = votes[voter.user.Id];
-                votes.Remove(voter.user.Id);
+                var activity = Votes[voter.User.Id];
+                Votes.Remove(voter.User.Id);
                 activity.Cancel();
             }
         }

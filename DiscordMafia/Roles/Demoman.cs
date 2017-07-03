@@ -69,7 +69,7 @@ namespace DiscordMafia.Roles
                 base.NightInfo(game, currentPlayer);
                 foreach (var player in game.playersList)
                 {
-                    if (player.isAlive && player.role.Team != Team.Mafia)
+                    if (player.IsAlive && player.Role.Team != Team.Mafia)
                     {
                         game.messageBuilder.PrepareText("NightInfo_" + GetType().Name + "_ForPlayers").AddImage("roles/whereToGo.png").SendPrivate(player);
                     }

@@ -2,52 +2,52 @@
 {
     public class AchievementAssigner
     {
-        private readonly Game game;
-        private readonly AchievementManager manager;
+        private readonly Game _game;
+        private readonly AchievementManager _manager;
 
         public AchievementAssigner(Game game)
         {
-            this.game = game;
-            manager = game.achievementManager;
+            this._game = game;
+            _manager = game.achievementManager;
         }
 
         public void afterGame()
         {
-            foreach (var player in game.playersList)
+            foreach (var player in _game.playersList)
             {
                 // TODO Уже выглядит плохо, разбить на методы
-                if (player.dbUser.totalPoints >= 10000)
+                if (player.DbUser.TotalPoints >= 10000)
                 {
-                    manager.push(player.user, Achievement.Id10k);
+                    _manager.Push(player.User, Achievement.Id10K);
                 }
-                if (player.dbUser.totalPoints >= 25000)
+                if (player.DbUser.TotalPoints >= 25000)
                 {
-                    manager.push(player.user, Achievement.Id25k);
+                    _manager.Push(player.User, Achievement.Id25K);
                 }
-                if (player.dbUser.totalPoints >= 50000)
+                if (player.DbUser.TotalPoints >= 50000)
                 {
-                    manager.push(player.user, Achievement.Id50k);
+                    _manager.Push(player.User, Achievement.Id50K);
                 }
-                if (player.dbUser.totalPoints >= 100000)
+                if (player.DbUser.TotalPoints >= 100000)
                 {
-                    manager.push(player.user, Achievement.Id100k);
+                    _manager.Push(player.User, Achievement.Id100K);
                 }
                 
-                if (player.dbUser.rate >= 2000)
+                if (player.DbUser.Rate >= 2000)
                 {
-                    manager.push(player.user, Achievement.IdRatingBronze);
+                    _manager.Push(player.User, Achievement.IdRatingBronze);
                 }
-                if (player.dbUser.rate >= 3500)
+                if (player.DbUser.Rate >= 3500)
                 {
-                    manager.push(player.user, Achievement.IdRatingSilver);
+                    _manager.Push(player.User, Achievement.IdRatingSilver);
                 }
-                if (player.dbUser.rate >= 5000)
+                if (player.DbUser.Rate >= 5000)
                 {
-                    manager.push(player.user, Achievement.IdRatingGold);
+                    _manager.Push(player.User, Achievement.IdRatingGold);
                 }
-                if (player.dbUser.rate >= 10000)
+                if (player.DbUser.Rate >= 10000)
                 {
-                    manager.push(player.user, Achievement.IdRatingChampion);
+                    _manager.Push(player.User, Achievement.IdRatingChampion);
                 }
             }
         }

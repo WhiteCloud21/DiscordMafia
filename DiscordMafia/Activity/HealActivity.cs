@@ -11,7 +11,7 @@ namespace DiscordMafia.Activity
             : base(doctor)
         {
             Patient = patient;
-            Patient.healedBy = this;
+            Patient.HealedBy = this;
         }
 
         protected override void OnCancel(InGamePlayerInfo onlyAgainstTarget)
@@ -20,7 +20,7 @@ namespace DiscordMafia.Activity
             {
                 if (Patient != null)
                 {
-                    Patient.healedBy = null;
+                    Patient.HealedBy = null;
                 }
                 IsCanceled = true;
                 base.OnCancel(onlyAgainstTarget);

@@ -6,22 +6,22 @@ namespace DiscordMafia.Achievement
 {
     public class AchievementManager
     {
-        protected readonly Dictionary<string, Achievement> allowedAchievements = new Dictionary<string, Achievement>();
+        protected readonly Dictionary<string, Achievement> AllowedAchievements = new Dictionary<string, Achievement>();
 
-        protected readonly List<Tuple<UserWrapper, Achievement>> achievements = new List<Tuple<UserWrapper, Achievement>>();
+        protected readonly List<Tuple<UserWrapper, Achievement>> Achievements = new List<Tuple<UserWrapper, Achievement>>();
 
-        protected readonly Game game;
+        protected readonly Game Game;
 
         public AchievementManager(Game game)
         {
-            this.game = game;
+            Game = game;
 
             var achievementsToRegister = new List<Achievement>
             {
-                new Achievement { Id = Achievement.Id10k, Icon = "\U0001F949", Name = "Первая зарплата", Description = "Набрать 10000 очков" },
-                new Achievement { Id = Achievement.Id25k, Icon = "\U0001F948", Name = "Толстосум", Description = "Набрать 25000 очков" },
-                new Achievement { Id = Achievement.Id50k, Icon = "\U0001F947", Name = "Мешок золота", Description = "Набрать 50000 очков" },
-                new Achievement { Id = Achievement.Id100k, Icon = "\U0001F3C6", Name = "Финансовый воротила", Description = "Набрать 100000 очков" },
+                new Achievement { Id = Achievement.Id10K, Icon = "\U0001F949", Name = "Первая зарплата", Description = "Набрать 10000 очков" },
+                new Achievement { Id = Achievement.Id25K, Icon = "\U0001F948", Name = "Толстосум", Description = "Набрать 25000 очков" },
+                new Achievement { Id = Achievement.Id50K, Icon = "\U0001F947", Name = "Мешок золота", Description = "Набрать 50000 очков" },
+                new Achievement { Id = Achievement.Id100K, Icon = "\U0001F3C6", Name = "Финансовый воротила", Description = "Набрать 100000 очков" },
                 new Achievement { Id = Achievement.IdRatingBronze, Icon = "\U0001F949", Name = "Первые шаги", Description = "Набрать 2000 рейтинга" },
                 new Achievement { Id = Achievement.IdRatingSilver, Icon = "\U0001F948", Name = "Знаток правил", Description = "Набрать 3500 рейтинга" },
                 new Achievement { Id = Achievement.IdRatingGold, Icon = "\U0001F947", Name = "Профи", Description = "Набрать 5000 рейтинга" },
@@ -30,42 +30,42 @@ namespace DiscordMafia.Achievement
             };
             foreach (var achievement in achievementsToRegister)
             {
-                allowedAchievements.Add(achievement.Id, achievement);
+                AllowedAchievements.Add(achievement.Id, achievement);
             }
         }
 
-        public bool push(UserWrapper user, string achievementId)
+        public bool Push(UserWrapper user, string achievementId)
         {
-            if (allowedAchievements.ContainsKey(achievementId))
+            if (AllowedAchievements.ContainsKey(achievementId))
             {
-                achievements.Add(new Tuple<UserWrapper, Achievement>(user, allowedAchievements[achievementId]));
+                Achievements.Add(new Tuple<UserWrapper, Achievement>(user, AllowedAchievements[achievementId]));
                 return true;
             }
             return false;
         }
 
-        public bool addInstantly(UserWrapper user, string achievementId)
+        public bool AddInstantly(UserWrapper user, string achievementId)
         {
-            if (allowedAchievements.ContainsKey(achievementId))
+            if (AllowedAchievements.ContainsKey(achievementId))
             {
-                var achievement = allowedAchievements[achievementId];
-                DB.Achievement dbAchievement = DB.Achievement.findUserAchievement(user.Id, achievementId);
+                var achievement = AllowedAchievements[achievementId];
+                DB.Achievement dbAchievement = DB.Achievement.FindUserAchievement(user.Id, achievementId);
                 if (dbAchievement == null)
                 {
                     dbAchievement = new DB.Achievement();
-                    dbAchievement.userId = user.Id;
-                    dbAchievement.achievementId = achievementId;
-                    dbAchievement.achievedAt = DateTime.Now;
+                    dbAchievement.UserId = user.Id;
+                    dbAchievement.AchievementId = achievementId;
+                    dbAchievement.AchievedAt = DateTime.Now;
                     var result = dbAchievement.Save();
                     if (result)
                     {
-                        var messageBuilder = game.messageBuilder;
+                        var messageBuilder = Game.messageBuilder;
                         var message = messageBuilder.GetText("AchievementUnlocked");
                         var achievementText = $"<b>{achievement.Icon} {achievement.Name}</b>";
                         var replaces = new Dictionary<string, object> { { "name", messageBuilder.FormatName(user) }, { "achievement", achievementText } };
                         messageBuilder
                             .Text(messageBuilder.Format(message, replaces), false)
-                            .SendPublic(game.gameChannel);
+                            .SendPublic(Game.gameChannel);
                     }
                     return result;
                 }
@@ -73,31 +73,31 @@ namespace DiscordMafia.Achievement
             return false;
         }
 
-        public void apply()
+        public void Apply()
         {
-            foreach (var achievementPair in achievements)
+            foreach (var achievementPair in Achievements)
             {
-                addInstantly(achievementPair.Item1, achievementPair.Item2.Id);
+                AddInstantly(achievementPair.Item1, achievementPair.Item2.Id);
             }
-            achievements.Clear();
+            Achievements.Clear();
         }
 
-        public IList<DB.Achievement> getAchievements(UserWrapper user)
+        public IList<DB.Achievement> GetAchievements(UserWrapper user)
         {
-            return DB.Achievement.findUserAchievements(user.Id);
+            return DB.Achievement.FindUserAchievements(user.Id);
         }
 
-        public string getAchievementsAsString(UserWrapper user)
+        public string GetAchievementsAsString(UserWrapper user)
         {
             var builder = new System.Text.StringBuilder();
-            var achievements = DB.Achievement.findUserAchievements(user.Id);
+            var achievements = DB.Achievement.FindUserAchievements(user.Id);
             builder.AppendLine("<b><u>Достижения:</u></b>");
             foreach (var dbAchievement in achievements)
             {
                 Achievement achievement;
-                if (allowedAchievements.TryGetValue(dbAchievement.achievementId, out achievement))
+                if (AllowedAchievements.TryGetValue(dbAchievement.AchievementId, out achievement))
                 {
-                    builder.AppendLine($"<b>{achievement.Icon} {achievement.Name}</b> ({achievement.Description}) - заработано {dbAchievement.achievedAt.ToString()}");
+                    builder.AppendLine($"<b>{achievement.Icon} {achievement.Name}</b> ({achievement.Description}) - заработано {dbAchievement.AchievedAt.ToString()}");
                 }
             }
             return builder.ToString();

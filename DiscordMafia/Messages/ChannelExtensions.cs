@@ -7,7 +7,7 @@ namespace DiscordMafia.Messages
 {
     static class ChannelExtensions
     {
-        const int MaxLength = 1800;
+        private const int MaxLength = 1800;
 
         public static IMessage[] SplitAndSend(this IMessageChannel channel, string text, bool tts = false)
         {
