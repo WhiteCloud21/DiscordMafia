@@ -11,19 +11,19 @@ namespace DiscordMafia.Config
 {
     public class MessageBuilder
     {
-        protected Messages storage;
-        protected DiscordSocketClient client;
-        private IList<InGamePlayerInfo> playersList;
-        protected Dictionary<ulong, IDMChannel> privateChannels = new Dictionary<ulong, IDMChannel>();
+        protected Messages Storage;
+        protected DiscordSocketClient Client;
+        private IList<InGamePlayerInfo> _playersList;
+        protected Dictionary<ulong, IDMChannel> PrivateChannels = new Dictionary<ulong, IDMChannel>();
         protected Dictionary<ulong, ISocketMessageChannel> Channels = new Dictionary<ulong, ISocketMessageChannel>();
 
-        protected string builtMessage = "";
+        protected string BuiltMessage = "";
 
         public MessageBuilder(GameSettings settings, DiscordSocketClient client, IList<InGamePlayerInfo> playersList)
         {
-            this.storage = settings.Messages;
-            this.client = client;
-            this.playersList = playersList;
+            this.Storage = settings.Messages;
+            this.Client = client;
+            this._playersList = playersList;
         }
 
         public string Encode(string str)
@@ -38,23 +38,23 @@ namespace DiscordMafia.Config
 
         public MessageBuilder PrepareTextReplacePlayer(string key, InGamePlayerInfo player, string fallbackKey = null)
         {
-            builtMessage += GetTextReplacePlayer(key, player);
-            if (String.IsNullOrEmpty(builtMessage) && !String.IsNullOrEmpty(fallbackKey))
+            BuiltMessage += GetTextReplacePlayer(key, player);
+            if (String.IsNullOrEmpty(BuiltMessage) && !String.IsNullOrEmpty(fallbackKey))
             {
-                builtMessage = GetTextReplacePlayer(fallbackKey, player);
+                BuiltMessage = GetTextReplacePlayer(fallbackKey, player);
             }
             return this;
         }
 
         public MessageBuilder PrepareText(string key)
         {
-            builtMessage += GetText(key);
+            BuiltMessage += GetText(key);
             return this;
         }
 
         public MessageBuilder Text(string message, bool encode = true)
         {
-            builtMessage = encode ? Encode(message) : message;
+            BuiltMessage = encode ? Encode(message) : message;
             return this;
         }
 
@@ -68,13 +68,13 @@ namespace DiscordMafia.Config
             var replaceDictionary = new Dictionary<string, object>
             {
                 { "name", FormatName(player) },
-                { "role", FormatRole(player.startRole.Name) },
-                { "role0", FormatRole(player.startRole.NameCases[0]) },
-                { "role1", FormatRole(player.startRole.NameCases[1]) },
-                { "role2", FormatRole(player.startRole.NameCases[2]) },
-                { "role3", FormatRole(player.startRole.NameCases[3]) },
-                { "role4", FormatRole(player.startRole.NameCases[4]) },
-                { "role5", FormatRole(player.startRole.NameCases[5]) },
+                { "role", FormatRole(player.StartRole.Name) },
+                { "role0", FormatRole(player.StartRole.NameCases[0]) },
+                { "role1", FormatRole(player.StartRole.NameCases[1]) },
+                { "role2", FormatRole(player.StartRole.NameCases[2]) },
+                { "role3", FormatRole(player.StartRole.NameCases[3]) },
+                { "role4", FormatRole(player.StartRole.NameCases[4]) },
+                { "role5", FormatRole(player.StartRole.NameCases[5]) },
             };
 
             return Format(messageTemplate, replaceDictionary);
@@ -82,28 +82,28 @@ namespace DiscordMafia.Config
 
         public string GetText(string key)
         {
-            return storage.get(key);
+            return Storage.get(key);
         }
 
         public MessageBuilder AddImage(string photoPathOnServer)
         {
-            builtMessage +=  " " + Program.Settings.ImageBaseUrl + photoPathOnServer;
+            BuiltMessage +=  " " + Program.Settings.ImageBaseUrl + photoPathOnServer;
             return this;
         }
 
         public IMessage[] SendPrivate(InGamePlayerInfo player, bool clear = true, bool tts = false)
         {
-            return SendPrivate(player.user, clear, tts);
+            return SendPrivate(player.User, clear, tts);
         }
 
         public IMessage[] SendPrivate(UserWrapper user, bool clear = true, bool tts = false)
         {
             IMessage[] messages = null;
-            if (string.IsNullOrEmpty(builtMessage))
+            if (string.IsNullOrEmpty(BuiltMessage))
             {
                 return null;
             }
-            messages = GetPrivateChannel(user).SplitAndSend(Markup(builtMessage), tts);
+            messages = GetPrivateChannel(user).SplitAndSend(Markup(BuiltMessage), tts);
             if (clear)
             {
                 Clear();
@@ -113,18 +113,18 @@ namespace DiscordMafia.Config
 
         protected IDMChannel GetPrivateChannel(UserWrapper user)
         {
-            if (!privateChannels.ContainsKey(user.Id))
+            if (!PrivateChannels.ContainsKey(user.Id))
             {
-                privateChannels.Add(user.Id, user.GetDmChannel());
+                PrivateChannels.Add(user.Id, user.GetDmChannel());
             }
-            return privateChannels[user.Id];
+            return PrivateChannels[user.Id];
         }
 
         protected ISocketMessageChannel GetChannel(ulong channelId)
         {
             if (!Channels.ContainsKey(channelId))
             {
-                Channels.Add(channelId, client.GetChannel(channelId) as ISocketMessageChannel);
+                Channels.Add(channelId, Client.GetChannel(channelId) as ISocketMessageChannel);
             }
             return Channels[channelId];
         }
@@ -132,11 +132,11 @@ namespace DiscordMafia.Config
         public IMessage[] SendPublic(IMessageChannel channel, bool clear = true, bool tts = false)
         {
             IMessage[] messages = null;
-            if (string.IsNullOrEmpty(builtMessage))
+            if (string.IsNullOrEmpty(BuiltMessage))
             {
                 return null;
             }
-            messages = channel.SplitAndSend(Markup(builtMessage), tts);
+            messages = channel.SplitAndSend(Markup(BuiltMessage), tts);
             if (clear)
             {
                 Clear();
@@ -151,9 +151,9 @@ namespace DiscordMafia.Config
 
         public void SendToTeam(DiscordMafia.Roles.Team team, bool clear = true)
         {
-            foreach (var player in playersList)
+            foreach (var player in _playersList)
             {
-                if (player.role.Team == team)
+                if (player.Role.Team == team)
                 {
                     SendPrivate(player, clear: false);
                 }
@@ -166,7 +166,7 @@ namespace DiscordMafia.Config
 
         public virtual void Clear()
         {
-            builtMessage = "";
+            BuiltMessage = "";
         }
 
         public string Format(string format, IDictionary<string, object> values)
@@ -189,7 +189,7 @@ namespace DiscordMafia.Config
 
         public string FormatName(InGamePlayerInfo player)
         {
-            return FormatName(player.user);
+            return FormatName(player.User);
         }
 
         public string FormatName(UserWrapper user)

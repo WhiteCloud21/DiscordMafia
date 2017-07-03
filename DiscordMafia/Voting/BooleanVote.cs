@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DiscordMafia.Activity;
 
 namespace DiscordMafia.Voting
 {
     public class BooleanVote
     {
-        protected Dictionary<ulong, BooleanVoteActivity> votes = new Dictionary<ulong, BooleanVoteActivity>();
+        protected Dictionary<ulong, BooleanVoteActivity> Votes = new Dictionary<ulong, BooleanVoteActivity>();
 
         /// <summary>
         /// Был ли хоть один проголосовавший (даже отменивший голос)
@@ -19,7 +20,7 @@ namespace DiscordMafia.Voting
 
         public BooleanVoteResult GetResult()
         {
-            return new BooleanVoteResult(votes);
+            return new BooleanVoteResult(Votes);
         }
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace DiscordMafia.Voting
         {
             HasVotes = true;
             var activity = new BooleanVoteActivity(voter, this, value);
-            votes.Add(voter.user.Id, activity);
+            Votes.Add(voter.User.Id, activity);
             voter.AddActivity(activity);
         }
 
@@ -42,10 +43,10 @@ namespace DiscordMafia.Voting
         /// <param name="voter"></param>
         public void Remove(InGamePlayerInfo voter)
         {
-            if (votes.ContainsKey(voter.user.Id))
+            if (Votes.ContainsKey(voter.User.Id))
             {
-                var activity = votes[voter.user.Id];
-                votes.Remove(voter.user.Id);
+                var activity = Votes[voter.User.Id];
+                Votes.Remove(voter.User.Id);
                 activity.Cancel();
             }
         }

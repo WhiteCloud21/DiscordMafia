@@ -19,19 +19,19 @@ namespace DiscordMafia.Items
             IsActive = true;
         }
 
-        private static BaseItem[] availableItems;
+        private static BaseItem[] _availableItems;
         public static BaseItem[] AvailableItems
         {
             get
             {
-                if (availableItems == null)
+                if (_availableItems == null)
                 {
-                    availableItems = new BaseItem[]
+                    _availableItems = new BaseItem[]
                     {
                         new Mask(),
                     };
                 }
-                return availableItems;
+                return _availableItems;
             }
         }
 

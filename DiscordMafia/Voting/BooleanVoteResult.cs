@@ -64,9 +64,9 @@ namespace DiscordMafia.Voting
 
         public bool IsVotedYes(InGamePlayerInfo voter)
         {
-            if (Result.HasValue && Result.Value && DetailedInfo.ContainsKey(voter.user.Id))
+            if (Result.HasValue && Result.Value && DetailedInfo.ContainsKey(voter.User.Id))
             {
-                return DetailedInfo[voter.user.Id].Value;
+                return DetailedInfo[voter.User.Id].Value;
             }
             return false;
         }

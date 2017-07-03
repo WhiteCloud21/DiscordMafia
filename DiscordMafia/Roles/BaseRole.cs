@@ -32,13 +32,13 @@ namespace DiscordMafia.Roles
                 case GameState.Night:
                     return true;
                 case GameState.Day:
-                    if (Player.voteFor == null)
+                    if (Player.VoteFor == null)
                     {
                         return false;
                     }
                     return true;
                 case GameState.Evening:
-                    if (Player.eveningVoteActivity == null)
+                    if (Player.EveningVoteActivity == null)
                     {
                         return false;
                     }

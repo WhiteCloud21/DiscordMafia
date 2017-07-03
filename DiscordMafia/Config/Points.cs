@@ -46,7 +46,7 @@ namespace DiscordMafia.Config
 
         private Points() { }
 
-        public static Points getInstance(string filename)
+        public static Points GetInstance(string filename)
         {
             if (!instances.ContainsKey(filename))
             {
@@ -71,10 +71,10 @@ namespace DiscordMafia.Config
 #pragma warning disable CA2235 // Mark all non-serializable fields.
         public int Points;
         public string Description;
-        private static readonly XmlSerializer intSerializer =
+        private static readonly XmlSerializer IntSerializer =
                                         new XmlSerializer(typeof(int));
 
-        private static readonly XmlSerializer stringSerializer =
+        private static readonly XmlSerializer StringSerializer =
                                         new XmlSerializer(typeof(string));
 #pragma warning restore CA2235 // Mark all non-serializable fields.
 
@@ -96,8 +96,8 @@ namespace DiscordMafia.Config
 
             try
             {
-                Points = (int)intSerializer.Deserialize(reader);
-                Description = (string)stringSerializer.Deserialize(reader);
+                Points = (int)IntSerializer.Deserialize(reader);
+                Description = (string)StringSerializer.Deserialize(reader);
             }
             finally
             {
@@ -107,8 +107,8 @@ namespace DiscordMafia.Config
 
         public void WriteXml(XmlWriter writer)
         {
-            intSerializer.Serialize(writer, Points);
-            stringSerializer.Serialize(writer, Description);
+            IntSerializer.Serialize(writer, Points);
+            StringSerializer.Serialize(writer, Description);
         }
     }
 }

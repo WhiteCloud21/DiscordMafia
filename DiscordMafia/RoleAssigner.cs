@@ -24,15 +24,15 @@ namespace DiscordMafia
 
             foreach (var player in players)
             {
-                player.startRole = player.role = new Citizen() { Player = player };
+                player.StartRole = player.Role = new Citizen() { Player = player };
             }
 
-            foreach (var role in settings.Roles.getTemporaryRoles(players.Count))
+            foreach (var role in settings.Roles.GetTemporaryRoles(players.Count))
             {
                 AssignRoleToRandomPlayer(role);
             }
 
-            foreach (var role in settings.Roles.getRandomRoles(players.Count, settings.MaxRandomPlayers, random))
+            foreach (var role in settings.Roles.GetRandomRoles(players.Count, settings.MaxRandomPlayers, random))
             {
                 AssignRoleToRandomPlayer(role);
             }
@@ -66,11 +66,11 @@ namespace DiscordMafia
             Console.WriteLine("Assined: {0} {1}", playerIndex, role.Name);
             foreach (var player in players)
             {
-                if (player.role is Citizen)
+                if (player.Role is Citizen)
                 {
                     if (playerIndex-- <= 0)
                     {
-                        player.startRole = player.role = role;
+                        player.StartRole = player.Role = role;
                         role.Player = player;
                         break;
                     }

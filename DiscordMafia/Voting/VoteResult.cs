@@ -58,11 +58,11 @@ namespace DiscordMafia.Voting
             VoteCountByPlayer = new Dictionary<ulong, int>();
             foreach (var vote in DetailedInfo.Values)
             {
-                if (!VoteCountByPlayer.ContainsKey(vote.ForWho.user.Id))
+                if (!VoteCountByPlayer.ContainsKey(vote.ForWho.User.Id))
                 {
-                    VoteCountByPlayer.Add(vote.ForWho.user.Id, 0);
+                    VoteCountByPlayer.Add(vote.ForWho.User.Id, 0);
                 }
-                VoteCountByPlayer[vote.ForWho.user.Id]++;
+                VoteCountByPlayer[vote.ForWho.User.Id]++;
             }
         }
 
@@ -84,18 +84,18 @@ namespace DiscordMafia.Voting
         
         public InGamePlayerInfo GetTarget(InGamePlayerInfo voter)
         {
-            if (DetailedInfo.ContainsKey(voter.user.Id))
+            if (DetailedInfo.ContainsKey(voter.User.Id))
             {
-                return DetailedInfo[voter.user.Id].ForWho;
+                return DetailedInfo[voter.User.Id].ForWho;
             }
             return null;
         }
 
         public bool IsVotedForLeader(InGamePlayerInfo voter)
         {
-            if (HasOneLeader && DetailedInfo.ContainsKey(voter.user.Id))
+            if (HasOneLeader && DetailedInfo.ContainsKey(voter.User.Id))
             {
-                return DetailedInfo[voter.user.Id].ForWho.user.Id == Leader;
+                return DetailedInfo[voter.User.Id].ForWho.User.Id == Leader;
             }
             return false;
         }

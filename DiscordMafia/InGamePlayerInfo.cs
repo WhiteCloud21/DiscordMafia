@@ -10,85 +10,85 @@ namespace DiscordMafia
 {
     public class InGamePlayerInfo
     {
-        public UserWrapper user { get; private set; }
-        public DB.User dbUser { get; private set; }
-        public BaseRole role { get; set; }
-        public BaseRole startRole { get; set; }
-        public bool isAlive { get; set; }
-        public bool isBot { get; set; }
-        public long currentGamePoints { get; set; }
-        public int? delayedDeath { get; set; }
-        protected Game game { get; set; }
-        protected List<BaseActivity> activityList { get; set; }
-        public VoteActivity voteFor { get; set; }
-        public BooleanVoteActivity eveningVoteActivity { get; set; }
-        public HealActivity healedBy { get; set; }
-        public JustifyActivity justifiedBy { get; set; }
-        public Place placeToGo { get; set; }
-        public List<BaseItem> ownedItems { get; set; }
-        protected bool isTurnSkipped { get; set; }
+        public UserWrapper User { get; private set; }
+        public DB.User DbUser { get; private set; }
+        public BaseRole Role { get; set; }
+        public BaseRole StartRole { get; set; }
+        public bool IsAlive { get; set; }
+        public bool IsBot { get; set; }
+        public long CurrentGamePoints { get; set; }
+        public int? DelayedDeath { get; set; }
+        protected Game Game { get; set; }
+        protected List<BaseActivity> ActivityList { get; set; }
+        public VoteActivity VoteFor { get; set; }
+        public BooleanVoteActivity EveningVoteActivity { get; set; }
+        public HealActivity HealedBy { get; set; }
+        public JustifyActivity JustifiedBy { get; set; }
+        public Place PlaceToGo { get; set; }
+        public List<BaseItem> OwnedItems { get; set; }
+        protected bool IsTurnSkipped { get; set; }
 
         public InGamePlayerInfo(UserWrapper user, Game game)
         {
-            this.user = user;
-            this.isBot = false;
-            this.isAlive = true;
-            this.currentGamePoints = 0;
-            this.game = game;
-            this.activityList = new List<BaseActivity>();
-            dbUser = DB.User.findById(user.Id);
-            placeToGo = Place.AvailablePlaces[0];
-            ownedItems = new List<BaseItem>();
+            this.User = user;
+            this.IsBot = false;
+            this.IsAlive = true;
+            this.CurrentGamePoints = 0;
+            this.Game = game;
+            this.ActivityList = new List<BaseActivity>();
+            DbUser = DB.User.FindById(user.Id);
+            PlaceToGo = Place.AvailablePlaces[0];
+            OwnedItems = new List<BaseItem>();
         }
 
         public void AddPoints(string strategy)
         {
-            var howMany = game.settings.Points.GetPoints(strategy);
-            currentGamePoints += howMany;
+            var howMany = Game.settings.Points.GetPoints(strategy);
+            CurrentGamePoints += howMany;
         }
 
         public void AddPoints(long howMany)
         {
-            currentGamePoints += howMany;
+            CurrentGamePoints += howMany;
         }
 
-        public void ActualizeDBUser()
+        public void ActualizeDbUser()
         {
-            dbUser.username = user.Username ?? "";
-            dbUser.firstName = user.FirstName ?? "";
-            dbUser.lastName = user.LastName ?? "";
-            dbUser.RecalculateStats();
-            dbUser.Save();
+            DbUser.Username = User.Username ?? "";
+            DbUser.FirstName = User.FirstName ?? "";
+            DbUser.LastName = User.LastName ?? "";
+            DbUser.RecalculateStats();
+            DbUser.Save();
         }
 
         public string GetName()
         {
-            return user.FirstName + " " + user.LastName;
+            return User.FirstName + " " + User.LastName;
         }
 
         public void AddActivity(BaseActivity activity)
         {
-            activityList.Add(activity);
+            ActivityList.Add(activity);
         }
 
         public void ClearActivity()
         {
-            isTurnSkipped = false;
-            role?.ClearActivity();
-            foreach (var item in activityList)
+            IsTurnSkipped = false;
+            Role?.ClearActivity();
+            foreach (var item in ActivityList)
             {
                 item.Cancel();
             }
-            activityList.Clear();
+            ActivityList.Clear();
         }
 
         public void CancelActivity(InGamePlayerInfo onlyAgainstTarget = null)
         {
-            role?.ClearActivity(true, onlyAgainstTarget);
+            Role?.ClearActivity(true, onlyAgainstTarget);
             if (onlyAgainstTarget != null)
             {
                 var itemsToRemove = new List<BaseActivity>();
-                foreach (var item in activityList)
+                foreach (var item in ActivityList)
                 {
                     item.Cancel(onlyAgainstTarget);
                     if (item.IsCanceled)
@@ -98,17 +98,17 @@ namespace DiscordMafia
                 }
                 foreach (var item in itemsToRemove)
                 {
-                    activityList.Remove(item);
+                    ActivityList.Remove(item);
                 }
             }
             else
             {
-                isTurnSkipped = false;
+                IsTurnSkipped = false;
                 var itemsToRemove = new List<BaseActivity>();
-                foreach (var item in activityList)
+                foreach (var item in ActivityList)
                 {
                     // Дневное и вечернее голосование отменяется через CancelVote
-                    if (game.currentState == GameState.Day && item == voteFor || game.currentState == GameState.Evening && item == eveningVoteActivity)
+                    if (Game.currentState == GameState.Day && item == VoteFor || Game.currentState == GameState.Evening && item == EveningVoteActivity)
                     {
                         continue;
                     }
@@ -117,22 +117,22 @@ namespace DiscordMafia
                 }
                 foreach (var item in itemsToRemove)
                 {
-                    activityList.Remove(item);
+                    ActivityList.Remove(item);
                 }
             }
         }
 
         public bool CancelVote()
         {
-            isTurnSkipped = false;
+            IsTurnSkipped = false;
             BaseActivity voteActivity;
-            switch (game.currentState)
+            switch (Game.currentState)
             {
                 case GameState.Day:
-                    voteActivity = voteFor;
+                    voteActivity = VoteFor;
                     break;
                 case GameState.Evening:
-                    voteActivity = eveningVoteActivity;
+                    voteActivity = EveningVoteActivity;
                     break;
                 default:
                     return false;
@@ -140,7 +140,7 @@ namespace DiscordMafia
             if (voteActivity != null)
             {
                 voteActivity.Cancel();
-                activityList.Remove(voteActivity);
+                ActivityList.Remove(voteActivity);
                 return true;
             }
             return false;
@@ -148,14 +148,14 @@ namespace DiscordMafia
 
         public bool HasActivityAgainst(InGamePlayerInfo target)
         {
-            foreach (var item in activityList)
+            foreach (var item in ActivityList)
             {
                 if (item.HasActivityAgainst(target))
                 {
                     return true;
                 }
             }
-            return role != null ? role.HasActivityAgainst(target) : false;
+            return Role != null ? Role.HasActivityAgainst(target) : false;
         }
 
         public override bool Equals(object obj)
@@ -165,12 +165,12 @@ namespace DiscordMafia
 
         public override int GetHashCode()
         {
-            return user.Id.GetHashCode();
+            return User.Id.GetHashCode();
         }
 
         public BaseItem GetItem(BaseItem item, bool onlyActive = false)
         {
-            var result = ownedItems.Find(i => item.GetType() == i.GetType() && (i.IsActive || !onlyActive));
+            var result = OwnedItems.Find(i => item.GetType() == i.GetType() && (i.IsActive || !onlyActive));
             return result;
         }
 
@@ -178,7 +178,7 @@ namespace DiscordMafia
         {
             if (x is InGamePlayerInfo && y is InGamePlayerInfo)
             {
-                return x.user.Id == y.user.Id;
+                return x.User.Id == y.User.Id;
             }
             else if (x is InGamePlayerInfo || y is InGamePlayerInfo)
             {
@@ -198,26 +198,26 @@ namespace DiscordMafia
             {
                 throw new InvalidOperationException(itemToBuy.NameCases[3] + " можно покупать только один раз за игру.");
             }
-            if (dbUser.totalPoints < itemToBuy.Cost)
+            if (DbUser.TotalPoints < itemToBuy.Cost)
             {
                 throw new InvalidOperationException("Недостаточно очков для покупки " + itemToBuy.NameCases[1]);
             }
-            ownedItems.Add(itemToBuy);
+            OwnedItems.Add(itemToBuy);
             AddPoints(-itemToBuy.Cost);
         }
 
         public bool IsReady(GameState currentState)
         {
-            return isTurnSkipped || (role?.IsReady(currentState) ?? false);
+            return IsTurnSkipped || (Role?.IsReady(currentState) ?? false);
         }
 
         public bool SkipTurn(bool value = true)
         {
-            if (isTurnSkipped == value)
+            if (IsTurnSkipped == value)
             {
                 return false;
             }
-            isTurnSkipped = true;
+            IsTurnSkipped = true;
             return true;
         }
     }
