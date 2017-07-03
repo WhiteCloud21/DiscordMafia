@@ -6,9 +6,9 @@ namespace DiscordMafia
 {
     public class BotSynchronizationContext: SynchronizationContext
     {
-        private readonly Queue<Action> messagesToProcess = new Queue<Action>();
-        private readonly object syncHandle = new object();
-        private bool isRunning = true;
+        private readonly Queue<Action> _messagesToProcess = new Queue<Action>();
+        private readonly object _syncHandle = new object();
+        private bool _isRunning = true;
 
         public override void Send(SendOrPostCallback codeToRun, object state)
         {
@@ -17,9 +17,9 @@ namespace DiscordMafia
 
         public override void Post(SendOrPostCallback codeToRun, object state)
         {
-            lock (syncHandle)
+            lock (_syncHandle)
             {
-                messagesToProcess.Enqueue(() => codeToRun(state));
+                _messagesToProcess.Enqueue(() => codeToRun(state));
                 SignalContinue();
             }
         }
@@ -35,36 +35,36 @@ namespace DiscordMafia
 
         private Action GrabItem()
         {
-            lock (syncHandle)
+            lock (_syncHandle)
             {
-                while (CanContinue() && messagesToProcess.Count == 0)
+                while (CanContinue() && _messagesToProcess.Count == 0)
                 {
-                    Monitor.Wait(syncHandle);
+                    Monitor.Wait(_syncHandle);
                 }
-                return messagesToProcess.Dequeue();
+                return _messagesToProcess.Dequeue();
             }
         }
 
         private bool CanContinue()
         {
-            lock (syncHandle)
+            lock (_syncHandle)
             {
-                return isRunning;
+                return _isRunning;
             }
         }
 
         public void Cancel()
         {
-            lock (syncHandle)
+            lock (_syncHandle)
             {
-                isRunning = false;
+                _isRunning = false;
                 SignalContinue();
             }
         }
 
         private void SignalContinue()
         {
-            Monitor.Pulse(syncHandle);
+            Monitor.Pulse(_syncHandle);
         }
     }
 }

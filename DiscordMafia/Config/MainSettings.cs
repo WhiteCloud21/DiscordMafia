@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
@@ -15,7 +14,7 @@ namespace DiscordMafia.Config
         public string ImageBaseUrl { get; protected set; }
         public string DatabasePath { get; protected set; }
         public ulong  GameChannel { get; protected set; }
-        public ulong AdminID { get; protected set; }
+        public ulong AdminId { get; protected set; }
 
         public MainSettings(params string[] filenames)
         {
@@ -71,7 +70,7 @@ namespace DiscordMafia.Config
                             GameChannel = ulong.Parse(reader.ReadElementContentAsString());
                             break;
                         case "AdminID":
-                            AdminID = ulong.Parse(reader.ReadElementContentAsString());
+                            AdminId = ulong.Parse(reader.ReadElementContentAsString());
                             break;
                         default:
                             reader.Skip();

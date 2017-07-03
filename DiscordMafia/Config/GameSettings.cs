@@ -59,11 +59,11 @@ namespace DiscordMafia.Config
 
             ReadConfig();
 
-            Messages = Messages.getInstance(GetFilePath("messages.xml"));
+            Messages = Messages.GetInstance(GetFilePath("messages.xml"));
             Console.WriteLine("Сообщения загружены");
-            Points = Points.getInstance(GetFilePath("points.xml"));
+            Points = Points.GetInstance(GetFilePath("points.xml"));
             Console.WriteLine("Конфигурация очков загружена");
-            Roles = Roles.getInstance(GetFilePath("roles.xml"));
+            Roles = Roles.GetInstance(GetFilePath("roles.xml"));
             Console.WriteLine("Конфигурация ролей загружена");
         }
 

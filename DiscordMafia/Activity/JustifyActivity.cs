@@ -11,7 +11,7 @@ namespace DiscordMafia.Activity
             : base(judge)
         {
             Accused = accused;
-            Accused.justifiedBy = this;
+            Accused.JustifiedBy = this;
         }
 
         protected override void OnCancel(InGamePlayerInfo onlyAgainstTarget)
@@ -20,7 +20,7 @@ namespace DiscordMafia.Activity
             {
                 if (Accused != null)
                 {
-                    Accused.justifiedBy = null;
+                    Accused.JustifiedBy = null;
                 }
                 IsCanceled = true;
                 base.OnCancel(onlyAgainstTarget);

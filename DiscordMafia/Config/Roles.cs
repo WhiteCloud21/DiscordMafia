@@ -17,19 +17,19 @@ namespace DiscordMafia.Config
     {
         [NonSerialized]
 #pragma warning disable CA2235 // Mark all non-serializable fields.
-        private static Dictionary<string, Roles> instances = new Dictionary<string, Roles>();
+        private static readonly Dictionary<string, Roles> Instances = new Dictionary<string, Roles>();
 
-        private Dictionary<string, System.Reflection.ConstructorInfo> typeCache = null;
+        private Dictionary<string, System.Reflection.ConstructorInfo> _typeCache = null;
 
-        private static readonly XmlSerializer valueSerializer =
+        private static readonly XmlSerializer ValueSerializer =
                                         new XmlSerializer(typeof(Roles));
 #pragma warning restore CA2235 // Mark all non-serializable fields.
 
         private Roles() { }
 
-        public static Roles getInstance(string filename)
+        public static Roles GetInstance(string filename)
         {
-            if (!instances.ContainsKey(filename))
+            if (!Instances.ContainsKey(filename))
             {
                 var instance = new Roles();
 
@@ -40,19 +40,19 @@ namespace DiscordMafia.Config
                     instance = (Roles)serializer.Deserialize(stream);
                 }
 
-                instances.Add(filename, instance);
+                Instances.Add(filename, instance);
             }
-            return instances[filename];
+            return Instances[filename];
         }
 
-        public List<BaseRole> getTemporaryRoles(int playersCount)
+        public List<BaseRole> GetTemporaryRoles(int playersCount)
         {
-            return filter(playersCount, false);
+            return Filter(playersCount, false);
         }
 
-        public List<BaseRole> getRandomRoles(int playersCount, IDictionary<Team, int> maxPlayersByTeam, Random randomGenerator)
+        public List<BaseRole> GetRandomRoles(int playersCount, IDictionary<Team, int> maxPlayersByTeam, Random randomGenerator)
         {
-            var roles = filter(playersCount, true);
+            var roles = Filter(playersCount, true);
             var result = new List<BaseRole>();
             var rolesByTeam = new Dictionary<Team, List<BaseRole>>();
             foreach (var team in maxPlayersByTeam.Keys)
@@ -79,17 +79,17 @@ namespace DiscordMafia.Config
             return result;
         }
 
-        protected List<BaseRole> filter(int playersCount, bool isRandom, bool onlyEnabled = true)
+        protected List<BaseRole> Filter(int playersCount, bool isRandom, bool onlyEnabled = true)
         {
-            fillCache();
+            FillCache();
             var result = new List<BaseRole>();
             foreach (var kvp in this)
             {
-                if (typeCache.ContainsKey(kvp.Key))
+                if (_typeCache.ContainsKey(kvp.Key))
                 {
                     if ((kvp.Value.IsEnabled || !onlyEnabled) && kvp.Value.IsRandom == isRandom && playersCount >= kvp.Value.MinPlayers)
                     {
-                        var constructor = typeCache[kvp.Key];
+                        var constructor = _typeCache[kvp.Key];
                         var role = constructor.Invoke(new object[0]) as BaseRole;
                         result.Add(role);
                     }
@@ -98,16 +98,16 @@ namespace DiscordMafia.Config
             return result;
         }
 
-        protected void fillCache(bool clear = false)
+        protected void FillCache(bool clear = false)
         {
-            if (clear && typeCache != null)
+            if (clear && _typeCache != null)
             {
-                typeCache.Clear();
-                typeCache = null;
+                _typeCache.Clear();
+                _typeCache = null;
             }
-            if (typeCache == null)
+            if (_typeCache == null)
             {
-                typeCache = new Dictionary<string, System.Reflection.ConstructorInfo>();
+                _typeCache = new Dictionary<string, System.Reflection.ConstructorInfo>();
                 foreach (var roleName in this.Keys)
                 {
                     var roleType = Type.GetType(typeof(BaseRole).Namespace + "." + roleName, false);
@@ -116,7 +116,7 @@ namespace DiscordMafia.Config
                         try
                         {
                             var constructor = roleType.GetTypeInfo().GetConstructor(Type.EmptyTypes);
-                            typeCache.Add(roleName, constructor);
+                            _typeCache.Add(roleName, constructor);
                         }
                         catch (Exception ex)
                         {
@@ -129,13 +129,13 @@ namespace DiscordMafia.Config
 
         public string RolesHelp()
         {
-            fillCache();
+            FillCache();
             var result = new StringBuilder();
             foreach (var kvp in this)
             {
-                if (typeCache.ContainsKey(kvp.Key))
+                if (_typeCache.ContainsKey(kvp.Key))
                 {
-                    var constructor = typeCache[kvp.Key];
+                    var constructor = _typeCache[kvp.Key];
                     var role = constructor.Invoke(new object[0]) as BaseRole;
                     result.Append($"<b>{role.Name}</b> - ");
                     result.Append(kvp.Value.IsEnabled ? "доступна, " : "недоступна, ");

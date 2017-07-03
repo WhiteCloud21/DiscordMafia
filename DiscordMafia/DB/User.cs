@@ -6,44 +6,44 @@ namespace DiscordMafia.DB
 {
     public class User
     {
-        public ulong id;
-        public string username = "";
-        public string firstName = "";
-        public string lastName = "";
-        public long totalPoints = 0;
-        public int gamesPlayed = 0;
-        public int wins = 0;
-        public int survivals = 0;
-        public int draws = 0;
-        public double rate = 0.0;
-        public bool isRegistered = false;
-        public bool isNewRecord = true;
+        public ulong Id;
+        public string Username = "";
+        public string FirstName = "";
+        public string LastName = "";
+        public long TotalPoints = 0;
+        public int GamesPlayed = 0;
+        public int Wins = 0;
+        public int Survivals = 0;
+        public int Draws = 0;
+        public double Rate = 0.0;
+        public bool IsRegistered = false;
+        public bool IsNewRecord = true;
 
-        public static User findById(ulong id)
+        public static User FindById(ulong id)
         {
-            var user = new User() { id = id };
+            var user = new User() { Id = id };
             var connection = Program.Connection;
             var command = connection.CreateCommand();
-            command.CommandText = getSelect() + "WHERE id = :id";
+            command.CommandText = GetSelect() + "WHERE id = :id";
             command.Parameters.AddWithValue(":id", id);
             var reader = command.ExecuteReader();
-            user.populateRecord(reader);
+            user.PopulateRecord(reader);
             return user;
         }
 
-        public static IEnumerable<User> findAllByCondition(string condition, SqliteParameter[] parameters)
+        public static IEnumerable<User> FindAllByCondition(string condition, SqliteParameter[] parameters)
         {
             var connection = Program.Connection;
             var command = connection.CreateCommand();
             var users = new List<User>();
-            command.CommandText = getSelect() + condition;
+            command.CommandText = GetSelect() + condition;
             command.Parameters.AddRange(parameters);
             var reader = command.ExecuteReader();
             do
             {
                 var user = new User();
-                user.populateRecord(reader);
-                if (user.id == 0)
+                user.PopulateRecord(reader);
+                if (user.Id == 0)
                 {
                     break;
                 }
@@ -53,45 +53,45 @@ namespace DiscordMafia.DB
             return users;
         }
 
-        public static IEnumerable<User> findAllByCondition(string condition)
+        public static IEnumerable<User> FindAllByCondition(string condition)
         {
-            return findAllByCondition(condition, new SqliteParameter[0]);
+            return FindAllByCondition(condition, new SqliteParameter[0]);
         }
 
-        protected User populateRecord(DbDataReader reader)
+        protected User PopulateRecord(DbDataReader reader)
         {
             if (reader.Read())
             {
-                id = ulong.Parse(reader.GetValue(0).ToString());
-                username = reader.GetString(1);
-                firstName = reader.GetString(2);
-                lastName = reader.GetString(3);
-                totalPoints = reader.GetInt64(4);
-                gamesPlayed = reader.GetInt32(5);
-                wins = reader.GetInt32(6);
-                survivals = reader.GetInt32(7);
-                draws = reader.GetInt32(8);
-                rate = reader.GetDouble(9);
-                isRegistered = reader.GetBoolean(10);
-                isNewRecord = false;
+                Id = ulong.Parse(reader.GetValue(0).ToString());
+                Username = reader.GetString(1);
+                FirstName = reader.GetString(2);
+                LastName = reader.GetString(3);
+                TotalPoints = reader.GetInt64(4);
+                GamesPlayed = reader.GetInt32(5);
+                Wins = reader.GetInt32(6);
+                Survivals = reader.GetInt32(7);
+                Draws = reader.GetInt32(8);
+                Rate = reader.GetDouble(9);
+                IsRegistered = reader.GetBoolean(10);
+                IsNewRecord = false;
             }
             return this;
         }
 
-        protected static string getSelect()
+        protected static string GetSelect()
         {
             return "SELECT id, username, first_name, last_name, total_points, games, wins, survivals, draws, rate, is_registered FROM user ";
         }
 
         public void RecalculateStats()
         {
-            if (gamesPlayed - wins - draws == 0)
+            if (GamesPlayed - Wins - Draws == 0)
             {
-                rate = (wins + survivals * 0.5) * gamesPlayed * 1.0;
+                Rate = (Wins + Survivals * 0.5) * GamesPlayed * 1.0;
             }
             else
             {
-                rate = 1.0 * (wins + survivals * 0.5) * gamesPlayed / (gamesPlayed - wins - draws);
+                Rate = 1.0 * (Wins + Survivals * 0.5) * GamesPlayed / (GamesPlayed - Wins - Draws);
             }
         }
 
@@ -99,7 +99,7 @@ namespace DiscordMafia.DB
         {
             var connection = Program.Connection;
             var command = connection.CreateCommand();
-            if (isNewRecord)
+            if (IsNewRecord)
             {
                 command.CommandText = @"INSERT OR REPLACE INTO user (id, username, first_name, last_name, total_points, games, wins, survivals, draws, rate, is_registered)
                                     VALUES (:id, :uname, :fname, :lname, :tpoints, :games, :wins, :survivals, :draws, :rate, 1)";
@@ -109,16 +109,16 @@ namespace DiscordMafia.DB
                 command.CommandText = @"UPDATE user SET id = :id, username = :uname, first_name = :fname, last_name = :lname, total_points = :tpoints,
                                     games = :games, wins = :wins, survivals = :survivals, draws = :draws, rate = :rate, is_registered = 1 WHERE id = :id";
             }
-            command.Parameters.AddWithValue(":id", id);
-            command.Parameters.AddWithValue(":uname", username);
-            command.Parameters.AddWithValue(":fname", firstName);
-            command.Parameters.AddWithValue(":lname", lastName);
-            command.Parameters.AddWithValue(":tpoints", totalPoints);
-            command.Parameters.AddWithValue(":games", gamesPlayed);
-            command.Parameters.AddWithValue(":wins", wins);
-            command.Parameters.AddWithValue(":survivals", survivals);
-            command.Parameters.AddWithValue(":draws", draws);
-            command.Parameters.AddWithValue(":rate", rate);
+            command.Parameters.AddWithValue(":id", Id);
+            command.Parameters.AddWithValue(":uname", Username);
+            command.Parameters.AddWithValue(":fname", FirstName);
+            command.Parameters.AddWithValue(":lname", LastName);
+            command.Parameters.AddWithValue(":tpoints", TotalPoints);
+            command.Parameters.AddWithValue(":games", GamesPlayed);
+            command.Parameters.AddWithValue(":wins", Wins);
+            command.Parameters.AddWithValue(":survivals", Survivals);
+            command.Parameters.AddWithValue(":draws", Draws);
+            command.Parameters.AddWithValue(":rate", Rate);
 
             return command.ExecuteNonQuery() > 0;
         }

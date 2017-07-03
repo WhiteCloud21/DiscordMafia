@@ -8,7 +8,7 @@ namespace DiscordMafia.Roles.Places
 {
     public class Place
     {
-        private static Place[] places;
+        private static Place[] _places;
         public string Name { get; protected set; }
 
         protected Place() { }
@@ -17,16 +17,16 @@ namespace DiscordMafia.Roles.Places
         {
             get
             {
-                if (places == null)
+                if (_places == null)
                 {
-                    places = new Place[]
+                    _places = new Place[]
                     {
                         new Place() { Name = "Дом" },
                         new Place() { Name = "Супермаркет" },
                         new Place() { Name = "Стадион" },
                     };
                 }
-                return places;
+                return _places;
             }
         }
     }

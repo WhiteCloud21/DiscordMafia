@@ -5,7 +5,7 @@ namespace DiscordMafia.Client
 {
     public class UserWrapper
     {
-        private IUser _user;
+        private readonly IUser _user;
         
         public ulong Id { get; set; }
         public string Username { get; set; }
@@ -31,7 +31,7 @@ namespace DiscordMafia.Client
 
         public bool IsAdmin()
         {
-            return Id == Program.Settings.AdminID;
+            return Id == Program.Settings.AdminId;
         }
 
         public IDMChannel GetDmChannel()
