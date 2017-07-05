@@ -5,37 +5,37 @@ namespace DiscordMafia
 {
     public class KillManager
     {
-        protected ISet<InGamePlayerInfo> killedPlayers = new HashSet<InGamePlayerInfo>();
-        protected Game game;
+        protected ISet<InGamePlayerInfo> KilledPlayers = new HashSet<InGamePlayerInfo>();
+        protected Game Game;
 
         public KillManager(Game game)
         {
-            this.game = game;
+            this.Game = game;
         }
 
         public void Kill(InGamePlayerInfo player)
         {
-            killedPlayers.Add(player);
+            KilledPlayers.Add(player);
         }
 
         public void Apply()
         {
-            foreach (var player in killedPlayers)
+            foreach (var player in KilledPlayers)
             {
-                player.isAlive = false;
-                game.messageBuilder.PrepareText("YouKilled").SendPrivate(player);
+                player.IsAlive = false;
+                Game.messageBuilder.PrepareText("YouKilled").SendPrivate(player);
 
-                if (player.role is Commissioner)
+                if (player.Role is Commissioner)
                 {
-                    var sergeant = game.playersList.Find(p => { return p.isAlive && p.role is Sergeant && !killedPlayers.Contains(p); });
+                    var sergeant = Game.playersList.Find(p => { return p.IsAlive && p.Role is Sergeant && !KilledPlayers.Contains(p); });
                     if (sergeant != null)
                     {
-                        sergeant.role = new Commissioner();
-                        game.messageBuilder.PrepareTextReplacePlayer("ComKilled_ToSergeant", player).SendPrivate(sergeant);
+                        sergeant.Role = new Commissioner();
+                        Game.messageBuilder.PrepareTextReplacePlayer("ComKilled_ToSergeant", player).SendPrivate(sergeant);
                     }
                 }
             }
-            killedPlayers.Clear();
+            KilledPlayers.Clear();
         }
     }
 }

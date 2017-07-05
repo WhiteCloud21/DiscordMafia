@@ -1,87 +1,151 @@
-﻿using System.Data.SQLite;
+﻿using Microsoft.Data.Sqlite;
 using Discord;
 using System.Threading;
 using DiscordMafia.Config;
 using System;
+using System.Reflection;
+using System.Threading.Tasks;
+using Discord.Commands;
+using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 using SimpleMigrations.DatabaseProvider;
 
 namespace DiscordMafia
 {
-    class Program
+    internal class Program
     {
-        public static BotSynchronizationContext syncContext = new BotSynchronizationContext();
-        private static MainSettings settings;
-        private static Game game;
-        public static SQLiteConnection connection;
+        public static BotSynchronizationContext SyncContext = new BotSynchronizationContext();
+        private static Game _game;
+        public static SqliteConnection Connection;
 
-        public static MainSettings Settings
-        {
-            get
-            {
-                return settings;
-            }
-        }
+        public static MainSettings Settings { get; private set; }
+
+        private CommandService commands;
+        private DiscordSocketClient client;
+        private IServiceProvider services;
 
         static void Main(string[] args)
         {
-            settings = new MainSettings("Config/mainSettings.xml", "Config/Local/mainSettings.xml");
-                
-            SynchronizationContext.SetSynchronizationContext(syncContext);
-            syncContext.Post(obj => Run(), null);
-            try
-            {
-                syncContext.RunMessagePump();
-            }
-            catch (Exception ex)
-            {
-                var message = String.Format("[{0:s}] {1}", DateTime.Now, ex);
-                Console.Error.WriteLine(message);
-                System.IO.File.AppendAllText("error.log", message);
-            }
+            new Program().Start().GetAwaiter().GetResult();
         }
 
-        static async void Run()
+        public async Task Start()
         {
-            connection = new SQLiteConnection($"Data Source={settings.DatabasePath};Version=3;");
+            var settings = new MainSettings("Config/mainSettings.xml", "Config/Local/mainSettings.xml");
+
+            var connection = new SqliteConnection($"Data Source={settings.DatabasePath};");
             connection.Open();
             Migrate(connection);
 
-            var client = new DiscordClient();
-            game = new Game(syncContext, client, Settings);
+            //            SynchronizationContext.SetSynchronizationContext(SyncContext);
+            //            SyncContext.Post(obj => Run(), null);
+            //            try
+            //            {
+            //                SyncContext.RunMessagePump();
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                var message = $"[{DateTime.Now:s}] {ex}";
+            //                Console.Error.WriteLine(message);
+            //                System.IO.File.AppendAllText("error.log", message);
+            //            }
 
-            client.MessageReceived += (s, e) =>
+            client = new DiscordSocketClient();
+            client.Log += Log;
+
+            _game = new Game(SyncContext, client, settings);
+
+            commands = new CommandService();
+
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(client);
+            serviceCollection.AddSingleton(connection);
+            serviceCollection.AddSingleton(settings);
+            serviceCollection.AddSingleton(_game);
+
+            Connection = connection;
+            Settings = settings;
+
+            services = serviceCollection.BuildServiceProvider();
+
+            await InstallCommands();
+
+            client.MessageReceived += message =>
             {
-                syncContext.Post((state) =>
+                return Task.Run(() =>
                 {
-                    if (!e.Message.IsAuthor)
+                    SyncContext.Post(state =>
                     {
-                        ProcessMessage(e);
-                    }
-                }, null);
+                        if (message.Author.Id != client.CurrentUser.Id)
+                        {
+                            ProcessMessage(message);
+                        }
+                    }, null);
+                });
             };
 
-            await client.Connect(settings.Token, TokenType.Bot);
-            client.SetGame(null);
+            await client.LoginAsync(TokenType.Bot, Settings.Token);
+            await client.StartAsync();
+            //await client.SetGameAsync(null);
+
+            SyncContext.RunMessagePump();
+
+            await Task.Delay(-1);
         }
 
-        private static void Migrate(SQLiteConnection connection)
+        public async Task InstallCommands()
+        {
+            // Hook the MessageReceived Event into our Command Handler
+            client.MessageReceived += HandleCommand;
+            // Discover all of the commands in this assembly and load them.
+            await commands.AddModulesAsync(Assembly.GetEntryAssembly());
+        }
+
+        public async Task HandleCommand(SocketMessage messageParam)
+        {
+            // Don't process the command if it was a System Message
+            var message = messageParam as SocketUserMessage;
+            if (message == null) return;
+            // Create a number to track where the prefix ends and the command begins
+            int argPos = 0;
+            // Determine if the message is a command, based on if it starts with '!' or a mention prefix
+            if (!(message.HasCharPrefix('/', ref argPos) ||
+                  message.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
+            // Create a Command Context
+            var context = new CommandContext(client, message);
+            // Execute the command. (result does not indicate a return value, 
+            // rather an object stating if the command executed successfully)
+            var result = await commands.ExecuteAsync(context, argPos, services, MultiMatchHandling.Best);
+            if (!result.IsSuccess) {
+                //ProcessMessage(messageParam);
+            }
+            //    await context.Channel.SendMessageAsync(result.ErrorReason);
+        }
+
+        private static Task Log(LogMessage msg)
+        {
+            Console.WriteLine(msg.ToString());
+            return Task.CompletedTask;
+        }
+
+        private static void Migrate(SqliteConnection connection)
         {
             var databaseProvider = new SqliteDatabaseProvider(connection);
-            var migrationsAssembly = typeof(Program).Assembly;
-            var migrator = new SimpleMigrations.SimpleMigrator(migrationsAssembly, databaseProvider, new SimpleMigrations.Console.ConsoleLogger());
+            var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly;
+            var migrator = new SimpleMigrations.SimpleMigrator(migrationsAssembly, databaseProvider);
             migrator.Load();
             migrator.MigrateToLatest();
         }
 
-        private static void ProcessMessage(MessageEventArgs e)
+        private static void ProcessMessage(SocketMessage message)
         {
-            if (e.Channel.IsPrivate)
+            if (message.Channel is SocketDMChannel)
             {
-                game.OnPrivateMessage(e);
+                _game.OnPrivateMessage(message);
             }
             else
             {
-                game.OnPublicMessage(e);
+                _game.OnPublicMessage(message);
             }
         }
     }

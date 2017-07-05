@@ -13,7 +13,7 @@ namespace DiscordMafia.Activity
         {
             Vote = vote;
             Value = value;
-            Player.eveningVoteActivity = this;
+            Player.EveningVoteActivity = this;
         }
 
         protected override void OnCancel(InGamePlayerInfo onlyAgainstTarget)
@@ -22,7 +22,7 @@ namespace DiscordMafia.Activity
             {
                 if (Player != null)
                 {
-                    Player.eveningVoteActivity = null;
+                    Player.EveningVoteActivity = null;
                     Vote.Remove(Player);
                 }
                 base.OnCancel(onlyAgainstTarget);

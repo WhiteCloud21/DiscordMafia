@@ -8,16 +8,16 @@ namespace DiscordMafia.Config
 {
     public class Messages
     {
-        private MessageDictionary messages = new MessageDictionary();
-        private Random random = new Random();
+        private MessageDictionary _messages = new MessageDictionary();
+        private readonly Random _random = new Random();
 
-        private static Dictionary<string, Messages> instances = new Dictionary<string, Messages>();
+        private static readonly Dictionary<string, Messages> _instances = new Dictionary<string, Messages>();
 
         private Messages() { }
 
-        public static Messages getInstance(string filename)
+        public static Messages GetInstance(string filename)
         {
-            if (!instances.ContainsKey(filename))
+            if (!_instances.ContainsKey(filename))
             {
                 var storage = new Messages();
 
@@ -25,20 +25,20 @@ namespace DiscordMafia.Config
                 using (Stream stream = new FileStream(filename, FileMode.Open))
                 {
                     var serializer = new XmlSerializer(typeof(MessageDictionary));
-                    storage.messages = (MessageDictionary)serializer.Deserialize(stream);
+                    storage._messages = (MessageDictionary)serializer.Deserialize(stream);
                 }
 
-                instances.Add(filename, storage);
+                _instances.Add(filename, storage);
             }
-            return instances[filename];
+            return _instances[filename];
         }
 
         public string get(string key)
         {
-            if (this.messages.ContainsKey(key))
+            if (this._messages.ContainsKey(key))
             {
-                var messages = this.messages[key];
-                return messages[random.Next(messages.Length)];
+                var messages = this._messages[key];
+                return messages[_random.Next(messages.Length)];
             }
             return "";
         }
@@ -65,11 +65,6 @@ namespace DiscordMafia.Config
         }
 
         public MessageDictionary() : base()
-        {
-        }
-
-        protected MessageDictionary(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext)
-            : base(serializationInfo, streamingContext)
         {
         }
     }

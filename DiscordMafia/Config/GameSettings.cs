@@ -50,20 +50,20 @@ namespace DiscordMafia.Config
             PlayerCollectingTime = 60000;
             PauseTime = 1000;
             MorningTime = 2000;
-            DayTime = 60000;
+            DayTime = 90000;
             EveningTime = 30000;
-            NightTime = 60000;
+            NightTime = 90000;
             InfectionChancePercent = 33;
             ShowNightActions = true;
             IsYakuzaEnabled = false;
 
             ReadConfig();
 
-            Messages = Messages.getInstance(GetFilePath("messages.xml"));
+            Messages = Messages.GetInstance(GetFilePath("messages.xml"));
             Console.WriteLine("Сообщения загружены");
-            Points = Points.getInstance(GetFilePath("points.xml"));
+            Points = Points.GetInstance(GetFilePath("points.xml"));
             Console.WriteLine("Конфигурация очков загружена");
-            Roles = Roles.getInstance(GetFilePath("roles.xml"));
+            Roles = Roles.GetInstance(GetFilePath("roles.xml"));
             Console.WriteLine("Конфигурация ролей загружена");
         }
 
@@ -71,11 +71,11 @@ namespace DiscordMafia.Config
         {
             using (var stream = new System.IO.FileStream(GetFilePath("gameSettings.xml"), System.IO.FileMode.Open))
             {
-                var reader = new XmlTextReader(stream);
-                reader.WhitespaceHandling = WhitespaceHandling.None;
-                reader.ReadToFollowing("Settings");
-                ReadXml(reader);
-                reader.Close();
+                using (var reader = XmlReader.Create(stream))
+                {
+                    reader.ReadToFollowing("Settings");
+                    ReadXml(reader);
+                }
             }
         }
 
@@ -111,9 +111,8 @@ namespace DiscordMafia.Config
 
             try
             {
-                while (reader.NodeType != XmlNodeType.EndElement)
+                while (reader.MoveToContent() != XmlNodeType.EndElement)
                 {
-                    reader.MoveToContent();
                     var name = reader.Name;
                     // TODO Сделать нормальный парсер (на атрибутах свойств?)
                     switch (name)
