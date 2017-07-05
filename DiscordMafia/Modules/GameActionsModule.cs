@@ -24,8 +24,8 @@ namespace DiscordMafia.Modules
             _client = client;
         }
 
-        [Command("start"), Summary("Выводит статистику."), Alias("старт"), RequireContext(ContextType.Guild)]
-        public async Task Start()
+        [Command("start"), Summary("Запускает игру."), Alias("старт"), RequireContext(ContextType.Guild)]
+        public async Task Start([Remainder] string ignored = null)
         {
             if (_game.currentState == GameState.Stopped)
             {
@@ -44,9 +44,8 @@ namespace DiscordMafia.Modules
             }
         }
 
-        [Command("join"), Summary("Выводит статистику."),
-        Alias("я", "z")]
-        public async Task Register()
+        [Command("join"), Summary("Присоединяет игрока к игре."), Alias("я", "z")]
+        public async Task Register([Remainder] string ignored = null)
         {
             var user = new UserWrapper(Context.User);
             if (_game.currentState == GameState.PlayerCollecting && !_game.currentPlayers.ContainsKey(Context.User.Id))

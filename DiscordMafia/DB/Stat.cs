@@ -59,7 +59,7 @@ namespace DiscordMafia.DB
             var winsPercent = dbUser.GamesPlayed > 0 ? 100.0 * dbUser.Wins / dbUser.GamesPlayed : 0.0;
             var survivalsPercent = dbUser.GamesPlayed > 0 ? 100.0 * dbUser.Survivals / dbUser.GamesPlayed : 0.0;
             var pointsAverage = dbUser.GamesPlayed > 0 ? 1.0 * dbUser.TotalPoints / dbUser.GamesPlayed : 0.0;
-            var message = "Ваша статистика:" + Environment.NewLine;
+            var message = $"Статистика игрока {user.Username}:" + Environment.NewLine;
             message += $"Всего игр: {dbUser.GamesPlayed}{Environment.NewLine}";
             message += $"Пережил игр: {dbUser.Survivals} ({survivalsPercent.ToString("0.00")}%){Environment.NewLine}";
             message += $"Побед: {dbUser.Wins} ({winsPercent.ToString("0.00")}%){Environment.NewLine}";
