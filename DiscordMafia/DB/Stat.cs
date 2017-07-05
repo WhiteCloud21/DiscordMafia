@@ -13,15 +13,16 @@ namespace DiscordMafia.DB
             "total_points", "rate", "games", "wins"
         };
 
-        public static IEnumerable<User> GetTop(string field, int howMany = 20)
+        public static IEnumerable<User> GetTop(string field, int countPerPage = 20, int fromPage = 1)
         {
             if (!allowedFields.Contains(field))
             {
                 field = allowedFields.First();
             }
-            howMany = Math.Min(Math.Max(howMany, 1), 300);
-            var parameters = new SqliteParameter[] { new SqliteParameter(":limit", howMany) };
-            return User.FindAllByCondition($"ORDER BY {field} DESC LIMIT :limit", parameters);
+            var limit = Math.Min(Math.Max(countPerPage, 1), 300);
+            var offset = (Math.Max(fromPage, 1) - 1) * countPerPage;
+            var parameters = new SqliteParameter[] { new SqliteParameter(":limit", limit), new SqliteParameter(":offset", offset) };
+            return User.FindAllByCondition($"ORDER BY {field} DESC, username ASC LIMIT :limit OFFSET :offset", parameters);
         }
 
         public static void RecalculateAll()

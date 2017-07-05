@@ -5,7 +5,9 @@ using DiscordMafia.Config;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
 using SimpleMigrations.DatabaseProvider;
 
 namespace DiscordMafia
@@ -18,45 +20,61 @@ namespace DiscordMafia
 
         public static MainSettings Settings { get; private set; }
 
-        private static void Main(string[] args)
+        private CommandService commands;
+        private DiscordSocketClient client;
+        private IServiceProvider services;
+
+        static void Main(string[] args)
         {
-            Settings = new MainSettings("Config/mainSettings.xml", "Config/Local/mainSettings.xml");
-                
-            SynchronizationContext.SetSynchronizationContext(SyncContext);
-            SyncContext.Post(obj => Run(), null);
-            try
-            {
-                SyncContext.RunMessagePump();
-            }
-            catch (Exception ex)
-            {
-                var message = $"[{DateTime.Now:s}] {ex}";
-                Console.Error.WriteLine(message);
-                System.IO.File.AppendAllText("error.log", message);
-            }
+            new Program().Start().GetAwaiter().GetResult();
         }
 
-        private static Task Log(LogMessage msg)
+        public async Task Start()
         {
-            Console.WriteLine(msg.ToString());
-            return Task.CompletedTask;
-        }
+            var settings = new MainSettings("Config/mainSettings.xml", "Config/Local/mainSettings.xml");
 
-        private static async void Run()
-        {
-            Connection = new SqliteConnection($"Data Source={Settings.DatabasePath};");
-            Connection.Open();
-            Migrate(Connection);
+            var connection = new SqliteConnection($"Data Source={settings.DatabasePath};");
+            connection.Open();
+            Migrate(connection);
 
-            var client = new DiscordSocketClient();
+            //            SynchronizationContext.SetSynchronizationContext(SyncContext);
+            //            SyncContext.Post(obj => Run(), null);
+            //            try
+            //            {
+            //                SyncContext.RunMessagePump();
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                var message = $"[{DateTime.Now:s}] {ex}";
+            //                Console.Error.WriteLine(message);
+            //                System.IO.File.AppendAllText("error.log", message);
+            //            }
+
+            client = new DiscordSocketClient();
             client.Log += Log;
-            _game = new Game(SyncContext, client, Settings);
 
-            client.MessageReceived += (message) =>
+            _game = new Game(SyncContext, client, settings);
+
+            commands = new CommandService();
+
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(client);
+            serviceCollection.AddSingleton(connection);
+            serviceCollection.AddSingleton(settings);
+            serviceCollection.AddSingleton(_game);
+
+            Connection = connection;
+            Settings = settings;
+
+            services = serviceCollection.BuildServiceProvider();
+
+            await InstallCommands();
+
+            client.MessageReceived += message =>
             {
                 return Task.Run(() =>
                 {
-                    SyncContext.Post((state) =>
+                    SyncContext.Post(state =>
                     {
                         if (message.Author.Id != client.CurrentUser.Id)
                         {
@@ -68,7 +86,46 @@ namespace DiscordMafia
 
             await client.LoginAsync(TokenType.Bot, Settings.Token);
             await client.StartAsync();
-            await client.SetGameAsync(null);
+            //await client.SetGameAsync(null);
+
+            SyncContext.RunMessagePump();
+
+            await Task.Delay(-1);
+        }
+
+        public async Task InstallCommands()
+        {
+            // Hook the MessageReceived Event into our Command Handler
+            client.MessageReceived += HandleCommand;
+            // Discover all of the commands in this assembly and load them.
+            await commands.AddModulesAsync(Assembly.GetEntryAssembly());
+        }
+
+        public async Task HandleCommand(SocketMessage messageParam)
+        {
+            // Don't process the command if it was a System Message
+            var message = messageParam as SocketUserMessage;
+            if (message == null) return;
+            // Create a number to track where the prefix ends and the command begins
+            int argPos = 0;
+            // Determine if the message is a command, based on if it starts with '!' or a mention prefix
+            if (!(message.HasCharPrefix('/', ref argPos) ||
+                  message.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
+            // Create a Command Context
+            var context = new CommandContext(client, message);
+            // Execute the command. (result does not indicate a return value, 
+            // rather an object stating if the command executed successfully)
+            var result = await commands.ExecuteAsync(context, argPos, services, MultiMatchHandling.Best);
+            if (!result.IsSuccess) {
+                //ProcessMessage(messageParam);
+            }
+            //    await context.Channel.SendMessageAsync(result.ErrorReason);
+        }
+
+        private static Task Log(LogMessage msg)
+        {
+            Console.WriteLine(msg.ToString());
+            return Task.CompletedTask;
         }
 
         private static void Migrate(SqliteConnection connection)
@@ -93,4 +150,3 @@ namespace DiscordMafia
         }
     }
 }
-

@@ -20,11 +20,11 @@ namespace DiscordMafia
     {
         protected System.Threading.SynchronizationContext syncContext;
         protected Random randomGenerator = new Random();
-        protected Timer timer;
+        internal Timer timer;
         private DiscordSocketClient client;
         public Config.GameSettings settings { get; protected set; }
 
-        public GameState currentState { get; protected set; }
+        public GameState currentState { get; internal set; }
         public Dictionary<ulong, InGamePlayerInfo> currentPlayers { get; protected set; }
         public List<InGamePlayerInfo> playersList { get; protected set; }
         public ulong gameChannel { get; protected set; }
@@ -38,7 +38,7 @@ namespace DiscordMafia
         protected KillManager killManager { get; set; }
         public Achievement.AchievementManager achievementManager { get; private set; }
         public Achievement.AchievementAssigner achievementAssigner { get; private set; }
-        protected int PlayerCollectingRemainingTime = 0;
+        internal int PlayerCollectingRemainingTime = 0;
 
         public Game(System.Threading.SynchronizationContext syncContext, DiscordSocketClient client, Config.MainSettings mainSettings)
         {
@@ -79,26 +79,9 @@ namespace DiscordMafia
             if (text.StartsWith("/"))
             {
                 text = text.ToLower();
-                var parts = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var parts = text.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
                 switch (parts[0].ToLower())
                 {
-                    case "/help":
-                    case "/хелп":
-                        Help(user);
-                        return;
-                    case "/top":
-                    case "/топ":
-                        var topCount = 20;
-                        if (parts.Length > 1)
-                        {
-                            int.TryParse(parts[1], out topCount);
-                        }
-                        messageBuilder.Text(Stat.GetTopAsString(messageBuilder, topCount), false).SendPublic(channel);
-                        return;
-                    case "/start":
-                    case "/старт":
-                        StartGame();
-                        return;
                     case "/погнали":
                     case "/го":
                     case "/go":
@@ -114,15 +97,9 @@ namespace DiscordMafia
                             StopGame();
                         }
                         return;
-                    case "/я":
-                    case "/z":
-                    case "/join":
-                        RegisterPlayer(user, fromPrivate: false);
-                        return;
                     case "/отмена":
                     case "/cancel":
                     case "/нея":
-                    case "/нет":
                         if (currentState == GameState.PlayerCollecting)
                         {
                             UnRegisterPlayer(user);
@@ -213,35 +190,12 @@ namespace DiscordMafia
                 var parts = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
                 switch (parts[0].ToLower())
                 {
-                    case "/хелп":
-                    case "/help":
-                        Help(user);
-                        return;
-                    case "/top":
-                    case "/топ":
-                        var topCount = 20;
-                        if (parts.Length > 1)
-                        {
-                            int.TryParse(parts[1], out topCount);
-                        }
-                        messageBuilder.Text(Stat.GetTopAsString(messageBuilder, topCount), false).SendPrivate(user);
-                        return;
-                    case "/mystat":
-                    case "/мойстат":
-                        messageBuilder.Text(Stat.GetStatAsString(user)).SendPrivate(user);
-                        messageBuilder.Text(achievementManager.GetAchievementsAsString(user), false).SendPrivate(user);
-                        return;
                     case "/recalculate":
                         if (user.IsAdmin())
                         {
                             Stat.RecalculateAll();
                             messageBuilder.Text("OK").SendPrivate(user);
                         }
-                        return;
-                    case "/я":
-                    case "/z":
-                    case "/join":
-                        RegisterPlayer(user, fromPrivate: true);
                         return;
                     case "/купить":
                     case "/buy":
@@ -673,79 +627,11 @@ namespace DiscordMafia
             }
         }
 
-        private void Help(UserWrapper user)
-        {
-            var currentPlayer = currentPlayers.ContainsKey(user.Id) ? currentPlayers[user.Id] : null;
-            var message = "<b>==========Игровые команды==========</b>" + Environment.NewLine;
-            message += "/help - вывод этой справки (в приват боту);" + Environment.NewLine;
-            message += "/join, /я - регистрация в игре (во время набора игроков);" + Environment.NewLine;
-            message += "/cancel, /отмена - выход из игры (во время набора игроков);" + Environment.NewLine;
-            message += "/mystat, /мойстат - ваша статистика(в приват боту);" + Environment.NewLine;
-            message += "/top, /топ - лучшие игроки;" + Environment.NewLine;
-            message += "/buy, /купить - посмотреть доступные вещи для покупки(только во время игры, в приват боту);" + Environment.NewLine;
-            //message += "/announceon, /предупреждай - сообщать о начале игры(в приват боту);" + Environment.NewLine;
-            //message += "/announceoff, /отстань - больше не сообщать о начале игры(в приват боту);" + Environment.NewLine;
-
-            if (currentPlayer != null && currentPlayer.IsAlive && currentPlayer.Role != null)
-            {
-                message += " " + Environment.NewLine;
-                message += "<b>=========== Помощь по статусу===========</b>" + Environment.NewLine;
-                message += "Ваш статус - " + messageBuilder.FormatRole(currentPlayer.Role.Name) + Environment.NewLine;
-                switch (currentPlayer.Role.Team)
-                {
-                    case Team.Civil:
-                        message += "Вы играете за команду мирных жителей" + Environment.NewLine;
-                        break;
-                    case Team.Neutral:
-                        message += "Вы играете сами за себя" + Environment.NewLine;
-                        break;
-                    case Team.Mafia:
-                        message += "Вы играете за команду мафов" + Environment.NewLine;
-                        break;
-                    case Team.Yakuza:
-                        message += "Вы играете за команду якудз" + Environment.NewLine;
-                        break;
-                }
-
-                message += messageBuilder.GetText(string.Format("RoleHelp_{0}", currentPlayer.Role.GetType().Name)) + Environment.NewLine;
-            }
-
-            message += " " + Environment.NewLine;
-            message += "<b>========Помощь по режиму игры========</b>" + Environment.NewLine;
-            message += $"Текущий режим игры: {settings.GameType}" + Environment.NewLine;
-            message += $"Якудза: {settings.IsYakuzaEnabled}" + Environment.NewLine;
-            message += $"Мафов из каждой группировки: {settings.MafPercent}%" + Environment.NewLine;
-            message += "<u><b>Доступные роли</b></u>" + Environment.NewLine;
-            message += settings.Roles.RolesHelp();
-
-            message += " " + Environment.NewLine;
-            message += "<b>======Помощь по начислению очков======</b>" + Environment.NewLine;
-            foreach (var pointConfig in settings.Points.Values)
-            {
-                message += $"{pointConfig.Description}: {pointConfig.Points}" + Environment.NewLine;
-            }
-
-            messageBuilder.Text(message, false).SendPrivate(user);
-        }
-
         private void NightAction(BaseRole role)
         {
             if (settings.ShowNightActions)
             {
                 messageBuilder.PrepareText("NightAction_" + role.GetType().Name).SendPublic(gameChannel);
-            }
-        }
-
-        private void RegisterPlayer(UserWrapper player, bool isBot = false, bool fromPrivate = false)
-        {
-            if (currentState == GameState.PlayerCollecting && !currentPlayers.ContainsKey(player.Id))
-            {
-                var playerInfo = new InGamePlayerInfo(player, this);
-                playerInfo.DbUser.Save();
-                playerInfo.IsBot = isBot;
-                currentPlayers.Add(player.Id, playerInfo);
-                playersList.Add(playerInfo);
-                messageBuilder.Text(String.Format("{0} присоединился к игре! ({1}) ", playerInfo.GetName(), currentPlayers.Count)).SendPublic(gameChannel);
             }
         }
 
@@ -872,21 +758,6 @@ namespace DiscordMafia
                         }
                     }
                 }
-            }
-        }
-
-        private void StartGame()
-        {
-            if (currentState == GameState.Stopped)
-            {
-                var message = $"Начинаю набор игроков. У вас <b>{settings.PlayerCollectingTime / 1000}</b> секунд.";
-                message += Environment.NewLine + "<b>/join</b> (<b>/я</b>) - Присоединиться к игре";
-                messageBuilder.Text(message, false).SendPublic(gameChannel);
-                currentState = GameState.PlayerCollecting;
-                timer.Interval = Math.Min(settings.PlayerCollectingTime, 60000);
-                PlayerCollectingRemainingTime = (int)(settings.PlayerCollectingTime - timer.Interval);
-                timer.Start();
-                client.SetGameAsync("Мафия (ожидание игроков)");
             }
         }
 

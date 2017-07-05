@@ -1,28 +1,29 @@
-﻿﻿<Project Sdk="Microsoft.NET.Sdk">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="1.0.0" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="1.1.1" />
-    <PackageReference Include="Simple.Migrations" Version="0.9.11" />
-    <PackageReference Include="System.Threading.Timer" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+    <PackageReference Include="Discord.Net" Version="1.0.0-rc2"/>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="1.1.1"/>
+    <PackageReference Include="Simple.Migrations" Version="0.9.11"/>
+    <PackageReference Include="System.Threading.Timer" Version="4.3.0"/>
+    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0"/>
+    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0"/>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Achievement" />
-    <Folder Include="Activity" />
-    <Folder Include="Client" />
-    <Folder Include="Config\Gametypes\wtf" />
-    <Folder Include="Config\Gametypes\yakuza" />
-    <Folder Include="Config\Local" />
-    <Folder Include="DB" />
-    <Folder Include="Items" />
-    <Folder Include="Messages" />
-    <Folder Include="Migrations" />
-    <Folder Include="Roles\Places" />
-    <Folder Include="Voting" />
+    <Folder Include="Achievement"/>
+    <Folder Include="Activity"/>
+    <Folder Include="Client"/>
+    <Folder Include="Config\Gametypes\wtf"/>
+    <Folder Include="Config\Gametypes\yakuza"/>
+    <Folder Include="Config\Local"/>
+    <Folder Include="DB"/>
+    <Folder Include="Items"/>
+    <Folder Include="Messages"/>
+    <Folder Include="Migrations"/>
+    <Folder Include="Roles\Places"/>
+    <Folder Include="Voting"/>
   </ItemGroup>
 </Project>

@@ -51,7 +51,7 @@ namespace DiscordMafia.Config
             PauseTime = 1000;
             MorningTime = 2000;
             DayTime = 90000;
-            EveningTime = 10000;
+            EveningTime = 30000;
             NightTime = 90000;
             InfectionChancePercent = 33;
             ShowNightActions = true;

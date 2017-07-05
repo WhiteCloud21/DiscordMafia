@@ -26,12 +26,12 @@ namespace DiscordMafia.Config
             this._playersList = playersList;
         }
 
-        public string Encode(string str)
+        public static string Encode(string str)
         {
             return System.Net.WebUtility.HtmlEncode(str);
         }
 
-        public string Markup(string str)
+        public static string Markup(string str)
         {
             return str.Replace("<b>", "**").Replace("</b>", "**").Replace("<i>", "_").Replace("</i>", "_").Replace("<u>", "__").Replace("</u>", "__");
         }
@@ -87,13 +87,18 @@ namespace DiscordMafia.Config
 
         public MessageBuilder AddImage(string photoPathOnServer)
         {
-            BuiltMessage +=  " " + Program.Settings.ImageBaseUrl + photoPathOnServer;
+            BuiltMessage += " " + Program.Settings.ImageBaseUrl + photoPathOnServer;
             return this;
         }
 
         public IMessage[] SendPrivate(InGamePlayerInfo player, bool clear = true, bool tts = false)
         {
             return SendPrivate(player.User, clear, tts);
+        }
+
+        public IMessage[] SendPrivate(IUser player, bool clear = true, bool tts = false)
+        {
+            return SendPrivate(new UserWrapper(player), clear, tts);
         }
 
         public IMessage[] SendPrivate(UserWrapper user, bool clear = true, bool tts = false)
@@ -128,7 +133,7 @@ namespace DiscordMafia.Config
             }
             return Channels[channelId];
         }
-        
+
         public IMessage[] SendPublic(IMessageChannel channel, bool clear = true, bool tts = false)
         {
             IMessage[] messages = null;
@@ -199,11 +204,11 @@ namespace DiscordMafia.Config
 
         public string FormatName(string firstName, string lastName, string userMention)
         {
-            var nameText = Encode(firstName + " " + lastName);
             if (!string.IsNullOrEmpty(userMention))
             {
                 return $"{userMention}";
             }
+            var nameText = Encode(firstName + " " + lastName);
             return $"<b>{nameText}</b>";
         }
 
