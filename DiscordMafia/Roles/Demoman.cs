@@ -67,11 +67,11 @@ namespace DiscordMafia.Roles
             if (Counter == 0)
             {
                 base.NightInfo(game, currentPlayer);
-                foreach (var player in game.playersList)
+                foreach (var player in game.PlayersList)
                 {
                     if (player.IsAlive && player.Role.Team != Team.Mafia)
                     {
-                        game.messageBuilder.PrepareText("NightInfo_" + GetType().Name + "_ForPlayers").AddImage("roles/whereToGo.png").SendPrivate(player);
+                        game.MessageBuilder.PrepareText("NightInfo_" + GetType().Name + "_ForPlayers").AddImage("roles/whereToGo.png").SendPrivate(player);
                     }
                 }
             }

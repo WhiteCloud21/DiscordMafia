@@ -17,12 +17,12 @@ namespace DiscordMafia.Roles
 
         public virtual void NightInfo(Game game, InGamePlayerInfo currentPlayer)
         {
-            game.messageBuilder.PrepareText("NightInfo_" + this.GetType().Name).SendPrivate(currentPlayer);
+            game.MessageBuilder.PrepareText("NightInfo_" + this.GetType().Name).SendPrivate(currentPlayer);
         }
 
         public virtual void DayInfo(Game game, InGamePlayerInfo currentPlayer)
         {
-            game.messageBuilder.PrepareText("DayInfo_" + this.GetType().Name).SendPrivate(currentPlayer);
+            game.MessageBuilder.PrepareText("DayInfo_" + this.GetType().Name).SendPrivate(currentPlayer);
         }
 
         public virtual bool IsReady(GameState currentState)

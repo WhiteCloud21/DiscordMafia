@@ -15,7 +15,6 @@ namespace DiscordMafia.Modules
         private DiscordSocketClient _client;
         private Game _game;
         private MainSettings _settings;
-        private SqliteConnection _connection;
 
         public GameActionsModule(Game game, DiscordSocketClient client, MainSettings settings)
         {
@@ -27,14 +26,14 @@ namespace DiscordMafia.Modules
         [Command("start"), Summary("Запускает игру."), Alias("старт"), RequireContext(ContextType.Guild)]
         public async Task Start([Remainder] string ignored = null)
         {
-            if (_game.currentState == GameState.Stopped)
+            if (_game.CurrentState == GameState.Stopped)
             {
-                var message = $"Начинаю набор игроков. У вас <b>{_game.settings.PlayerCollectingTime / 1000}</b> секунд.";
+                var message = $"Начинаю набор игроков. У вас <b>{_game.Settings.PlayerCollectingTime / 1000}</b> секунд.";
                 message += Environment.NewLine + "<b>/join</b> (<b>/я</b>) - Присоединиться к игре";
-                _game.messageBuilder.Text(message, false).SendPublic(_game.gameChannel);
-                _game.currentState = GameState.PlayerCollecting;
-                _game.timer.Interval = Math.Min(_game.settings.PlayerCollectingTime, 60000);
-                _game.PlayerCollectingRemainingTime = (int)(_game.settings.PlayerCollectingTime - _game.timer.Interval);
+                _game.MessageBuilder.Text(message, false).SendPublic(_game.GameChannel);
+                _game.CurrentState = GameState.PlayerCollecting;
+                _game.timer.Interval = Math.Min(_game.Settings.PlayerCollectingTime, 60000);
+                _game.PlayerCollectingRemainingTime = (int)(_game.Settings.PlayerCollectingTime - _game.timer.Interval);
                 _game.timer.Start();
                 await _client.SetGameAsync("Мафия (ожидание игроков)");
             }
@@ -48,14 +47,14 @@ namespace DiscordMafia.Modules
         public async Task Register([Remainder] string ignored = null)
         {
             var user = new UserWrapper(Context.User);
-            if (_game.currentState == GameState.PlayerCollecting && !_game.currentPlayers.ContainsKey(Context.User.Id))
+            if (_game.CurrentState == GameState.PlayerCollecting && !_game.CurrentPlayers.ContainsKey(Context.User.Id))
             {
                 var playerInfo = new InGamePlayerInfo(user, _game);
                 playerInfo.DbUser.Save();
                 playerInfo.IsBot = Context.User.IsBot;
-                _game.currentPlayers.Add(Context.User.Id, playerInfo);
-                _game.playersList.Add(playerInfo);
-                _game.messageBuilder.Text(String.Format("{0} присоединился к игре! ({1}) ", playerInfo.GetName(), _game.currentPlayers.Count)).SendPublic(_game.gameChannel);
+                _game.CurrentPlayers.Add(Context.User.Id, playerInfo);
+                _game.PlayersList.Add(playerInfo);
+                _game.MessageBuilder.Text(String.Format("{0} присоединился к игре! ({1}) ", playerInfo.GetName(), _game.CurrentPlayers.Count)).SendPublic(_game.GameChannel);
             }
             await Task.CompletedTask;
         }

@@ -43,7 +43,7 @@ namespace DiscordMafia
 
         public void AddPoints(string strategy)
         {
-            var howMany = Game.settings.Points.GetPoints(strategy);
+            var howMany = Game.Settings.Points.GetPoints(strategy);
             CurrentGamePoints += howMany;
         }
 
@@ -108,7 +108,7 @@ namespace DiscordMafia
                 foreach (var item in ActivityList)
                 {
                     // Дневное и вечернее голосование отменяется через CancelVote
-                    if (Game.currentState == GameState.Day && item == VoteFor || Game.currentState == GameState.Evening && item == EveningVoteActivity)
+                    if (Game.CurrentState == GameState.Day && item == VoteFor || Game.CurrentState == GameState.Evening && item == EveningVoteActivity)
                     {
                         continue;
                     }
@@ -126,7 +126,7 @@ namespace DiscordMafia
         {
             IsTurnSkipped = false;
             BaseActivity voteActivity;
-            switch (Game.currentState)
+            switch (Game.CurrentState)
             {
                 case GameState.Day:
                     voteActivity = VoteFor;
