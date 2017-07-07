@@ -26,32 +26,25 @@ namespace DiscordMafia.Modules
             _client = client;
         }
 
-        [Command("start"), Summary("Запускает игру."), Alias("старт"), RequireContext(ContextType.Guild)]
+        [Command("start"), Summary("Запускает игру."), Alias("старт"), RequireContext(ContextType.Guild), RequireGameState(GameState.Stopped)]
         public async Task Start([Remainder] string ignored = null)
         {
-            if (_game.CurrentState == GameState.Stopped)
-            {
-                var message = $"Начинаю набор игроков. У вас <b>{_game.Settings.PlayerCollectingTime / 1000}</b> секунд.";
-                message += Environment.NewLine + "<b>/join</b> (<b>/я</b>) - Присоединиться к игре";
-                _game.MessageBuilder.Text(message, false).SendPublic(_game.GameChannel);
-                _game.CurrentState = GameState.PlayerCollecting;
-                _game.timer.Interval = Math.Min(_game.Settings.PlayerCollectingTime, 60000);
-                _game.PlayerCollectingRemainingTime = (int)(_game.Settings.PlayerCollectingTime - _game.timer.Interval);
-                _game.timer.Start();
-                await _client.SetGameAsync("Мафия (ожидание игроков)");
-            }
-            else
-            {
-                await Task.CompletedTask;
-            }
+            var message = $"Начинаю набор игроков. У вас <b>{_game.Settings.PlayerCollectingTime / 1000}</b> секунд.";
+            message += Environment.NewLine + "<b>/join</b> (<b>/я</b>) - Присоединиться к игре";
+            _game.MessageBuilder.Text(message, false).SendPublic(_game.GameChannel);
+            _game.CurrentState = GameState.PlayerCollecting;
+            _game.timer.Interval = Math.Min(_game.Settings.PlayerCollectingTime, 60000);
+            _game.PlayerCollectingRemainingTime = (int)(_game.Settings.PlayerCollectingTime - _game.timer.Interval);
+            _game.timer.Start();
+            await _client.SetGameAsync("Мафия (ожидание игроков)");
         }
 
-        [Command("join"), Summary("Присоединяет игрока к игре."),
+        [Command("join"), Summary("Присоединяет игрока к игре."), RequireGameState(GameState.PlayerCollecting),
          Alias("я", "z")]
         public async Task Register([Remainder] string ignored = null)
         {
             var user = new UserWrapper(Context.User);
-            if (_game.CurrentState == GameState.PlayerCollecting && !_game.CurrentPlayers.ContainsKey(Context.User.Id))
+            if (!_game.CurrentPlayers.ContainsKey(Context.User.Id))
             {
                 var playerInfo = new InGamePlayerInfo(user, _game);
                 playerInfo.DbUser.Save();
@@ -137,7 +130,7 @@ namespace DiscordMafia.Modules
             }
         }
 
-        [Command("imprison"), Summary("Осудить указанного игрока."), RequirePlayer,
+        [Command("imprison"), Summary("Осудить указанного игрока."), RequirePlayer, RequireGameState(GameState.Day),
          Alias("посадить", "повесить", "gjcflbnm", "gjdtcbnm")]
         public async Task Vote([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
@@ -146,7 +139,7 @@ namespace DiscordMafia.Modules
             {
                 if (Context.Channel is IDMChannel)
                 {
-                    if (currentPlayer.Role is Elder && _game.CurrentState == GameState.Day)
+                    if (currentPlayer.Role is Elder)
                     {
                         var elder = (currentPlayer.Role as Elder);
                         var playerToKill = _game.GetPlayerInfo(player);
@@ -175,32 +168,26 @@ namespace DiscordMafia.Modules
             await Task.CompletedTask;
         }
 
-        [Command("yes"), Summary("Согласиться с решением суда."), Alias("да"), RequireContext(ContextType.Guild), RequirePlayer]
+        [Command("yes"), Summary("Согласиться с решением суда."), Alias("да"), RequireContext(ContextType.Guild), RequirePlayer, RequireGameState(GameState.Evening)]
         public async Task AcceptVote([Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (_game.CurrentState == GameState.Evening)
-                {
-                    _game.EveningVote(currentPlayer, true);
-                    _game.CheckNextCheckpoint();
-                }
+                _game.EveningVote(currentPlayer, true);
+                _game.CheckNextCheckpoint();
             }
             await Task.CompletedTask;
         }
 
-        [Command("no"), Summary("Опротестовать решение суда."), Alias("нет"), RequireContext(ContextType.Guild), RequirePlayer]
+        [Command("no"), Summary("Опротестовать решение суда."), Alias("нет"), RequireContext(ContextType.Guild), RequirePlayer, RequireGameState(GameState.Evening)]
         public async Task DeclineVote([Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (_game.CurrentState == GameState.Evening)
-                {
-                    _game.EveningVote(currentPlayer, false);
-                    _game.CheckNextCheckpoint();
-                }
+                _game.EveningVote(currentPlayer, false);
+                _game.CheckNextCheckpoint();
             }
             await Task.CompletedTask;
         }
@@ -278,14 +265,13 @@ namespace DiscordMafia.Modules
             await Task.CompletedTask;
         }
 
-        [Command("kill"), Summary("Посодействовать в убийстве игрока."), Alias("убить"), RequireContext(ContextType.DM), RequirePlayer]
+        [Command("kill"), Summary("Посодействовать в убийстве игрока."), Alias("убить"), RequireContext(ContextType.DM), RequirePlayer, RequireGameState(GameState.Night)]
         public async Task Kill([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                var currentState = _game.CurrentState;
-                if (currentPlayer.Role is Highlander && currentState == GameState.Night)
+                if (currentPlayer.Role is Highlander)
                 {
                     var highlander = (currentPlayer.Role as Highlander);
                     var playerToKill = _game.GetPlayerInfo(player);
@@ -305,7 +291,7 @@ namespace DiscordMafia.Modules
                     }
                     return;
                 }
-                if (currentPlayer.Role is Sheriff && currentState == GameState.Night)
+                if (currentPlayer.Role is Sheriff)
                 {
                     var sheriff = (currentPlayer.Role as Sheriff);
                     var playerToKill = _game.GetPlayerInfo(player);
@@ -318,7 +304,7 @@ namespace DiscordMafia.Modules
                     }
                     return;
                 }
-                if (currentPlayer.Role is Killer && currentState == GameState.Night)
+                if (currentPlayer.Role is Killer)
                 {
                     var killer = (currentPlayer.Role as Killer);
                     var playerToKill = _game.GetPlayerInfo(player);
@@ -332,7 +318,7 @@ namespace DiscordMafia.Modules
                     }
                     return;
                 }
-                if (currentPlayer.Role is NeutralKiller && currentState == GameState.Night)
+                if (currentPlayer.Role is NeutralKiller)
                 {
                     var maniac = (currentPlayer.Role as NeutralKiller);
                     var playerToKill = _game.GetPlayerInfo(player);
@@ -345,51 +331,45 @@ namespace DiscordMafia.Modules
                     }
                     return;
                 }
-                if (currentState == GameState.Night)
-                {
-                    _game.NightVote(currentPlayer, player);
-                    _game.CheckNextCheckpoint();
-                }
+                _game.NightVote(currentPlayer, player);
+                _game.CheckNextCheckpoint();
             }
             await Task.CompletedTask;
         }
 
-        [Command("curse"), Summary("Проклясть игрока."), Alias("проклясть"), RequireContext(ContextType.DM), RequirePlayer]
+        [Command("curse"), Summary("Проклясть игрока."), Alias("проклясть"), RequireContext(ContextType.DM), RequirePlayer(typeof(Warlock)), RequireGameState(GameState.Night)]
         public async Task CursePlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Warlock && _game.CurrentState == GameState.Night)
+                var warlock = (currentPlayer.Role as Warlock);
+                var playerToCurse = _game.GetPlayerInfo(player);
+                if (playerToCurse != null && warlock.PlayerToCurse == null)
                 {
-                    var warlock = (currentPlayer.Role as Warlock);
-                    var playerToCurse = _game.GetPlayerInfo(player);
-                    if (playerToCurse != null && warlock.PlayerToCurse == null)
+                    try
                     {
-                        try
-                        {
-                            warlock.PlayerToCurse = playerToCurse;
-                            _game.NightAction(currentPlayer.Role);
-                            await ReplyAsync("Голос принят.");
-                            _game.CheckNextCheckpoint();
-                        }
-                        catch (Exception ex)
-                        {
-                            _game.MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
-                        }
+                        warlock.PlayerToCurse = playerToCurse;
+                        _game.NightAction(currentPlayer.Role);
+                        await ReplyAsync("Голос принят.");
+                        _game.CheckNextCheckpoint();
+                    }
+                    catch (Exception ex)
+                    {
+                        _game.MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
                     }
                 }
             }
             await Task.CompletedTask;
         }
 
-        [Command("check"), Summary("Проверить игрока."), Alias("пров", "проверить"), RequireContext(ContextType.DM), RequirePlayer]
+        [Command("check"), Summary("Проверить игрока."), Alias("пров", "проверить"), RequireContext(ContextType.DM), RequirePlayer(typeof(Commissioner), typeof(Homeless), typeof(Lawyer)), RequireGameState(GameState.Night)]
         public async Task CheckPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Commissioner && _game.CurrentState == GameState.Night)
+                if (currentPlayer.Role is Commissioner)
                 {
                     var commissioner = (currentPlayer.Role as Commissioner);
                     var playerToCheck = _game.GetPlayerInfo(player);
@@ -401,7 +381,7 @@ namespace DiscordMafia.Modules
                         _game.CheckNextCheckpoint();
                     }
                 }
-                else if (currentPlayer.Role is Homeless && _game.CurrentState == GameState.Night)
+                else if (currentPlayer.Role is Homeless)
                 {
                     var homeless = (currentPlayer.Role as Homeless);
                     var playerToCheck = _game.GetPlayerInfo(player);
@@ -413,7 +393,7 @@ namespace DiscordMafia.Modules
                         _game.CheckNextCheckpoint();
                     }
                 }
-                else if (currentPlayer.Role is Lawyer && _game.CurrentState == GameState.Night)
+                else if (currentPlayer.Role is Lawyer)
                 {
                     var lawyer = (currentPlayer.Role as Lawyer);
                     var playerToCheck = _game.GetPlayerInfo(player);
@@ -430,157 +410,142 @@ namespace DiscordMafia.Modules
             await Task.CompletedTask;
         }
 
-        [Command("sleep"), Summary("Переспать с игроком."), Alias("спать"), RequireContext(ContextType.DM), RequirePlayer]
+        [Command("sleep"), Summary("Переспать с игроком."), Alias("спать"), RequireContext(ContextType.DM), RequirePlayer(typeof(Wench)), RequireGameState(GameState.Night)]
         public async Task SleepWithPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Wench && _game.CurrentState == GameState.Night)
+                var wench = (currentPlayer.Role as Wench);
+                var playerToCheck = _game.GetPlayerInfo(player);
+                if (playerToCheck != null && wench.PlayerToCheck == null)
                 {
-                    var wench = (currentPlayer.Role as Wench);
-                    var playerToCheck = _game.GetPlayerInfo(player);
-                    if (playerToCheck != null && wench.PlayerToCheck == null)
+                    try
                     {
-                        try
-                        {
-                            wench.PlayerToCheck = playerToCheck;
-                            _game.NightAction(currentPlayer.Role);
-                            await ReplyAsync("Голос принят.");
-                            _game.CheckNextCheckpoint();
-                        }
-                        catch (Exception ex)
-                        {
-                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                        }
+                        wench.PlayerToCheck = playerToCheck;
+                        _game.NightAction(currentPlayer.Role);
+                        await ReplyAsync("Голос принят.");
+                        _game.CheckNextCheckpoint();
+                    }
+                    catch (Exception ex)
+                    {
+                        _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                     }
                 }
             }
             await Task.CompletedTask;
         }
 
-        [Command("block"), Summary("Блокировать игрока."), Alias("блок"), RequireContext(ContextType.DM), RequirePlayer]
+        [Command("block"), Summary("Блокировать игрока."), Alias("блок"), RequireContext(ContextType.DM), RequirePlayer(typeof(Hoodlum)), RequireGameState(GameState.Night)]
         public async Task BlockPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Hoodlum && _game.CurrentState == GameState.Night)
+                var hoodlum = (currentPlayer.Role as Hoodlum);
+                var playerToBlock = _game.GetPlayerInfo(player);
+                if (playerToBlock != null && hoodlum.PlayerToBlock == null)
                 {
-                    var hoodlum = (currentPlayer.Role as Hoodlum);
-                    var playerToBlock = _game.GetPlayerInfo(player);
-                    if (playerToBlock != null && hoodlum.PlayerToBlock == null)
+                    try
                     {
-                        try
-                        {
-                            hoodlum.PlayerToBlock = playerToBlock;
-                            _game.NightAction(currentPlayer.Role);
-                            var response = String.Format("Громила {0} выбрал {1} для блокировки!", currentPlayer.GetName(), hoodlum.PlayerToBlock.GetName());
-                            _game.MessageBuilder.Text(response).SendToTeam(Team.Yakuza);
-                            _game.CheckNextCheckpoint();
-                        }
-                        catch (Exception ex)
-                        {
-                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                        }
+                        hoodlum.PlayerToBlock = playerToBlock;
+                        _game.NightAction(currentPlayer.Role);
+                        var response = String.Format("Громила {0} выбрал {1} для блокировки!", currentPlayer.GetName(), hoodlum.PlayerToBlock.GetName());
+                        _game.MessageBuilder.Text(response).SendToTeam(Team.Yakuza);
+                        _game.CheckNextCheckpoint();
+                    }
+                    catch (Exception ex)
+                    {
+                        _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                     }
                 }
             }
             await Task.CompletedTask;
         }
 
-        [Command("heal"), Summary("Подлатать игрока."), Alias("лечить"), RequireContext(ContextType.DM), RequirePlayer]
+        [Command("heal"), Summary("Подлатать игрока."), Alias("лечить"), RequireContext(ContextType.DM), RequirePlayer(typeof(Doctor)), RequireGameState(GameState.Night)]
         public async Task HealPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Doctor && _game.CurrentState == GameState.Night)
+                var doctor = (currentPlayer.Role as Doctor);
+                var playerToHeal = _game.GetPlayerInfo(player);
+                if (playerToHeal != null && doctor.PlayerToHeal == null)
                 {
-                    var doctor = (currentPlayer.Role as Doctor);
-                    var playerToHeal = _game.GetPlayerInfo(player);
-                    if (playerToHeal != null && doctor.PlayerToHeal == null)
+                    try
                     {
-                        try
-                        {
-                            doctor.PlayerToHeal = playerToHeal;
-                            _game.NightAction(currentPlayer.Role);
-                            await ReplyAsync("Голос принят.");
-                            _game.CheckNextCheckpoint();
-                        }
-                        catch (Exception ex)
-                        {
-                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                        }
+                        doctor.PlayerToHeal = playerToHeal;
+                        _game.NightAction(currentPlayer.Role);
+                        await ReplyAsync("Голос принят.");
+                        _game.CheckNextCheckpoint();
+                    }
+                    catch (Exception ex)
+                    {
+                        _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                     }
                 }
             }
             await Task.CompletedTask;
         }
 
-        [Command("justify"), Summary("Оправдать игрока."), Alias("оправдать"), RequireContext(ContextType.DM), RequirePlayer]
+        [Command("justify"), Summary("Оправдать игрока."), Alias("оправдать"), RequireContext(ContextType.DM), RequirePlayer(typeof(Judge)), RequireGameState(GameState.Day)]
         public async Task JustifyPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Judge && _game.CurrentState == GameState.Day)
+                var judge = (currentPlayer.Role as Judge);
+                var playerToJustify = _game.GetPlayerInfo(player);
+                if (playerToJustify != null && judge.PlayerToJustufy == null)
                 {
-                    var judge = (currentPlayer.Role as Judge);
-                    var playerToJustify = _game.GetPlayerInfo(player);
-                    if (playerToJustify != null && judge.PlayerToJustufy == null)
+                    try
                     {
-                        try
-                        {
-                            judge.PlayerToJustufy = playerToJustify;
-                            await ReplyAsync("Голос принят.");
-                            _game.CheckNextCheckpoint();
-                        }
-                        catch (Exception ex)
-                        {
-                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                        }
+                        judge.PlayerToJustufy = playerToJustify;
+                        await ReplyAsync("Голос принят.");
+                        _game.CheckNextCheckpoint();
+                    }
+                    catch (Exception ex)
+                    {
+                        _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                     }
                 }
             }
             await Task.CompletedTask;
         }
 
-        [Command("destroy"), Summary("Взорвать локацию."), Alias("подорвать", "kaboom"), RequireContext(ContextType.DM), RequirePlayer]
+        [Command("destroy"), Summary("Взорвать локацию."), Alias("подорвать", "kaboom"), RequireContext(ContextType.DM), RequirePlayer(typeof(Demoman)), RequireGameState(GameState.Night)]
         public async Task Kaboom([Summary("номер локации")] int place, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Demoman && _game.CurrentState == GameState.Night)
+                var demoman = (currentPlayer.Role as Demoman);
+                var placeToDestroy = _game.GetPlaceInfo(place);
+                if (placeToDestroy != null && demoman.PlaceToDestroy == null)
                 {
-                    var demoman = (currentPlayer.Role as Demoman);
-                    var placeToDestroy = _game.GetPlaceInfo(place);
-                    if (placeToDestroy != null && demoman.PlaceToDestroy == null)
+                    try
                     {
-                        try
-                        {
-                            demoman.PlaceToDestroy = placeToDestroy;
-                            await ReplyAsync(MessageBuilder.Encode("Сегодня взорвем " + placeToDestroy.Name));
-                            _game.CheckNextCheckpoint();
-                        }
-                        catch (Exception ex)
-                        {
-                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                        }
+                        demoman.PlaceToDestroy = placeToDestroy;
+                        await ReplyAsync(MessageBuilder.Encode("Сегодня взорвем " + placeToDestroy.Name));
+                        _game.CheckNextCheckpoint();
+                    }
+                    catch (Exception ex)
+                    {
+                        _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                     }
                 }
             }
             await Task.CompletedTask;
         }
 
-        [Command("go"), Summary("Посетить локацию."), Alias("пойти"), RequireContext(ContextType.DM), RequirePlayer]
+        [Command("go"), Summary("Посетить локацию."), Alias("пойти"), RequireContext(ContextType.DM), RequirePlayer, RequireGameState(GameState.Night)]
         public async Task WhereToGo([Summary("номер локации")] int place, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role.Team != Team.Mafia && _game.CurrentState == GameState.Night)
+                if (currentPlayer.Role.Team != Team.Mafia)
                 {
                     var placeToGo = _game.GetPlaceInfo(place);
                     if (placeToGo != null)
