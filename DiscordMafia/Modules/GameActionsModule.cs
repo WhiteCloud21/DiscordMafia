@@ -93,7 +93,7 @@ namespace DiscordMafia.Modules
             }
         }
 
-        [Command("skip"), Summary("Форсирует начало игры."), Alias("пропустить"), RequirePlayer]
+        [Command("skip"), Summary("Позволяет пропустить текущее действие."), Alias("пропустить"), RequirePlayer]
         public async Task Skip([Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
