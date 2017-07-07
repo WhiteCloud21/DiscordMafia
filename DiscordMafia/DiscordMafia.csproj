@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Discord.Net" Version="1.0.0-rc2" />
+    <PackageReference Include="Discord.Net" Version="1.0.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="1.1.1" />
     <PackageReference Include="Simple.Migrations" Version="0.9.11" />
     <PackageReference Include="System.Threading.Timer" Version="4.3.0" />
