@@ -23,15 +23,15 @@ namespace DiscordMafia
             foreach (var player in KilledPlayers)
             {
                 player.IsAlive = false;
-                Game.messageBuilder.PrepareText("YouKilled").SendPrivate(player);
+                Game.MessageBuilder.PrepareText("YouKilled").SendPrivate(player);
 
                 if (player.Role is Commissioner)
                 {
-                    var sergeant = Game.playersList.Find(p => { return p.IsAlive && p.Role is Sergeant && !KilledPlayers.Contains(p); });
+                    var sergeant = Game.PlayersList.Find(p => { return p.IsAlive && p.Role is Sergeant && !KilledPlayers.Contains(p); });
                     if (sergeant != null)
                     {
                         sergeant.Role = new Commissioner();
-                        Game.messageBuilder.PrepareTextReplacePlayer("ComKilled_ToSergeant", player).SendPrivate(sergeant);
+                        Game.MessageBuilder.PrepareTextReplacePlayer("ComKilled_ToSergeant", player).SendPrivate(sergeant);
                     }
                 }
             }

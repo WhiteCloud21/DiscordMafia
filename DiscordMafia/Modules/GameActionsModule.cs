@@ -18,7 +18,6 @@ namespace DiscordMafia.Modules
         private DiscordSocketClient _client;
         private Game _game;
         private MainSettings _settings;
-        private SqliteConnection _connection;
 
         public GameActionsModule(Game game, DiscordSocketClient client, MainSettings settings)
         {
@@ -30,14 +29,14 @@ namespace DiscordMafia.Modules
         [Command("start"), Summary("Запускает игру."), Alias("старт"), RequireContext(ContextType.Guild)]
         public async Task Start([Remainder] string ignored = null)
         {
-            if (_game.currentState == GameState.Stopped)
+            if (_game.CurrentState == GameState.Stopped)
             {
-                var message = $"Начинаю набор игроков. У вас <b>{_game.settings.PlayerCollectingTime / 1000}</b> секунд.";
+                var message = $"Начинаю набор игроков. У вас <b>{_game.Settings.PlayerCollectingTime / 1000}</b> секунд.";
                 message += Environment.NewLine + "<b>/join</b> (<b>/я</b>) - Присоединиться к игре";
-                _game.messageBuilder.Text(message, false).SendPublic(_game.gameChannel);
-                _game.currentState = GameState.PlayerCollecting;
-                _game.timer.Interval = Math.Min(_game.settings.PlayerCollectingTime, 60000);
-                _game.PlayerCollectingRemainingTime = (int)(_game.settings.PlayerCollectingTime - _game.timer.Interval);
+                _game.MessageBuilder.Text(message, false).SendPublic(_game.GameChannel);
+                _game.CurrentState = GameState.PlayerCollecting;
+                _game.timer.Interval = Math.Min(_game.Settings.PlayerCollectingTime, 60000);
+                _game.PlayerCollectingRemainingTime = (int)(_game.Settings.PlayerCollectingTime - _game.timer.Interval);
                 _game.timer.Start();
                 await _client.SetGameAsync("Мафия (ожидание игроков)");
             }
@@ -52,14 +51,14 @@ namespace DiscordMafia.Modules
         public async Task Register([Remainder] string ignored = null)
         {
             var user = new UserWrapper(Context.User);
-            if (_game.currentState == GameState.PlayerCollecting && !_game.currentPlayers.ContainsKey(Context.User.Id))
+            if (_game.CurrentState == GameState.PlayerCollecting && !_game.CurrentPlayers.ContainsKey(Context.User.Id))
             {
                 var playerInfo = new InGamePlayerInfo(user, _game);
                 playerInfo.DbUser.Save();
                 playerInfo.IsBot = Context.User.IsBot;
-                _game.currentPlayers.Add(Context.User.Id, playerInfo);
-                _game.playersList.Add(playerInfo);
-                _game.messageBuilder.Text(String.Format("{0} присоединился к игре! ({1}) ", playerInfo.GetName(), _game.currentPlayers.Count)).SendPublic(_game.gameChannel);
+                _game.CurrentPlayers.Add(Context.User.Id, playerInfo);
+                _game.PlayersList.Add(playerInfo);
+                _game.MessageBuilder.Text(String.Format("{0} присоединился к игре! ({1}) ", playerInfo.GetName(), _game.CurrentPlayers.Count)).SendPublic(_game.GameChannel);
             }
             await Task.CompletedTask;
         }
@@ -67,29 +66,29 @@ namespace DiscordMafia.Modules
         [Command("cancel"), Summary("Отменяет действие."), Alias("отмена", "нея", "don't")]
         public async Task Cancel([Remainder] string ignored = null)
         {
-            if (_game.currentState == GameState.PlayerCollecting && _game.currentPlayers.ContainsKey(Context.User.Id))
+            if (_game.CurrentState == GameState.PlayerCollecting && _game.CurrentPlayers.ContainsKey(Context.User.Id))
             {
-                var playerInfo = _game.currentPlayers[Context.User.Id];
-                _game.currentPlayers.Remove(Context.User.Id);
-                _game.playersList.Remove(playerInfo);
-                _game.messageBuilder.Text(String.Format("{0} вышел из игры! ({1}) ", playerInfo.GetName(), _game.currentPlayers.Count)).SendPublic(_game.gameChannel);
+                var playerInfo = _game.CurrentPlayers[Context.User.Id];
+                _game.CurrentPlayers.Remove(Context.User.Id);
+                _game.PlayersList.Remove(playerInfo);
+                _game.MessageBuilder.Text(String.Format("{0} вышел из игры! ({1}) ", playerInfo.GetName(), _game.CurrentPlayers.Count)).SendPublic(_game.GameChannel);
                 await Task.CompletedTask;
             }
             else
             {
                 InGamePlayerInfo currentPlayer;
-                if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+                if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
                 {
                     if (Context.Channel is IDMChannel)
                     {
                         currentPlayer.CancelActivity();
                         await ReplyAsync("Ваш голос отменен");
                     }
-                    else if (_game.currentState == GameState.Day)
+                    else if (_game.CurrentState == GameState.Day)
                     {
                         if (currentPlayer.CancelVote())
                         {
-                            _game.messageBuilder.Text(currentPlayer.GetName() + " отменил свой голос").SendPublic(_game.gameChannel);
+                            _game.MessageBuilder.Text(currentPlayer.GetName() + " отменил свой голос").SendPublic(_game.GameChannel);
                         }
                         await Task.CompletedTask;
                     }
@@ -105,7 +104,7 @@ namespace DiscordMafia.Modules
         public async Task Skip([Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
                 if (Context.Channel is IDMChannel)
                 {
@@ -123,7 +122,7 @@ namespace DiscordMafia.Modules
                 {
                     if (currentPlayer.SkipTurn())
                     {
-                        _game.messageBuilder.Text(currentPlayer.GetName() + " пропустил ход").SendPublic(_game.gameChannel);
+                        _game.MessageBuilder.Text(currentPlayer.GetName() + " пропустил ход").SendPublic(_game.GameChannel);
                         _game.CheckNextCheckpoint();
                     }
                     else
@@ -143,11 +142,11 @@ namespace DiscordMafia.Modules
         public async Task Vote([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
                 if (Context.Channel is IDMChannel)
                 {
-                    if (currentPlayer.Role is Elder && _game.currentState == GameState.Day)
+                    if (currentPlayer.Role is Elder && _game.CurrentState == GameState.Day)
                     {
                         var elder = (currentPlayer.Role as Elder);
                         var playerToKill = _game.GetPlayerInfo(player);
@@ -161,7 +160,7 @@ namespace DiscordMafia.Modules
                             }
                             catch (Exception ex)
                             {
-                                _game.messageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
+                                _game.MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
                             }
                         }
                         return;
@@ -180,9 +179,9 @@ namespace DiscordMafia.Modules
         public async Task AcceptVote([Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (_game.currentState == GameState.Evening)
+                if (_game.CurrentState == GameState.Evening)
                 {
                     _game.EveningVote(currentPlayer, true);
                     _game.CheckNextCheckpoint();
@@ -195,9 +194,9 @@ namespace DiscordMafia.Modules
         public async Task DeclineVote([Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (_game.currentState == GameState.Evening)
+                if (_game.CurrentState == GameState.Evening)
                 {
                     _game.EveningVote(currentPlayer, false);
                     _game.CheckNextCheckpoint();
@@ -209,14 +208,14 @@ namespace DiscordMafia.Modules
         [Command("gamemode"), Summary("Возвращает текущий режим игры."), Alias("gametype", "режим"), RequireContext(ContextType.Guild)]
         public async Task GameMode()
         {
-            await ReplyAsync(MessageBuilder.Encode($"Текущий режим игры: {_game.settings.GameType}"));
+            await ReplyAsync(MessageBuilder.Encode($"Текущий режим игры: {_game.Settings.GameType}"));
         }
 
         [Command("buy"), Summary("Выводит список предметов."), Alias("купить"), RequireContext(ContextType.DM), RequirePlayer]
         public async Task BuyItem()
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
                 if (BaseItem.AvailableItems.Length > 0)
                 {
@@ -246,11 +245,11 @@ namespace DiscordMafia.Modules
                         response += Environment.NewLine;
                         response += Environment.NewLine;
                     }
-                    _game.messageBuilder.Text(response, false).SendPrivate(currentPlayer);
+                    _game.MessageBuilder.Text(response, false).SendPrivate(currentPlayer);
                 }
                 else
                 {
-                    _game.messageBuilder.PrepareText("ShopDisabled").SendPrivate(currentPlayer);
+                    _game.MessageBuilder.PrepareText("ShopDisabled").SendPrivate(currentPlayer);
                 }
             }
             await Task.CompletedTask;
@@ -260,7 +259,7 @@ namespace DiscordMafia.Modules
         public async Task BuyItem([Summary("номер предмета")] int item, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
                 var itemToBuy = _game.GetItemInfo(item.ToString());
                 if (itemToBuy != null)
@@ -272,7 +271,7 @@ namespace DiscordMafia.Modules
                     }
                     catch (Exception ex)
                     {
-                        _game.messageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
+                        _game.MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
                     }
                 }
             }
@@ -283,9 +282,9 @@ namespace DiscordMafia.Modules
         public async Task Kill([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                var currentState = _game.currentState;
+                var currentState = _game.CurrentState;
                 if (currentPlayer.Role is Highlander && currentState == GameState.Night)
                 {
                     var highlander = (currentPlayer.Role as Highlander);
@@ -301,7 +300,7 @@ namespace DiscordMafia.Modules
                         }
                         catch (Exception ex)
                         {
-                            _game.messageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
+                            _game.MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
                         }
                     }
                     return;
@@ -328,7 +327,7 @@ namespace DiscordMafia.Modules
                         killer.PlayerToKill = playerToKill;
                         _game.NightAction(currentPlayer.Role);
                         var response = String.Format("Киллер {0} выбрал в качестве жертвы {1}!", currentPlayer.GetName(), playerToKill.GetName());
-                        _game.messageBuilder.Text(response).SendToTeam(Team.Mafia);
+                        _game.MessageBuilder.Text(response).SendToTeam(Team.Mafia);
                         _game.CheckNextCheckpoint();
                     }
                     return;
@@ -359,9 +358,9 @@ namespace DiscordMafia.Modules
         public async Task CursePlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Warlock && _game.currentState == GameState.Night)
+                if (currentPlayer.Role is Warlock && _game.CurrentState == GameState.Night)
                 {
                     var warlock = (currentPlayer.Role as Warlock);
                     var playerToCurse = _game.GetPlayerInfo(player);
@@ -376,7 +375,7 @@ namespace DiscordMafia.Modules
                         }
                         catch (Exception ex)
                         {
-                            _game.messageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
+                            _game.MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
                         }
                     }
                 }
@@ -388,9 +387,9 @@ namespace DiscordMafia.Modules
         public async Task CheckPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Commissioner && _game.currentState == GameState.Night)
+                if (currentPlayer.Role is Commissioner && _game.CurrentState == GameState.Night)
                 {
                     var commissioner = (currentPlayer.Role as Commissioner);
                     var playerToCheck = _game.GetPlayerInfo(player);
@@ -402,7 +401,7 @@ namespace DiscordMafia.Modules
                         _game.CheckNextCheckpoint();
                     }
                 }
-                else if (currentPlayer.Role is Homeless && _game.currentState == GameState.Night)
+                else if (currentPlayer.Role is Homeless && _game.CurrentState == GameState.Night)
                 {
                     var homeless = (currentPlayer.Role as Homeless);
                     var playerToCheck = _game.GetPlayerInfo(player);
@@ -414,7 +413,7 @@ namespace DiscordMafia.Modules
                         _game.CheckNextCheckpoint();
                     }
                 }
-                else if (currentPlayer.Role is Lawyer && _game.currentState == GameState.Night)
+                else if (currentPlayer.Role is Lawyer && _game.CurrentState == GameState.Night)
                 {
                     var lawyer = (currentPlayer.Role as Lawyer);
                     var playerToCheck = _game.GetPlayerInfo(player);
@@ -423,7 +422,7 @@ namespace DiscordMafia.Modules
                         lawyer.PlayerToCheck = playerToCheck;
                         _game.NightAction(currentPlayer.Role);
                         var response = String.Format("Адвокат {0} выбрал {1} для проверки!", currentPlayer.GetName(), lawyer.PlayerToCheck.GetName());
-                        _game.messageBuilder.Text(response).SendToTeam(Team.Mafia);
+                        _game.MessageBuilder.Text(response).SendToTeam(Team.Mafia);
                         _game.CheckNextCheckpoint();
                     }
                 }
@@ -435,9 +434,9 @@ namespace DiscordMafia.Modules
         public async Task SleepWithPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Wench && _game.currentState == GameState.Night)
+                if (currentPlayer.Role is Wench && _game.CurrentState == GameState.Night)
                 {
                     var wench = (currentPlayer.Role as Wench);
                     var playerToCheck = _game.GetPlayerInfo(player);
@@ -452,7 +451,7 @@ namespace DiscordMafia.Modules
                         }
                         catch (Exception ex)
                         {
-                            _game.messageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
+                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                         }
                     }
                 }
@@ -464,9 +463,9 @@ namespace DiscordMafia.Modules
         public async Task BlockPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Hoodlum && _game.currentState == GameState.Night)
+                if (currentPlayer.Role is Hoodlum && _game.CurrentState == GameState.Night)
                 {
                     var hoodlum = (currentPlayer.Role as Hoodlum);
                     var playerToBlock = _game.GetPlayerInfo(player);
@@ -477,12 +476,12 @@ namespace DiscordMafia.Modules
                             hoodlum.PlayerToBlock = playerToBlock;
                             _game.NightAction(currentPlayer.Role);
                             var response = String.Format("Громила {0} выбрал {1} для блокировки!", currentPlayer.GetName(), hoodlum.PlayerToBlock.GetName());
-                            _game.messageBuilder.Text(response).SendToTeam(Team.Yakuza);
+                            _game.MessageBuilder.Text(response).SendToTeam(Team.Yakuza);
                             _game.CheckNextCheckpoint();
                         }
                         catch (Exception ex)
                         {
-                            _game.messageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
+                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                         }
                     }
                 }
@@ -494,9 +493,9 @@ namespace DiscordMafia.Modules
         public async Task HealPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Doctor && _game.currentState == GameState.Night)
+                if (currentPlayer.Role is Doctor && _game.CurrentState == GameState.Night)
                 {
                     var doctor = (currentPlayer.Role as Doctor);
                     var playerToHeal = _game.GetPlayerInfo(player);
@@ -511,7 +510,7 @@ namespace DiscordMafia.Modules
                         }
                         catch (Exception ex)
                         {
-                            _game.messageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
+                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                         }
                     }
                 }
@@ -523,9 +522,9 @@ namespace DiscordMafia.Modules
         public async Task JustifyPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Judge && _game.currentState == GameState.Day)
+                if (currentPlayer.Role is Judge && _game.CurrentState == GameState.Day)
                 {
                     var judge = (currentPlayer.Role as Judge);
                     var playerToJustify = _game.GetPlayerInfo(player);
@@ -539,7 +538,7 @@ namespace DiscordMafia.Modules
                         }
                         catch (Exception ex)
                         {
-                            _game.messageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
+                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                         }
                     }
                 }
@@ -551,9 +550,9 @@ namespace DiscordMafia.Modules
         public async Task Kaboom([Summary("номер локации")] int place, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role is Demoman && _game.currentState == GameState.Night)
+                if (currentPlayer.Role is Demoman && _game.CurrentState == GameState.Night)
                 {
                     var demoman = (currentPlayer.Role as Demoman);
                     var placeToDestroy = _game.GetPlaceInfo(place);
@@ -567,7 +566,7 @@ namespace DiscordMafia.Modules
                         }
                         catch (Exception ex)
                         {
-                            _game.messageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
+                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                         }
                     }
                 }
@@ -579,9 +578,9 @@ namespace DiscordMafia.Modules
         public async Task WhereToGo([Summary("номер локации")] int place, [Remainder] string ignored = null)
         {
             InGamePlayerInfo currentPlayer;
-            if (_game.currentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
             {
-                if (currentPlayer.Role.Team != Team.Mafia && _game.currentState == GameState.Night)
+                if (currentPlayer.Role.Team != Team.Mafia && _game.CurrentState == GameState.Night)
                 {
                     var placeToGo = _game.GetPlaceInfo(place);
                     if (placeToGo != null)
@@ -594,7 +593,7 @@ namespace DiscordMafia.Modules
                         }
                         catch (Exception ex)
                         {
-                            _game.messageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
+                            _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
                         }
                     }
                 }
@@ -619,12 +618,12 @@ namespace DiscordMafia.Modules
         [Command("gamemode"), Summary("Изменяет режим игры."), Alias("gametype", "режим"), RequireContext(ContextType.Guild), RequireAdmin]
         public async Task SetGameMode([Summary("режим игры"), Remainder] string mode)
         {
-            if (_game.currentState == GameState.Stopped)
+            if (_game.CurrentState == GameState.Stopped)
             {
-                if (_game.settings.IsValidGametype(mode))
+                if (_game.Settings.IsValidGametype(mode))
                 {
                     _game.LoadSettings(mode);
-                    await ReplyAsync(MessageBuilder.Encode($"Режим игры успешно изменен на {_game.settings.GameType}."));
+                    await ReplyAsync(MessageBuilder.Encode($"Режим игры успешно изменен на {_game.Settings.GameType}."));
                 }
                 else
                 {

@@ -11,7 +11,7 @@ namespace DiscordMafia.Preconditions
         {
             Game game = services.GetService(typeof(Game)) as Game;
             InGamePlayerInfo player;
-            if (game.currentPlayers.TryGetValue(context.User.Id, out player))
+            if (game.CurrentPlayers.TryGetValue(context.User.Id, out player))
             {
                 if (player.IsAlive)
                 {

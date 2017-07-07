@@ -8,12 +8,12 @@
         public AchievementAssigner(Game game)
         {
             this._game = game;
-            _manager = game.achievementManager;
+            _manager = game.AchievementManager;
         }
 
         public void afterGame()
         {
-            foreach (var player in _game.playersList)
+            foreach (var player in _game.PlayersList)
             {
                 // TODO Уже выглядит плохо, разбить на методы
                 if (player.DbUser.TotalPoints >= 10000)

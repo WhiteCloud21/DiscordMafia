@@ -52,20 +52,22 @@ namespace DiscordMafia.Achievement
                 DB.Achievement dbAchievement = DB.Achievement.FindUserAchievement(user.Id, achievementId);
                 if (dbAchievement == null)
                 {
-                    dbAchievement = new DB.Achievement();
-                    dbAchievement.UserId = user.Id;
-                    dbAchievement.AchievementId = achievementId;
-                    dbAchievement.AchievedAt = DateTime.Now;
+                    dbAchievement = new DB.Achievement()
+                    {
+                        UserId = user.Id,
+                        AchievementId = achievementId,
+                        AchievedAt = DateTime.Now
+                    };
                     var result = dbAchievement.Save();
                     if (result)
                     {
-                        var messageBuilder = Game.messageBuilder;
+                        var messageBuilder = Game.MessageBuilder;
                         var message = messageBuilder.GetText("AchievementUnlocked");
                         var achievementText = $"<b>{achievement.Icon} {achievement.Name}</b>";
                         var replaces = new Dictionary<string, object> { { "name", messageBuilder.FormatName(user) }, { "achievement", achievementText } };
                         messageBuilder
                             .Text(messageBuilder.Format(message, replaces), false)
-                            .SendPublic(Game.gameChannel);
+                            .SendPublic(Game.GameChannel);
                     }
                     return result;
                 }
@@ -94,8 +96,7 @@ namespace DiscordMafia.Achievement
             builder.AppendLine("<b><u>Достижения:</u></b>");
             foreach (var dbAchievement in achievements)
             {
-                Achievement achievement;
-                if (AllowedAchievements.TryGetValue(dbAchievement.AchievementId, out achievement))
+                if (AllowedAchievements.TryGetValue(dbAchievement.AchievementId, out Achievement achievement))
                 {
                     builder.AppendLine($"<b>{achievement.Icon} {achievement.Name}</b> ({achievement.Description}) - заработано {dbAchievement.AchievedAt.ToString()}");
                 }

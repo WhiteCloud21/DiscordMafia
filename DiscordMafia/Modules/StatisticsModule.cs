@@ -30,15 +30,15 @@ namespace DiscordMafia.Modules
         {
             var user = new UserWrapper(Context.User);
             await ReplyAsync(MessageBuilder.Markup(MessageBuilder.Encode(Stat.GetStatAsString(user))));
-            await ReplyAsync(MessageBuilder.Markup(_game.achievementManager.GetAchievementsAsString(user)));
+            await ReplyAsync(MessageBuilder.Markup(_game.AchievementManager.GetAchievementsAsString(user)));
         }
 
         [Command("stats"), Summary("Выводит статистику."), Alias("статы")]
         public async Task Statistics([Summary("Пользователь, по которому отобразить статистику")] IUser queryUser = null)
         {
-            var user = new UserWrapper(queryUser != null ? queryUser : Context.User);
+            var user = new UserWrapper(queryUser ?? Context.User);
             await ReplyAsync(MessageBuilder.Markup(MessageBuilder.Encode(Stat.GetStatAsString(user))));
-            await ReplyAsync(MessageBuilder.Markup(_game.achievementManager.GetAchievementsAsString(user)));
+            await ReplyAsync(MessageBuilder.Markup(_game.AchievementManager.GetAchievementsAsString(user)));
         }
     }
 }

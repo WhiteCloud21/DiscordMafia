@@ -19,7 +19,7 @@ namespace DiscordMafia.Modules
         [Command("help"), Summary("Выводит справку."), Alias("хелп")]
         public async Task Help()
         {
-            var currentPlayer = _game.currentPlayers.ContainsKey(Context.User.Id) ? _game.currentPlayers[Context.User.Id] : null;
+            var currentPlayer = _game.CurrentPlayers.ContainsKey(Context.User.Id) ? _game.CurrentPlayers[Context.User.Id] : null;
             var message = "<b>==========Игровые команды==========</b>" + Environment.NewLine;
             message += "/help - вывод этой справки (в приват боту);" + Environment.NewLine;
             message += "/join, /я - регистрация в игре (во время набора игроков);" + Environment.NewLine;
@@ -34,7 +34,7 @@ namespace DiscordMafia.Modules
             {
                 message += " " + Environment.NewLine;
                 message += "<b>=========== Помощь по статусу===========</b>" + Environment.NewLine;
-                message += "Ваш статус - " + _game.messageBuilder.FormatRole(currentPlayer.Role.Name) + Environment.NewLine;
+                message += "Ваш статус - " + _game.MessageBuilder.FormatRole(currentPlayer.Role.Name) + Environment.NewLine;
                 switch (currentPlayer.Role.Team)
                 {
                     case Team.Civil:
@@ -51,25 +51,25 @@ namespace DiscordMafia.Modules
                         break;
                 }
 
-                message += _game.messageBuilder.GetText(string.Format("RoleHelp_{0}", currentPlayer.Role.GetType().Name)) + Environment.NewLine;
+                message += _game.MessageBuilder.GetText(string.Format("RoleHelp_{0}", currentPlayer.Role.GetType().Name)) + Environment.NewLine;
             }
 
             message += " " + Environment.NewLine;
             message += "<b>========Помощь по режиму игры========</b>" + Environment.NewLine;
-            message += $"Текущий режим игры: {_game.settings.GameType}" + Environment.NewLine;
-            message += $"Якудза: {_game.settings.IsYakuzaEnabled}" + Environment.NewLine;
-            message += $"Мафов из каждой группировки: {_game.settings.MafPercent}%" + Environment.NewLine;
+            message += $"Текущий режим игры: {_game.Settings.GameType}" + Environment.NewLine;
+            message += $"Якудза: {_game.Settings.IsYakuzaEnabled}" + Environment.NewLine;
+            message += $"Мафов из каждой группировки: {_game.Settings.MafPercent}%" + Environment.NewLine;
             message += "<u><b>Доступные роли</b></u>" + Environment.NewLine;
-            message += _game.settings.Roles.RolesHelp();
+            message += _game.Settings.Roles.RolesHelp();
 
             message += " " + Environment.NewLine;
             message += "<b>======Помощь по начислению очков======</b>" + Environment.NewLine;
-            foreach (var pointConfig in _game.settings.Points.Values)
+            foreach (var pointConfig in _game.Settings.Points.Values)
             {
                 message += $"{pointConfig.Description}: {pointConfig.Points}" + Environment.NewLine;
             }
 
-            _game.messageBuilder.Text(message, false).SendPrivate(Context.User);
+            _game.MessageBuilder.Text(message, false).SendPrivate(Context.User);
             // ReplyAsync is a method on ModuleBase
             // await ReplyAsync(message);
             await Task.CompletedTask;
