@@ -69,8 +69,8 @@ namespace DiscordMafia.Modules
             }
             else
             {
-                InGamePlayerInfo currentPlayer;
-                if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+                InGamePlayerInfo currentPlayer = _game.GetPlayerInfo(Context.User.Id);
+                if (currentPlayer != null)
                 {
                     if (Context.Channel is IDMChannel)
                     {

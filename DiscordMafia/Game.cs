@@ -408,7 +408,7 @@ namespace DiscordMafia
         /// <param name="userId"></param>
         /// <param name="onlyAlive"></param>
         /// <returns></returns>
-        protected InGamePlayerInfo GetPlayerInfo(ulong userId, bool onlyAlive = true)
+        internal InGamePlayerInfo GetPlayerInfo(ulong userId, bool onlyAlive = true)
         {
             if (CurrentPlayers.ContainsKey(userId))
             {
