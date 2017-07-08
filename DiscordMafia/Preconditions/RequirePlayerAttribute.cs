@@ -26,28 +26,32 @@ namespace DiscordMafia.Preconditions
 
         public override async Task<PreconditionResult> CheckPermissions(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
-            Game game = services.GetService(typeof(Game)) as Game;
-            InGamePlayerInfo player;
-            if (game.CurrentPlayers.TryGetValue(context.User.Id, out player))
+            return await Task.Run(() =>
             {
-                if (player.IsAlive)
+                Game game = services.GetService(typeof(Game)) as Game;
+                if (game.CurrentPlayers.TryGetValue(context.User.Id, out InGamePlayerInfo player))
                 {
-                    if (validRoles == null || validRoles.Contains(player.Role.GetType()))
+                    if (player.IsAlive)
                     {
-                        return PreconditionResult.FromSuccess();
-                    } else {
-                        return PreconditionResult.FromError($"Command {command.Name} is not available for your role.");
+                        if (validRoles == null || validRoles.Contains(player.Role.GetType()))
+                        {
+                            return PreconditionResult.FromSuccess();
+                        }
+                        else
+                        {
+                            return PreconditionResult.FromError($"Command {command.Name} is not available for your role.");
+                        }
+                    }
+                    else
+                    {
+                        return PreconditionResult.FromError("You are dead now.");
                     }
                 }
                 else
                 {
-                    return PreconditionResult.FromError("You are dead now.");
+                    return PreconditionResult.FromError("You are not participating in current game.");
                 }
-            }
-            else
-            {
-                return PreconditionResult.FromError("You are not participating in current game.");
-            }
+            });
         }
     }
 }

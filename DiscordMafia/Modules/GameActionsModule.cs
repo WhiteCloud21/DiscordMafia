@@ -96,8 +96,7 @@ namespace DiscordMafia.Modules
         [Command("skip"), Summary("Позволяет пропустить текущее действие."), Alias("пропустить"), RequirePlayer]
         public async Task Skip([Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 if (Context.Channel is IDMChannel)
                 {
@@ -134,8 +133,7 @@ namespace DiscordMafia.Modules
          Alias("посадить", "повесить", "gjcflbnm", "gjdtcbnm")]
         public async Task Vote([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 if (Context.Channel is IDMChannel)
                 {
@@ -171,8 +169,7 @@ namespace DiscordMafia.Modules
         [Command("yes"), Summary("Согласиться с решением суда."), Alias("да"), RequireContext(ContextType.Guild), RequirePlayer, RequireGameState(GameState.Evening)]
         public async Task AcceptVote([Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 _game.EveningVote(currentPlayer, true);
                 _game.CheckNextCheckpoint();
@@ -183,8 +180,7 @@ namespace DiscordMafia.Modules
         [Command("no"), Summary("Опротестовать решение суда."), Alias("нет"), RequireContext(ContextType.Guild), RequirePlayer, RequireGameState(GameState.Evening)]
         public async Task DeclineVote([Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 _game.EveningVote(currentPlayer, false);
                 _game.CheckNextCheckpoint();
@@ -201,8 +197,7 @@ namespace DiscordMafia.Modules
         [Command("buy"), Summary("Выводит список предметов."), Alias("купить"), RequireContext(ContextType.DM), RequirePlayer]
         public async Task BuyItem()
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 if (BaseItem.AvailableItems.Length > 0)
                 {
@@ -245,8 +240,7 @@ namespace DiscordMafia.Modules
         [Command("buy"), Summary("Купить предмет."), Alias("купить"), RequireContext(ContextType.DM), RequirePlayer]
         public async Task BuyItem([Summary("номер предмета")] int item, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var itemToBuy = _game.GetItemInfo(item.ToString());
                 if (itemToBuy != null)
@@ -268,8 +262,7 @@ namespace DiscordMafia.Modules
         [Command("kill"), Summary("Посодействовать в убийстве игрока."), Alias("убить"), RequireContext(ContextType.DM), RequirePlayer, RequireGameState(GameState.Night)]
         public async Task Kill([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 if (currentPlayer.Role is Highlander)
                 {
@@ -340,8 +333,7 @@ namespace DiscordMafia.Modules
         [Command("curse"), Summary("Проклясть игрока."), Alias("проклясть"), RequireContext(ContextType.DM), RequirePlayer(typeof(Warlock)), RequireGameState(GameState.Night)]
         public async Task CursePlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var warlock = (currentPlayer.Role as Warlock);
                 var playerToCurse = _game.GetPlayerInfo(player);
@@ -366,8 +358,7 @@ namespace DiscordMafia.Modules
         [Command("check"), Summary("Проверить игрока."), Alias("пров", "проверить"), RequireContext(ContextType.DM), RequirePlayer(typeof(Commissioner), typeof(Homeless), typeof(Lawyer)), RequireGameState(GameState.Night)]
         public async Task CheckPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 if (currentPlayer.Role is Commissioner)
                 {
@@ -413,8 +404,7 @@ namespace DiscordMafia.Modules
         [Command("sleep"), Summary("Переспать с игроком."), Alias("спать"), RequireContext(ContextType.DM), RequirePlayer(typeof(Wench)), RequireGameState(GameState.Night)]
         public async Task SleepWithPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var wench = (currentPlayer.Role as Wench);
                 var playerToCheck = _game.GetPlayerInfo(player);
@@ -439,8 +429,7 @@ namespace DiscordMafia.Modules
         [Command("block"), Summary("Блокировать игрока."), Alias("блок"), RequireContext(ContextType.DM), RequirePlayer(typeof(Hoodlum)), RequireGameState(GameState.Night)]
         public async Task BlockPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var hoodlum = (currentPlayer.Role as Hoodlum);
                 var playerToBlock = _game.GetPlayerInfo(player);
@@ -466,8 +455,7 @@ namespace DiscordMafia.Modules
         [Command("heal"), Summary("Подлатать игрока."), Alias("лечить"), RequireContext(ContextType.DM), RequirePlayer(typeof(Doctor)), RequireGameState(GameState.Night)]
         public async Task HealPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var doctor = (currentPlayer.Role as Doctor);
                 var playerToHeal = _game.GetPlayerInfo(player);
@@ -492,8 +480,7 @@ namespace DiscordMafia.Modules
         [Command("justify"), Summary("Оправдать игрока."), Alias("оправдать"), RequireContext(ContextType.DM), RequirePlayer(typeof(Judge)), RequireGameState(GameState.Day)]
         public async Task JustifyPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var judge = (currentPlayer.Role as Judge);
                 var playerToJustify = _game.GetPlayerInfo(player);
@@ -517,8 +504,7 @@ namespace DiscordMafia.Modules
         [Command("destroy"), Summary("Взорвать локацию."), Alias("подорвать", "kaboom"), RequireContext(ContextType.DM), RequirePlayer(typeof(Demoman)), RequireGameState(GameState.Night)]
         public async Task Kaboom([Summary("номер локации")] int place, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var demoman = (currentPlayer.Role as Demoman);
                 var placeToDestroy = _game.GetPlaceInfo(place);
@@ -542,8 +528,7 @@ namespace DiscordMafia.Modules
         [Command("go"), Summary("Посетить локацию."), Alias("пойти"), RequireContext(ContextType.DM), RequirePlayer, RequireGameState(GameState.Night)]
         public async Task WhereToGo([Summary("номер локации")] int place, [Remainder] string ignored = null)
         {
-            InGamePlayerInfo currentPlayer;
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out currentPlayer))
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 if (currentPlayer.Role.Team != Team.Mafia)
                 {

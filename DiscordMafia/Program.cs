@@ -107,7 +107,7 @@ namespace DiscordMafia
                     // {
                     //     await context.Channel.SendMessageAsync(result.ErrorReason);
                     // }
-                    if (!result.IsCompletedSuccessfully && message.Author.Id != client.CurrentUser.Id)
+                    if (result.Status != TaskStatus.RanToCompletion && message.Author.Id != client.CurrentUser.Id)
                     {
                         ProcessMessage(message);
                     }

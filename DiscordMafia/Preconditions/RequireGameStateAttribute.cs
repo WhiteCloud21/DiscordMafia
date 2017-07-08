@@ -20,15 +20,18 @@ namespace DiscordMafia.Preconditions
 
         public override async Task<PreconditionResult> CheckPermissions(ICommandContext context, CommandInfo command, IServiceProvider services)
         {
-            var game = services.GetService(typeof(Game)) as Game;
-            if (validStates.Contains(game.CurrentState))
+            return await Task.Run(() =>
             {
-                return PreconditionResult.FromSuccess();
-            }
-            else
-            {
-                return PreconditionResult.FromError($"Current game state is incorrect for command {command.Name}.");
-            }
+                var game = services.GetService(typeof(Game)) as Game;
+                if (validStates.Contains(game.CurrentState))
+                {
+                    return PreconditionResult.FromSuccess();
+                }
+                else
+                {
+                    return PreconditionResult.FromError($"Current game state is incorrect for command {command.Name}.");
+                }
+            });
         }
     }
 }
