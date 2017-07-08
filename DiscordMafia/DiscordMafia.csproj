@@ -21,7 +21,6 @@
     <Folder Include="DB" />
     <Folder Include="Items" />
     <Folder Include="Messages" />
-    <Folder Include="Migrations" />
     <Folder Include="Roles\Places" />
     <Folder Include="Voting" />
   </ItemGroup>

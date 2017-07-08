@@ -9,7 +9,7 @@ using DiscordMafia.DB;
 using DiscordMafia.Items;
 using DiscordMafia.Preconditions;
 using DiscordMafia.Roles;
-using Microsoft.Data.Sqlite;
+using static DiscordMafia.Config.MessageBuilder;
 
 namespace DiscordMafia.Modules
 {
@@ -51,7 +51,9 @@ namespace DiscordMafia.Modules
                 playerInfo.IsBot = Context.User.IsBot;
                 _game.CurrentPlayers.Add(Context.User.Id, playerInfo);
                 _game.PlayersList.Add(playerInfo);
-                _game.MessageBuilder.Text(String.Format("{0} присоединился к игре! ({1}) ", playerInfo.GetName(), _game.CurrentPlayers.Count)).SendPublic(_game.GameChannel);
+                _game.MessageBuilder
+                    .PrepareTextReplacePlayer("PlayerRegister", playerInfo, additionalReplaceDictionary: new ReplaceDictionary { ["count"] = _game.CurrentPlayers.Count })
+                    .SendPublic(_game.GameChannel);
             }
             await Task.CompletedTask;
         }
@@ -64,7 +66,9 @@ namespace DiscordMafia.Modules
                 var playerInfo = _game.CurrentPlayers[Context.User.Id];
                 _game.CurrentPlayers.Remove(Context.User.Id);
                 _game.PlayersList.Remove(playerInfo);
-                _game.MessageBuilder.Text(String.Format("{0} вышел из игры! ({1}) ", playerInfo.GetName(), _game.CurrentPlayers.Count)).SendPublic(_game.GameChannel);
+                _game.MessageBuilder
+                    .PrepareTextReplacePlayer("PlayerUnRegister", playerInfo, additionalReplaceDictionary: new ReplaceDictionary { ["count"] = _game.CurrentPlayers.Count })
+                    .SendPublic(_game.GameChannel);
                 await Task.CompletedTask;
             }
             else
@@ -81,7 +85,7 @@ namespace DiscordMafia.Modules
                     {
                         if (currentPlayer.CancelVote())
                         {
-                            _game.MessageBuilder.Text(currentPlayer.GetName() + " отменил свой голос").SendPublic(_game.GameChannel);
+                            _game.MessageBuilder.PrepareTextReplacePlayer("PlayerCanceledVote", currentPlayer).SendPublic(_game.GameChannel);
                         }
                         await Task.CompletedTask;
                     }
@@ -114,7 +118,7 @@ namespace DiscordMafia.Modules
                 {
                     if (currentPlayer.SkipTurn())
                     {
-                        _game.MessageBuilder.Text(currentPlayer.GetName() + " пропустил ход").SendPublic(_game.GameChannel);
+                        _game.MessageBuilder.PrepareTextReplacePlayer("PlayerSkippedTurn", currentPlayer).SendPublic(_game.GameChannel);
                         _game.CheckNextCheckpoint();
                     }
                     else
@@ -302,8 +306,9 @@ namespace DiscordMafia.Modules
                     {
                         killer.PlayerToKill = player;
                         _game.NightAction(currentPlayer.Role);
-                        var response = String.Format("Киллер {0} выбрал в качестве жертвы {1}!", currentPlayer.GetName(), player.GetName());
-                        _game.MessageBuilder.Text(response).SendToTeam(Team.Mafia);
+                        _game.MessageBuilder.
+                            PrepareTextReplacePlayer("NightAction_Killer_ToTeam", currentPlayer, additionalReplaceDictionary: new ReplaceDictionary { ["toKill"] = killer.PlayerToKill.GetName() }).
+                            SendToTeam(Team.Mafia);
                         _game.CheckNextCheckpoint();
                     }
                     return;
@@ -384,8 +389,9 @@ namespace DiscordMafia.Modules
                     {
                         lawyer.PlayerToCheck = player;
                         _game.NightAction(currentPlayer.Role);
-                        var response = String.Format("Адвокат {0} выбрал {1} для проверки!", currentPlayer.GetName(), lawyer.PlayerToCheck.GetName());
-                        _game.MessageBuilder.Text(response).SendToTeam(Team.Mafia);
+                        _game.MessageBuilder.
+                            PrepareTextReplacePlayer("NightAction_Lawyer_ToTeam", currentPlayer, additionalReplaceDictionary: new ReplaceDictionary { ["toCheck"] = lawyer.PlayerToCheck.GetName() }).
+                            SendToTeam(Team.Mafia);
                         _game.CheckNextCheckpoint();
                     }
                 }
@@ -429,8 +435,9 @@ namespace DiscordMafia.Modules
                     {
                         hoodlum.PlayerToBlock = player;
                         _game.NightAction(currentPlayer.Role);
-                        var response = String.Format("Громила {0} выбрал {1} для блокировки!", currentPlayer.GetName(), hoodlum.PlayerToBlock.GetName());
-                        _game.MessageBuilder.Text(response).SendToTeam(Team.Yakuza);
+                        _game.MessageBuilder.
+                            PrepareTextReplacePlayer("NightAction_Hoodlum_ToTeam", currentPlayer, additionalReplaceDictionary: new ReplaceDictionary { ["toBlock"] = hoodlum.PlayerToBlock.GetName() }).
+                            SendToTeam(Team.Yakuza);
                         _game.CheckNextCheckpoint();
                     }
                     catch (Exception ex)

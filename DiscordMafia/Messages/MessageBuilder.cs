@@ -19,6 +19,8 @@ namespace DiscordMafia.Config
 
         protected string BuiltMessage = "";
 
+        protected static Regex GenderRegex = new Regex(@"\{\s*gender:\s*(.*?)\s*\|\s*(.*?)\s*\}");
+
         public MessageBuilder(GameSettings settings, DiscordSocketClient client, IList<InGamePlayerInfo> playersList)
         {
             this.Storage = settings.Messages;
@@ -36,12 +38,12 @@ namespace DiscordMafia.Config
             return str.Replace("<b>", "**").Replace("</b>", "**").Replace("<i>", "_").Replace("</i>", "_").Replace("<u>", "__").Replace("</u>", "__");
         }
 
-        public MessageBuilder PrepareTextReplacePlayer(string key, InGamePlayerInfo player, string fallbackKey = null)
+        public MessageBuilder PrepareTextReplacePlayer(string key, InGamePlayerInfo player, string fallbackKey = null, IDictionary<string, object> additionalReplaceDictionary = null)
         {
-            BuiltMessage += GetTextReplacePlayer(key, player);
+            BuiltMessage += GetTextReplacePlayer(key, player, additionalReplaceDictionary: additionalReplaceDictionary);
             if (String.IsNullOrEmpty(BuiltMessage) && !String.IsNullOrEmpty(fallbackKey))
             {
-                BuiltMessage = GetTextReplacePlayer(fallbackKey, player);
+                BuiltMessage = GetTextReplacePlayer(fallbackKey, player, additionalReplaceDictionary: additionalReplaceDictionary);
             }
             return this;
         }
@@ -58,24 +60,32 @@ namespace DiscordMafia.Config
             return this;
         }
 
-        public string GetTextReplacePlayer(string key, InGamePlayerInfo player)
+        public string GetTextReplacePlayer(string key, InGamePlayerInfo player, IDictionary<string, object> additionalReplaceDictionary = null)
         {
-            return FormatTextReplacePlayer(GetText(key), player);
+            return FormatTextReplacePlayer(GetText(key), player, additionalReplaceDictionary);
         }
 
-        public string FormatTextReplacePlayer(string messageTemplate, InGamePlayerInfo player)
+        public string FormatTextReplacePlayer(string messageTemplate, InGamePlayerInfo player, IDictionary<string, object> additionalReplaceDictionary = null)
         {
             var replaceDictionary = new Dictionary<string, object>
             {
                 { "name", FormatName(player) },
-                { "role", FormatRole(player.StartRole.Name) },
-                { "role0", FormatRole(player.StartRole.NameCases[0]) },
-                { "role1", FormatRole(player.StartRole.NameCases[1]) },
-                { "role2", FormatRole(player.StartRole.NameCases[2]) },
-                { "role3", FormatRole(player.StartRole.NameCases[3]) },
-                { "role4", FormatRole(player.StartRole.NameCases[4]) },
-                { "role5", FormatRole(player.StartRole.NameCases[5]) },
+                { "nameSimple", Encode(player.GetName()) },
+                { "role", FormatRole(player.StartRole?.Name) },
+                { "role0", FormatRole(player.StartRole?.NameCases[0]) },
+                { "role1", FormatRole(player.StartRole?.NameCases[1]) },
+                { "role2", FormatRole(player.StartRole?.NameCases[2]) },
+                { "role3", FormatRole(player.StartRole?.NameCases[3]) },
+                { "role4", FormatRole(player.StartRole?.NameCases[4]) },
+                { "role5", FormatRole(player.StartRole?.NameCases[5]) },
             };
+
+            messageTemplate = GenderRegex.Replace(messageTemplate, player.DbUser.Settings.Gender == DB.User.Gender.Male ? "$1" : "$2");
+
+            if (additionalReplaceDictionary != null)
+            {
+                messageTemplate = Format(messageTemplate, additionalReplaceDictionary);
+            }
 
             return Format(messageTemplate, replaceDictionary);
         }
@@ -184,11 +194,16 @@ namespace DiscordMafia.Config
                 (current, key) =>
                 {
                     int colonIndex = key.IndexOf(':');
+                    var valuesKey = colonIndex > 0 ? key.Substring(0, colonIndex) : key;
+                    if (!values.ContainsKey(valuesKey))
+                    {
+                        return current;
+                    }
                     return current.Replace(
                     "{" + key + "}",
                     colonIndex > 0
-                        ? string.Format("{0:" + key.Substring(colonIndex + 1) + "}", values[key.Substring(0, colonIndex)])
-                        : values[key].ToString());
+                        ? string.Format("{0:" + key.Substring(colonIndex + 1) + "}", values[valuesKey])
+                        : values[valuesKey]?.ToString() ?? "");
                 });
         }
 
@@ -215,6 +230,11 @@ namespace DiscordMafia.Config
         public virtual string FormatRole(string role)
         {
             return "<b>" + Encode(role) + "</b>";
+        }
+
+        public class ReplaceDictionary: Dictionary<string, object>
+        {
+
         }
     }
 }

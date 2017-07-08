@@ -1,6 +1,7 @@
 ﻿using DiscordMafia.Client;
 using System;
 using System.Collections.Generic;
+using static DiscordMafia.Config.MessageBuilder;
 
 namespace DiscordMafia.Achievement
 {
@@ -62,11 +63,9 @@ namespace DiscordMafia.Achievement
                     if (result)
                     {
                         var messageBuilder = Game.MessageBuilder;
-                        var message = messageBuilder.GetText("AchievementUnlocked");
                         var achievementText = $"<b>{achievement.Icon} {achievement.Name}</b>";
-                        var replaces = new Dictionary<string, object> { { "name", messageBuilder.FormatName(user) }, { "achievement", achievementText } };
                         messageBuilder
-                            .Text(messageBuilder.Format(message, replaces), false)
+                            .PrepareTextReplacePlayer("AchievementUnlocked", new InGamePlayerInfo(user, Game), additionalReplaceDictionary: new ReplaceDictionary { ["achievement"] = achievementText })
                             .SendPublic(Game.GameChannel);
                     }
                     return result;
