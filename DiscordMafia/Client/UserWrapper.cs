@@ -36,7 +36,7 @@ namespace DiscordMafia.Client
 
         public IDMChannel GetDmChannel()
         {
-            return _user.CreateDMChannelAsync().Result;
+            return _user.GetOrCreateDMChannelAsync().Result;
         }
     }
 }

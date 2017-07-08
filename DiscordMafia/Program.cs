@@ -37,19 +37,6 @@ namespace DiscordMafia
             connection.Open();
             Migrate(connection);
 
-            //            SynchronizationContext.SetSynchronizationContext(SyncContext);
-            //            SyncContext.Post(obj => Run(), null);
-            //            try
-            //            {
-            //                SyncContext.RunMessagePump();
-            //            }
-            //            catch (Exception ex)
-            //            {
-            //                var message = $"[{DateTime.Now:s}] {ex}";
-            //                Console.Error.WriteLine(message);
-            //                System.IO.File.AppendAllText("error.log", message);
-            //            }
-
             client = new DiscordSocketClient();
             client.Log += Log;
 
@@ -70,25 +57,20 @@ namespace DiscordMafia
 
             await InstallCommands();
 
-            client.MessageReceived += message =>
-            {
-                return Task.Run(() =>
-                {
-                    SyncContext.Post(state =>
-                    {
-                        if (message.Author.Id != client.CurrentUser.Id)
-                        {
-                            ProcessMessage(message);
-                        }
-                    }, null);
-                });
-            };
-
             await client.LoginAsync(TokenType.Bot, Settings.Token);
             await client.StartAsync();
-            //await client.SetGameAsync(null);
+            await client.SetGameAsync(null);
 
-            SyncContext.RunMessagePump();
+            try
+            {
+                SyncContext.RunMessagePump();
+            }
+            catch (Exception ex)
+            {
+                var message = $"[{DateTime.Now:s}] {ex}";
+                Console.Error.WriteLine(message);
+                System.IO.File.AppendAllText("error.log", message);
+            }
 
             await Task.Delay(-1);
         }
@@ -111,15 +93,26 @@ namespace DiscordMafia
             // Determine if the message is a command, based on if it starts with '!' or a mention prefix
             if (!(message.HasCharPrefix('/', ref argPos) ||
                   message.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
-            // Create a Command Context
-            var context = new CommandContext(client, message);
-            // Execute the command. (result does not indicate a return value, 
-            // rather an object stating if the command executed successfully)
-            var result = await commands.ExecuteAsync(context, argPos, services, MultiMatchHandling.Best);
-            if (!result.IsSuccess) {
-                //ProcessMessage(messageParam);
-            }
-            //    await context.Channel.SendMessageAsync(result.ErrorReason);
+
+            await Task.Run(() =>
+            {
+                SyncContext.Post(state =>
+                {
+                    // Create a Command Context
+                    var context = new CommandContext(client, message);
+                    // Execute the command. (result does not indicate a return value, 
+                    // rather an object stating if the command executed successfully)
+                    var result = commands.ExecuteAsync(context, argPos, services, MultiMatchHandling.Best);
+                    // if (!result.IsSuccess)
+                    // {
+                    //     await context.Channel.SendMessageAsync(result.ErrorReason);
+                    // }
+                    if (!result.IsCompletedSuccessfully && message.Author.Id != client.CurrentUser.Id)
+                    {
+                        ProcessMessage(message);
+                    }
+                }, null);
+            });
         }
 
         private static Task Log(LogMessage msg)
@@ -139,13 +132,9 @@ namespace DiscordMafia
 
         private static void ProcessMessage(SocketMessage message)
         {
-            if (message.Channel is SocketDMChannel)
+            if (message.Channel is IDMChannel)
             {
                 _game.OnPrivateMessage(message);
-            }
-            else
-            {
-                _game.OnPublicMessage(message);
             }
         }
     }
