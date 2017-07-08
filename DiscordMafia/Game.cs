@@ -493,7 +493,7 @@ namespace DiscordMafia
             var dayVoteResult = CurrentDayVote?.GetResult();
             if (dayVoteResult != null && dayVoteResult.HasOneLeader)
             {
-                MessageBuilder.PrepareText("EveningVoteInfo").SendPublic(GameChannel);
+                MessageBuilder.PrepareTextReplacePlayer("EveningVoteInfo", CurrentPlayers[dayVoteResult.Leader.Value]).SendPublic(GameChannel);
                 timer.Interval = Settings.EveningTime;
                 foreach (var player in PlayersList)
                 {

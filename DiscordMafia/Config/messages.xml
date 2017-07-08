@@ -342,7 +342,7 @@
   <Item>
     <string>EveningVoteInfo</string>
     <ArrayOfString>
-      <string><![CDATA[Посадить или оправдать, вот в чем вопрос! Голосовать нужно командами <b>/да</b> - посадить и <b>/нет</b> - оправдать.]]></string>
+      <string><![CDATA[Посадить или оправдать {name}, вот в чем вопрос! Голосовать нужно командами <b>/да</b> - посадить и <b>/нет</b> - оправдать.]]></string>
     </ArrayOfString>
   </Item>
   <Item>
