@@ -98,7 +98,7 @@ namespace DiscordMafia
             }
         }
 
-        internal void DayVote(InGamePlayerInfo player, int choosenPlayer)
+        internal void DayVote(InGamePlayerInfo player, InGamePlayerInfo choosenPlayer)
         {
             if (player == null)
             {
@@ -106,14 +106,13 @@ namespace DiscordMafia
             }
             if (CurrentState == GameState.Day)
             {
-                var voteFor = GetPlayerInfo(choosenPlayer);
-                if (voteFor != null)
+                if (choosenPlayer != null)
                 {
                     try
                     {
-                        CurrentDayVote.Add(player, voteFor);
-                        var voteCount = CurrentDayVote.GetResult().VoteCountByPlayer[voteFor.User.Id];
-                        MessageBuilder.Text(String.Format("{0} голосует за {1} ({2})!", player.GetName(), voteFor.GetName(), voteCount)).SendPublic(GameChannel);
+                        CurrentDayVote.Add(player, choosenPlayer);
+                        var voteCount = CurrentDayVote.GetResult().VoteCountByPlayer[choosenPlayer.User.Id];
+                        MessageBuilder.Text(String.Format("{0} голосует за {1} ({2})!", player.GetName(), choosenPlayer.GetName(), voteCount)).SendPublic(GameChannel);
                     }
                     catch (ArgumentException)
                     {
@@ -162,7 +161,7 @@ namespace DiscordMafia
             }
         }
 
-        internal void NightVote(InGamePlayerInfo player, int choosenPlayer)
+        internal void NightVote(InGamePlayerInfo player, InGamePlayerInfo choosenPlayer)
         {
             if (player == null)
             {
@@ -170,8 +169,7 @@ namespace DiscordMafia
             }
             if (CurrentState == GameState.Night)
             {
-                var voteFor = GetPlayerInfo(choosenPlayer);
-                if (voteFor != null)
+                if (choosenPlayer != null)
                 {
                     if (player.Role is Mafioso)
                     {
@@ -181,9 +179,9 @@ namespace DiscordMafia
                             {
                                 NightAction(player.Role);
                             }
-                            CurrentMafiaVote.Add(player, voteFor);
-                            var voteCount = CurrentMafiaVote.GetResult().VoteCountByPlayer[voteFor.User.Id];
-                            var message = String.Format("{0} голосует за убийство {1} ({2})!", player.GetName(), voteFor.GetName(), voteCount);
+                            CurrentMafiaVote.Add(player, choosenPlayer);
+                            var voteCount = CurrentMafiaVote.GetResult().VoteCountByPlayer[choosenPlayer.User.Id];
+                            var message = String.Format("{0} голосует за убийство {1} ({2})!", player.GetName(), choosenPlayer.GetName(), voteCount);
                             MessageBuilder.Text(message).SendToTeam(Team.Mafia);
                         }
                         catch (ArgumentException)
@@ -199,9 +197,9 @@ namespace DiscordMafia
                             {
                                 NightAction(player.Role);
                             }
-                            CurrentYakuzaVote.Add(player, voteFor);
-                            var voteCount = CurrentYakuzaVote.GetResult().VoteCountByPlayer[voteFor.User.Id];
-                            var message = String.Format("{0} голосует за убийство {1} ({2})!", player.GetName(), voteFor.GetName(), voteCount);
+                            CurrentYakuzaVote.Add(player, choosenPlayer);
+                            var voteCount = CurrentYakuzaVote.GetResult().VoteCountByPlayer[choosenPlayer.User.Id];
+                            var message = String.Format("{0} голосует за убийство {1} ({2})!", player.GetName(), choosenPlayer.GetName(), voteCount);
                             MessageBuilder.Text(message).SendToTeam(Team.Yakuza);
                         }
                         catch (ArgumentException)
@@ -403,7 +401,7 @@ namespace DiscordMafia
         }
 
         /// <summary>
-        /// Возвращает игрока по его ID Telegram
+        /// Возвращает игрока по его ID Discord
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="onlyAlive"></param>

@@ -131,7 +131,7 @@ namespace DiscordMafia.Modules
 
         [Command("imprison"), Summary("Осудить указанного игрока."), RequirePlayer, RequireGameState(GameState.Day),
          Alias("посадить", "повесить", "gjcflbnm", "gjdtcbnm")]
-        public async Task Vote([Summary("номер игрока")] int player, [Remainder] string ignored = null)
+        public async Task Vote([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
@@ -140,7 +140,7 @@ namespace DiscordMafia.Modules
                     if (currentPlayer.Role is Elder)
                     {
                         var elder = (currentPlayer.Role as Elder);
-                        var playerToKill = _game.GetPlayerInfo(player);
+                        var playerToKill = player;
                         if (playerToKill != null && elder.PlayerToKill == null)
                         {
                             try
@@ -260,19 +260,18 @@ namespace DiscordMafia.Modules
         }
 
         [Command("kill"), Summary("Посодействовать в убийстве игрока."), Alias("убить"), RequireContext(ContextType.DM), RequirePlayer, RequireGameState(GameState.Night)]
-        public async Task Kill([Summary("номер игрока")] int player, [Remainder] string ignored = null)
+        public async Task Kill([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 if (currentPlayer.Role is Highlander)
                 {
                     var highlander = (currentPlayer.Role as Highlander);
-                    var playerToKill = _game.GetPlayerInfo(player);
-                    if (playerToKill != null && highlander.PlayerToKill == null)
+                    if (player != null && highlander.PlayerToKill == null)
                     {
                         try
                         {
-                            highlander.PlayerToKill = playerToKill;
+                            highlander.PlayerToKill = player;
                             _game.NightAction(currentPlayer.Role);
                             await ReplyAsync("Голос принят.");
                             _game.CheckNextCheckpoint();
@@ -287,10 +286,9 @@ namespace DiscordMafia.Modules
                 if (currentPlayer.Role is Sheriff)
                 {
                     var sheriff = (currentPlayer.Role as Sheriff);
-                    var playerToKill = _game.GetPlayerInfo(player);
-                    if (playerToKill != null && sheriff.PlayerToKill == null)
+                    if (player != null && sheriff.PlayerToKill == null)
                     {
-                        sheriff.PlayerToKill = playerToKill;
+                        sheriff.PlayerToKill = player;
                         _game.NightAction(currentPlayer.Role);
                         await ReplyAsync("Голос принят.");
                         _game.CheckNextCheckpoint();
@@ -300,12 +298,11 @@ namespace DiscordMafia.Modules
                 if (currentPlayer.Role is Killer)
                 {
                     var killer = (currentPlayer.Role as Killer);
-                    var playerToKill = _game.GetPlayerInfo(player);
-                    if (playerToKill != null && killer.PlayerToKill == null)
+                    if (player != null && killer.PlayerToKill == null)
                     {
-                        killer.PlayerToKill = playerToKill;
+                        killer.PlayerToKill = player;
                         _game.NightAction(currentPlayer.Role);
-                        var response = String.Format("Киллер {0} выбрал в качестве жертвы {1}!", currentPlayer.GetName(), playerToKill.GetName());
+                        var response = String.Format("Киллер {0} выбрал в качестве жертвы {1}!", currentPlayer.GetName(), player.GetName());
                         _game.MessageBuilder.Text(response).SendToTeam(Team.Mafia);
                         _game.CheckNextCheckpoint();
                     }
@@ -314,10 +311,9 @@ namespace DiscordMafia.Modules
                 if (currentPlayer.Role is NeutralKiller)
                 {
                     var maniac = (currentPlayer.Role as NeutralKiller);
-                    var playerToKill = _game.GetPlayerInfo(player);
-                    if (playerToKill != null && maniac.PlayerToKill == null)
+                    if (player != null && maniac.PlayerToKill == null)
                     {
-                        maniac.PlayerToKill = playerToKill;
+                        maniac.PlayerToKill = player;
                         _game.NightAction(currentPlayer.Role);
                         await ReplyAsync("Голос принят.");
                         _game.CheckNextCheckpoint();
@@ -331,17 +327,16 @@ namespace DiscordMafia.Modules
         }
 
         [Command("curse"), Summary("Проклясть игрока."), Alias("проклясть"), RequireContext(ContextType.DM), RequirePlayer(typeof(Warlock)), RequireGameState(GameState.Night)]
-        public async Task CursePlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
+        public async Task CursePlayer([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var warlock = (currentPlayer.Role as Warlock);
-                var playerToCurse = _game.GetPlayerInfo(player);
-                if (playerToCurse != null && warlock.PlayerToCurse == null)
+                if (player != null && warlock.PlayerToCurse == null)
                 {
                     try
                     {
-                        warlock.PlayerToCurse = playerToCurse;
+                        warlock.PlayerToCurse = player;
                         _game.NightAction(currentPlayer.Role);
                         await ReplyAsync("Голос принят.");
                         _game.CheckNextCheckpoint();
@@ -356,17 +351,16 @@ namespace DiscordMafia.Modules
         }
 
         [Command("check"), Summary("Проверить игрока."), Alias("пров", "проверить"), RequireContext(ContextType.DM), RequirePlayer(typeof(Commissioner), typeof(Homeless), typeof(Lawyer)), RequireGameState(GameState.Night)]
-        public async Task CheckPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
+        public async Task CheckPlayer([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 if (currentPlayer.Role is Commissioner)
                 {
                     var commissioner = (currentPlayer.Role as Commissioner);
-                    var playerToCheck = _game.GetPlayerInfo(player);
-                    if (playerToCheck != null && commissioner.PlayerToCheck == null)
+                    if (player != null && commissioner.PlayerToCheck == null)
                     {
-                        commissioner.PlayerToCheck = playerToCheck;
+                        commissioner.PlayerToCheck = player;
                         _game.NightAction(currentPlayer.Role);
                         await ReplyAsync("Голос принят.");
                         _game.CheckNextCheckpoint();
@@ -375,10 +369,9 @@ namespace DiscordMafia.Modules
                 else if (currentPlayer.Role is Homeless)
                 {
                     var homeless = (currentPlayer.Role as Homeless);
-                    var playerToCheck = _game.GetPlayerInfo(player);
-                    if (playerToCheck != null && homeless.PlayerToCheck == null)
+                    if (player != null && homeless.PlayerToCheck == null)
                     {
-                        homeless.PlayerToCheck = playerToCheck;
+                        homeless.PlayerToCheck = player;
                         _game.NightAction(currentPlayer.Role);
                         await ReplyAsync("Голос принят.");
                         _game.CheckNextCheckpoint();
@@ -387,10 +380,9 @@ namespace DiscordMafia.Modules
                 else if (currentPlayer.Role is Lawyer)
                 {
                     var lawyer = (currentPlayer.Role as Lawyer);
-                    var playerToCheck = _game.GetPlayerInfo(player);
-                    if (playerToCheck != null && lawyer.PlayerToCheck == null)
+                    if (player != null && lawyer.PlayerToCheck == null)
                     {
-                        lawyer.PlayerToCheck = playerToCheck;
+                        lawyer.PlayerToCheck = player;
                         _game.NightAction(currentPlayer.Role);
                         var response = String.Format("Адвокат {0} выбрал {1} для проверки!", currentPlayer.GetName(), lawyer.PlayerToCheck.GetName());
                         _game.MessageBuilder.Text(response).SendToTeam(Team.Mafia);
@@ -402,17 +394,16 @@ namespace DiscordMafia.Modules
         }
 
         [Command("sleep"), Summary("Переспать с игроком."), Alias("спать"), RequireContext(ContextType.DM), RequirePlayer(typeof(Wench)), RequireGameState(GameState.Night)]
-        public async Task SleepWithPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
+        public async Task SleepWithPlayer([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var wench = (currentPlayer.Role as Wench);
-                var playerToCheck = _game.GetPlayerInfo(player);
-                if (playerToCheck != null && wench.PlayerToCheck == null)
+                if (player != null && wench.PlayerToCheck == null)
                 {
                     try
                     {
-                        wench.PlayerToCheck = playerToCheck;
+                        wench.PlayerToCheck = player;
                         _game.NightAction(currentPlayer.Role);
                         await ReplyAsync("Голос принят.");
                         _game.CheckNextCheckpoint();
@@ -427,17 +418,16 @@ namespace DiscordMafia.Modules
         }
 
         [Command("block"), Summary("Блокировать игрока."), Alias("блок"), RequireContext(ContextType.DM), RequirePlayer(typeof(Hoodlum)), RequireGameState(GameState.Night)]
-        public async Task BlockPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
+        public async Task BlockPlayer([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var hoodlum = (currentPlayer.Role as Hoodlum);
-                var playerToBlock = _game.GetPlayerInfo(player);
-                if (playerToBlock != null && hoodlum.PlayerToBlock == null)
+                if (player != null && hoodlum.PlayerToBlock == null)
                 {
                     try
                     {
-                        hoodlum.PlayerToBlock = playerToBlock;
+                        hoodlum.PlayerToBlock = player;
                         _game.NightAction(currentPlayer.Role);
                         var response = String.Format("Громила {0} выбрал {1} для блокировки!", currentPlayer.GetName(), hoodlum.PlayerToBlock.GetName());
                         _game.MessageBuilder.Text(response).SendToTeam(Team.Yakuza);
@@ -453,17 +443,16 @@ namespace DiscordMafia.Modules
         }
 
         [Command("heal"), Summary("Подлатать игрока."), Alias("лечить"), RequireContext(ContextType.DM), RequirePlayer(typeof(Doctor)), RequireGameState(GameState.Night)]
-        public async Task HealPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
+        public async Task HealPlayer([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var doctor = (currentPlayer.Role as Doctor);
-                var playerToHeal = _game.GetPlayerInfo(player);
-                if (playerToHeal != null && doctor.PlayerToHeal == null)
+                if (player != null && doctor.PlayerToHeal == null)
                 {
                     try
                     {
-                        doctor.PlayerToHeal = playerToHeal;
+                        doctor.PlayerToHeal = player;
                         _game.NightAction(currentPlayer.Role);
                         await ReplyAsync("Голос принят.");
                         _game.CheckNextCheckpoint();
@@ -478,17 +467,16 @@ namespace DiscordMafia.Modules
         }
 
         [Command("justify"), Summary("Оправдать игрока."), Alias("оправдать"), RequireContext(ContextType.DM), RequirePlayer(typeof(Judge)), RequireGameState(GameState.Day)]
-        public async Task JustifyPlayer([Summary("номер игрока")] int player, [Remainder] string ignored = null)
+        public async Task JustifyPlayer([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 var judge = (currentPlayer.Role as Judge);
-                var playerToJustify = _game.GetPlayerInfo(player);
-                if (playerToJustify != null && judge.PlayerToJustufy == null)
+                if (player != null && judge.PlayerToJustufy == null)
                 {
                     try
                     {
-                        judge.PlayerToJustufy = playerToJustify;
+                        judge.PlayerToJustufy = player;
                         await ReplyAsync("Голос принят.");
                         _game.CheckNextCheckpoint();
                     }

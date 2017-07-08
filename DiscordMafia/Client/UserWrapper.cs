@@ -12,7 +12,9 @@ namespace DiscordMafia.Client
         public string UsernameMention { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        
+
+        public IUser DiscordUser => _user;
+
         public UserWrapper(IUser discordUser)
         {
             _user = discordUser;

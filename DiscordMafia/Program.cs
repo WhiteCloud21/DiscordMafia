@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using Discord;
-using System.Threading;
 using DiscordMafia.Config;
 using System;
 using System.Reflection;
@@ -77,6 +76,8 @@ namespace DiscordMafia
 
         public async Task InstallCommands()
         {
+            commands.AddTypeReader<InGamePlayerInfo>(new TypeReaders.InGamePlayerInfoTypeReader());
+
             // Hook the MessageReceived Event into our Command Handler
             client.MessageReceived += HandleCommand;
             // Discover all of the commands in this assembly and load them.
