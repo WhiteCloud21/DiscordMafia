@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using DiscordMafia.Client;
@@ -11,8 +10,8 @@ using DiscordMafia.Items;
 using DiscordMafia.Roles;
 using DiscordMafia.Roles.Places;
 using DiscordMafia.Voting;
-using DiscordMafia.DB;
 using DiscordMafia.Lib;
+using static DiscordMafia.Config.MessageBuilder;
 
 namespace DiscordMafia
 {
@@ -139,14 +138,16 @@ namespace DiscordMafia
                         if (leader != player)
                         {
                             CurrentEveningVote.Add(player, voteValue);
-                            if (voteValue)
-                            {
-                                MessageBuilder.Text(String.Format("{0} уверен в виновности {1} ({2})!", player.GetName(), leader.GetName(), CurrentEveningVote.GetResult().YesCount)).SendPublic(GameChannel);
-                            }
-                            else
-                            {
-                                MessageBuilder.Text(String.Format("{0} требует оправдания {1} ({2})!", player.GetName(), leader.GetName(), CurrentEveningVote.GetResult().NoCount)).SendPublic(GameChannel);
-                            }
+                            MessageBuilder
+                                .PrepareTextReplacePlayer(
+                                    voteValue ? "EveningVote_Yes" : "EveningVote_No",
+                                    player,
+                                    additionalReplaceDictionary: new ReplaceDictionary {
+                                        ["toHang"] = Encode(leader.GetName()),
+                                        ["count"] = voteValue ? CurrentEveningVote.GetResult().YesCount : CurrentEveningVote.GetResult().NoCount
+                                    }
+                                )
+                                .SendPublic(GameChannel);
                         }
                         else
                         {

@@ -71,7 +71,7 @@ namespace DiscordMafia
                 System.IO.File.AppendAllText("error.log", message);
             }
 
-            await Task.Delay(-1);
+            await Task.CompletedTask;
         }
 
         public async Task InstallCommands()
@@ -91,7 +91,7 @@ namespace DiscordMafia
             if (message == null) return;
             // Create a number to track where the prefix ends and the command begins
             int argPos = 0;
-            // Determine if the message is a command, based on if it starts with '!' or a mention prefix
+            // Determine if the message is a command, based on if it starts with '/' or a mention prefix
             if (!(message.HasCharPrefix('/', ref argPos) ||
                   message.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
 
@@ -108,6 +108,7 @@ namespace DiscordMafia
                     // {
                     //     await context.Channel.SendMessageAsync(result.ErrorReason);
                     // }
+                    result.Wait();
                     if (result.Status != TaskStatus.RanToCompletion && message.Author.Id != client.CurrentUser.Id)
                     {
                         ProcessMessage(message);

@@ -46,7 +46,7 @@ namespace DiscordMafia.Config
             };
             MinPlayers = 3;
             MafPercent = 34;
-            StartFromNight = false;
+            StartFromNight = true;
             PlayerCollectingTime = 60000;
             PauseTime = 1000;
             MorningTime = 2000;

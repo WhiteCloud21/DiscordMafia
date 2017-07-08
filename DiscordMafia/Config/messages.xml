@@ -3,25 +3,37 @@
   <Item>
     <string>PlayerRegister</string>
     <ArrayOfString>
-      <string>{name} {gender:присоединился|присоединилась} к игре! ({count})</string>
+      <string>{nameSimple} {gender:присоединился|присоединилась} к игре! ({count})</string>
     </ArrayOfString>
   </Item>
   <Item>
     <string>PlayerUnRegister</string>
     <ArrayOfString>
-      <string>{name} {gender:вышел|вышла} из игры. ({count})</string>
+      <string>{nameSimple} {gender:вышел|вышла} из игры. ({count})</string>
     </ArrayOfString>
   </Item>
   <Item>
     <string>PlayerCanceledVote</string>
     <ArrayOfString>
-      <string>{name} {gender:отменил|отменила} свой голос.</string>
+      <string>{nameSimple} {gender:отменил|отменила} свой голос.</string>
     </ArrayOfString>
   </Item>
   <Item>
     <string>PlayerSkippedTurn</string>
     <ArrayOfString>
-      <string>{name} {gender:пропустил|пропустила} ход.</string>
+      <string>{nameSimple} {gender:пропустил|пропустила} ход.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>EveningVote_Yes</string>
+    <ArrayOfString>
+      <string>{nameSimple} {gender:уверен|уверена} в виновности {toHang} ({count}).</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>EveningVote_No</string>
+    <ArrayOfString>
+      <string>{nameSimple} требует оправдания {toHang} ({count}).</string>
     </ArrayOfString>
   </Item>
   <Item>
