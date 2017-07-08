@@ -10,7 +10,8 @@ using Microsoft.Data.Sqlite;
 
 namespace DiscordMafia.Modules
 {
-    public class StatisticsModule : ModuleBase
+    [Summary("Команды статистики")]
+    public class StatisticsModule : BaseModule
     {
         private Game _game;
         private MainSettings _settings;

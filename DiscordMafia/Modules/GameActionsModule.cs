@@ -13,7 +13,8 @@ using static DiscordMafia.Config.MessageBuilder;
 
 namespace DiscordMafia.Modules
 {
-    public class GameActionsModule : ModuleBase
+    [Summary("Игровые команды")]
+    public class GameActionsModule : BaseModule
     {
         private DiscordSocketClient _client;
         private Game _game;

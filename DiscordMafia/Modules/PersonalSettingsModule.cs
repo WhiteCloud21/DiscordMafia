@@ -10,8 +10,8 @@ using Microsoft.Data.Sqlite;
 
 namespace DiscordMafia.Modules
 {
-    [Group("settings"), Alias("настройки")]
-    public class PersonalSettingsModule : ModuleBase
+    [Group("settings"), Alias("настройки"), Summary("Личные настройки")]
+    public class PersonalSettingsModule : BaseModule
     {
         private Game _game;
         private MainSettings _settings;

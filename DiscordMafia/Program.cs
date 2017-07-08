@@ -47,6 +47,7 @@ namespace DiscordMafia
             serviceCollection.AddSingleton(client);
             serviceCollection.AddSingleton(connection);
             serviceCollection.AddSingleton(settings);
+            serviceCollection.AddSingleton(commands);
             serviceCollection.AddSingleton(_game);
 
             Connection = connection;

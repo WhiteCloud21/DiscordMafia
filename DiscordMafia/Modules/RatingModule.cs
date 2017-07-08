@@ -10,8 +10,8 @@ using Microsoft.Data.Sqlite;
 
 namespace DiscordMafia.Modules
 {
-    [Group("top"), Alias("топ")]
-    public class RatingModule : ModuleBase
+    [Group("top"), Alias("топ"), Summary("Команды рейтинга")]
+    public class RatingModule : BaseModule
     {
         private const int PerPage = 20;
 
@@ -32,7 +32,7 @@ namespace DiscordMafia.Modules
             _connection = connection;
         }
 
-        [Command, Priority(-100)]
+        [Command, Priority(-100), Summary("Топ по умолчанию (может меняться)")]
         public async Task Default([Summary("Страница топа")] int page = 1)
         {
             await DrawTop(PointsField, page);
