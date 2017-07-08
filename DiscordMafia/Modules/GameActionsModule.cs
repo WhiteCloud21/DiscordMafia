@@ -133,7 +133,7 @@ namespace DiscordMafia.Modules
             }
         }
 
-        [Command("imprison"), Summary("Осудить указанного игрока."), RequirePlayer, RequireGameState(GameState.Day),
+        [Command("imprison"), Summary("Осудить указанного игрока."), RequirePlayer, RequireGameState(GameState.Day, GameState.Evening),
          Alias("посадить", "повесить", "gjcflbnm", "gjdtcbnm")]
         public async Task Vote([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
@@ -161,7 +161,7 @@ namespace DiscordMafia.Modules
                         return;
                     }
                 }
-                else
+                else if (_game.CurrentState == GameState.Day) // TODO Изменить проверку
                 {
                     _game.DayVote(currentPlayer, player);
                     _game.CheckNextCheckpoint();
@@ -473,7 +473,7 @@ namespace DiscordMafia.Modules
             await Task.CompletedTask;
         }
 
-        [Command("justify"), Summary("Оправдать игрока."), Alias("оправдать"), RequireContext(ContextType.DM), RequirePlayer(typeof(Judge)), RequireGameState(GameState.Day)]
+        [Command("justify"), Summary("Оправдать игрока."), Alias("оправдать"), RequireContext(ContextType.DM), RequirePlayer(typeof(Judge)), RequireGameState(GameState.Day, GameState.Evening)]
         public async Task JustifyPlayer([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))

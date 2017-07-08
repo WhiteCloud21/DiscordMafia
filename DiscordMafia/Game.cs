@@ -289,6 +289,15 @@ namespace DiscordMafia
                             yakuzaMessage += String.Format("{0} - {1} (`{2}`)", MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.Role.Name), player.GetName()) + Environment.NewLine;
                             break;
                     }
+                    if (player.Role is Sergeant)
+                    {
+                        var commissioner = (from p in PlayersList where p.Role is Commissioner select p).FirstOrDefault();
+                        if (commissioner != null)
+                        {
+                            MessageBuilder.PrepareTextReplacePlayer("CheckStatus", commissioner).SendPrivate(player);
+                            MessageBuilder.PrepareTextReplacePlayer("CheckStatus", player).SendPrivate(commissioner);
+                        }
+                    }
                 }
                 mafiaMessage += "Можете обсуждать свои действия в личных сообщениях или через бота.";
                 yakuzaMessage += "Можете обсуждать свои действия в личных сообщениях или через бота.";
@@ -771,8 +780,7 @@ namespace DiscordMafia
                     var role = player.Role as Homeless;
                     if (role.PlayerToCheck != null)
                     {
-                        var message = String.Format("Статус {0} - {1}", MessageBuilder.FormatName(role.PlayerToCheck), MessageBuilder.FormatRole(role.PlayerToCheck.Role.Name));
-                        MessageBuilder.Text(message, false).SendPrivate(player);
+                        MessageBuilder.PrepareTextReplacePlayer("CheckStatus", role.PlayerToCheck).SendPrivate(player);
                         MessageBuilder.PrepareTextReplacePlayer("HomelessCheck", role.PlayerToCheck).SendPublic(GameChannel);
                         if (role.PlayerToCheck.Role.Team == Team.Mafia || role.PlayerToCheck.Role.Team == Team.Yakuza)
                         {
@@ -783,14 +791,18 @@ namespace DiscordMafia
                 }
                 #endregion
 
-                #region Комиссар
+                #region Комиссар и сержант
                 if (player.Role is Commissioner)
                 {
                     var role = player.Role as Commissioner;
                     if (role.PlayerToCheck != null)
                     {
-                        var message = String.Format("Статус {0} - {1}", MessageBuilder.FormatName(role.PlayerToCheck), MessageBuilder.FormatRole(role.PlayerToCheck.Role.Name));
-                        MessageBuilder.Text(message, false).SendPrivate(player);
+                        MessageBuilder.PrepareTextReplacePlayer("CheckStatus", role.PlayerToCheck).SendPrivate(player);
+                        var sergeant = (from p in PlayersList where (p.Role is Sergeant && p.IsAlive) select p).FirstOrDefault();
+                        if (sergeant != null)
+                        {
+                            MessageBuilder.PrepareTextReplacePlayer("CheckStatus", role.PlayerToCheck).SendPrivate(sergeant);
+                        }
                         switch (role.PlayerToCheck.Role.Team)
                         {
                             case Team.Civil:
@@ -959,7 +971,7 @@ namespace DiscordMafia
                     var role = player.Role as Lawyer;
                     if (role.PlayerToCheck != null)
                     {
-                        MessageBuilder.PrepareTextReplacePlayer("LawyerCheck", role.PlayerToCheck).SendToTeam(Team.Mafia);
+                        MessageBuilder.PrepareTextReplacePlayer("CheckStatus", role.PlayerToCheck).SendToTeam(Team.Mafia);
                         if (role.PlayerToCheck.Role is Commissioner)
                         {
                             player.AddPoints("LawyerCheckCom");

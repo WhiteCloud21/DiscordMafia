@@ -65,7 +65,7 @@
         {
             switch (currentState)
             {
-                case GameState.Day:
+                case GameState.Evening:
                     if (PlayerToKill == null)
                     {
                         return false;
