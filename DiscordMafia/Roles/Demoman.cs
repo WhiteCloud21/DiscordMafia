@@ -63,7 +63,7 @@ namespace DiscordMafia.Roles
 
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
         {
-            Counter = (Counter + 1) % 3;
+            Counter = (Counter + 1) % 2;
             if (Counter == 0)
             {
                 base.NightInfo(game, currentPlayer);

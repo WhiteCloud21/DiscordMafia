@@ -79,7 +79,7 @@ namespace DiscordMafia.Roles
         {
             switch (currentState)
             {
-                case GameState.Day:
+                case GameState.Evening:
                     if (PlayerToJustufy == null)
                     {
                         return false;

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using DiscordMafia.Client;
@@ -11,8 +10,8 @@ using DiscordMafia.Items;
 using DiscordMafia.Roles;
 using DiscordMafia.Roles.Places;
 using DiscordMafia.Voting;
-using DiscordMafia.DB;
 using DiscordMafia.Lib;
+using static DiscordMafia.Config.MessageBuilder;
 
 namespace DiscordMafia
 {
@@ -59,125 +58,11 @@ namespace DiscordMafia
             KillManager = new KillManager(this);
         }
 
-        private void LoadSettings(string gametype = null)
+        internal void LoadSettings(string gametype = null)
         {
             Settings = new Config.GameSettings(gametype);
             MessageBuilder = new Config.MessageBuilder(Settings, client, PlayersList);
             Console.WriteLine("Settings loaded");
-        }
-
-        public void OnPublicMessage(SocketMessage message)
-        {
-            string text = message.Content;
-            var channel = message.Channel;
-            UserWrapper user = message.Author;
-            if (channel.Id != GameChannel)
-            {
-                return;
-            }
-            var currentPlayer = GetPlayerInfo(user.Id);
-            if (text.StartsWith("/"))
-            {
-                text = text.ToLower();
-                var parts = text.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
-                switch (parts[0].ToLower())
-                {
-                    case "/погнали":
-                    case "/го":
-                    case "/go":
-                        if (user.IsAdmin())
-                        {
-                             StopPlayerCollecting();
-                        }
-                        return;
-                    case "/stop":
-                    case "/стоп":
-                        if (user.IsAdmin())
-                        {
-                            StopGame();
-                        }
-                        return;
-                    case "/отмена":
-                    case "/cancel":
-                    case "/нея":
-                        if (CurrentState == GameState.PlayerCollecting)
-                        {
-                            UnRegisterPlayer(user);
-                            return;
-                        }
-                        if (currentPlayer != null && CurrentState == GameState.Day)
-                        {
-                            if (currentPlayer.CancelVote())
-                            {
-                                MessageBuilder.Text(currentPlayer.GetName() + " отменил свой голос").SendPublic(GameChannel);
-                            }
-                        }
-                        return;
-                    case "/пропустить":
-                    case "/skip":
-                        if (currentPlayer != null)
-                        {
-                            if (currentPlayer.SkipTurn())
-                            {
-                                MessageBuilder.Text(currentPlayer.GetName() + " пропустил ход").SendPublic(GameChannel);
-                                CheckNextCheckpoint();
-                            }
-                        }
-                        return;
-                    case "/посадить":
-                    case "/повесить":
-                    case "/imprison":
-                        if (parts.Length > 1)
-                        {
-                            DayVote(currentPlayer, parts[1]);
-                            CheckNextCheckpoint();
-                        }
-                        return;
-                    case "/да":
-                    case "/yes":
-                        if (CurrentState == GameState.Evening)
-                        {
-                            EveningVote(currentPlayer, true);
-                            CheckNextCheckpoint();
-                        }
-                        return;
-                    case "/нет":
-                    case "/no":
-                        if (CurrentState == GameState.Evening)
-                        {
-                            EveningVote(currentPlayer, false);
-                            CheckNextCheckpoint();
-                        }
-                        return;
-                    case "/gametype":
-                    case "/gamemode":
-                    case "/режим":
-                        if (user.IsAdmin() && parts.Length > 1)
-                        {
-                            if (CurrentState == GameState.Stopped)
-                            {
-                                if (Settings.IsValidGametype(parts[1]))
-                                {
-                                    LoadSettings(parts[1]);
-                                    MessageBuilder.Text("Режим игры успешно изменен.").SendPublic(GameChannel);
-                                }
-                                else
-                                {
-                                    MessageBuilder.Text("Неизвестный режим игры.").SendPublic(GameChannel);
-                                }
-                            }
-                            else
-                            {
-                                MessageBuilder.Text("Менять режим игры нельзя, пока игра не завершена.").SendPublic(GameChannel);
-                            }
-                        }
-                        else
-                        {
-                            MessageBuilder.Text($"Текущий режим игры: {Settings.GameType}").SendPublic(GameChannel);
-                        }
-                        return;
-                }
-            }
         }
 
         public void OnPrivateMessage(SocketMessage message)
@@ -185,449 +70,26 @@ namespace DiscordMafia
             string text = message.Content;
             UserWrapper user = message.Author;
             var currentPlayer = GetPlayerInfo(user.Id);
-            if (text.StartsWith("/"))
+            if (!text.StartsWith("/"))
             {
-                var parts = text.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                switch (parts[0].ToLower())
+                // Передача "командных" сообщений
+                if (currentPlayer?.Role != null)
                 {
-                    case "/recalculate":
-                        if (user.IsAdmin())
-                        {
-                            Stat.RecalculateAll();
-                            MessageBuilder.Text("OK").SendPrivate(user);
-                        }
-                        return;
-                    case "/купить":
-                    case "/buy":
-                        if (currentPlayer == null)
-                        {
-                            return;
-                        }
-                        if (parts.Length > 1)
-                        {
-                            var itemToBuy = GetItemInfo(parts[1]);
-                            if (itemToBuy != null)
-                            {
-                                try
-                                {
-                                    currentPlayer.Buy(itemToBuy);
-                                    MessageBuilder.Text("Вы купили " + itemToBuy.Name).SendPrivate(currentPlayer);
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
-                                }
-                            }
-                            return;
-                        }
-                        if (BaseItem.AvailableItems.Length > 0)
-                        {
-                            var response = "Предметы, доступные для покупки: " + Environment.NewLine;
-                            for (var i = 0; i < BaseItem.AvailableItems.Length; i++)
-                            {
-                                var item = BaseItem.AvailableItems[i];
-                                var itemInPlayer = currentPlayer.GetItem(item);
-                                response += String.Format("{0}. <b>{1}</b> - предмет ", i + 1, item.Name);
-                                if (itemInPlayer != null)
-                                {
-                                    if (itemInPlayer.IsActive)
-                                    {
-                                        response += "будет использован этой ночью";
-                                    }
-                                    else
-                                    {
-                                        response += "уже использован";
-                                    }
-                                }
-                                else
-                                {
-                                    response += "доступен для покупки";
-                                }
-                                response += ". Цена: " + item.Cost + Environment.NewLine;
-                                response += "<i>" + item.Description + "</i>";
-                                response += Environment.NewLine;
-                                response += Environment.NewLine;
-                            }
-                            MessageBuilder.Text(response, false).SendPrivate(currentPlayer);
-                        }
-                        else
-                        {
-                            MessageBuilder.PrepareText("ShopDisabled").SendPrivate(currentPlayer);
-                        }
-                        return;
-                    case "/отмена":
-                    case "/cancel":
-                        if (currentPlayer != null)
-                        {
-                            currentPlayer.CancelActivity();
-                            MessageBuilder.Text("Ваш голос отменен").SendPrivate(currentPlayer);
-                        }
-                        return;
-                    case "/пропустить":
-                    case "/skip":
-                        if (currentPlayer != null)
-                        {
-                            if (currentPlayer.SkipTurn())
-                            {
-                                MessageBuilder.Text("Вы пропустили ход.").SendPrivate(currentPlayer);
-                                CheckNextCheckpoint();
-                            }
-                        }
-                        return;
-                    case "/убить":
-                    case "/kill":
-                        if (currentPlayer == null)
-                        {
-                            return;
-                        }
-                        if (currentPlayer.Role is Highlander && parts.Length > 1 && CurrentState == GameState.Night)
-                        {
-                            var highlander = (currentPlayer.Role as Highlander);
-                            var playerToKill = GetPlayerInfo(parts[1]);
-                            if (playerToKill != null && highlander.PlayerToKill == null)
-                            {
-                                try
-                                {
-                                    highlander.PlayerToKill = playerToKill;
-                                    NightAction(currentPlayer.Role);
-                                    MessageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                    CheckNextCheckpoint();
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
-                                }
-                            }
-                            return;
-                        }
-                        if (currentPlayer.Role is Sheriff && parts.Length > 1 && CurrentState == GameState.Night)
-                        {
-                            var sheriff = (currentPlayer.Role as Sheriff);
-                            var playerToKill = GetPlayerInfo(parts[1]);
-                            if (playerToKill != null && sheriff.PlayerToKill == null)
-                            {
-                                sheriff.PlayerToKill = playerToKill;
-                                NightAction(currentPlayer.Role);
-                                MessageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                CheckNextCheckpoint();
-                            }
-                            return;
-                        }
-                        if (currentPlayer.Role is Killer && parts.Length > 1 && CurrentState == GameState.Night)
-                        {
-                            var killer = (currentPlayer.Role as Killer);
-                            var playerToKill = GetPlayerInfo(parts[1]);
-                            if (playerToKill != null && killer.PlayerToKill == null)
-                            {
-                                killer.PlayerToKill = playerToKill;
-                                NightAction(currentPlayer.Role);
-                                var response = String.Format("Киллер {0} выбрал в качестве жертвы {1}!", currentPlayer.GetName(), playerToKill.GetName());
-                                MessageBuilder.Text(response).SendToTeam(Team.Mafia);
-                                CheckNextCheckpoint();
-                            }
-                            return;
-                        }
-                        if (currentPlayer.Role is NeutralKiller && parts.Length > 1 && CurrentState == GameState.Night)
-                        {
-                            var maniac = (currentPlayer.Role as NeutralKiller);
-                            var playerToKill = GetPlayerInfo(parts[1]);
-                            if (playerToKill != null && maniac.PlayerToKill == null)
-                            {
-                                maniac.PlayerToKill = playerToKill;
-                                NightAction(currentPlayer.Role);
-                                MessageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                CheckNextCheckpoint();
-                            }
-                            return;
-                        }
-                        if (parts.Length > 1 && CurrentState == GameState.Night)
-                        {
-                            NightVote(currentPlayer, parts[1]);
-                            CheckNextCheckpoint();
-                        }
-                        return;
-                    case "/проклясть":
-                    case "/curse":
-                        if (currentPlayer == null)
-                        {
-                            return;
-                        }
-                        if (currentPlayer.Role is Warlock && parts.Length > 1 && CurrentState == GameState.Night)
-                        {
-                            var warlock = (currentPlayer.Role as Warlock);
-                            var playerToCurse = GetPlayerInfo(parts[1]);
-                            if (playerToCurse != null && warlock.PlayerToCurse == null)
-                            {
-                                try
-                                {
-                                    warlock.PlayerToCurse = playerToCurse;
-                                    NightAction(currentPlayer.Role);
-                                    MessageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                    CheckNextCheckpoint();
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
-                                }
-                            }
-                        }
-                        return;
-                    case "/посадить":
-                    case "/imprison":
-                        if (currentPlayer == null)
-                        {
-                            return;
-                        }
-                        if (currentPlayer.Role is Elder && parts.Length > 1 && CurrentState == GameState.Day)
-                        {
-                            var elder = (currentPlayer.Role as Elder);
-                            var playerToKill = GetPlayerInfo(parts[1]);
-                            if (playerToKill != null && elder.PlayerToKill == null)
-                            {
-                                try
-                                {
-                                    elder.PlayerToKill = playerToKill;
-                                    MessageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                    CheckNextCheckpoint();
-                                }
-                                catch (Exception ex)
-                                {
-                                    MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
-                                }
-                            }
-                            return;
-                        }
-                        return;
-                    case "/пров":
-                    case "/check":
-                        {
-                            if (currentPlayer == null)
-                            {
-                                return;
-                            }
-                            if (currentPlayer.Role is Commissioner && parts.Length > 1 && CurrentState == GameState.Night)
-                            {
-                                var commissioner = (currentPlayer.Role as Commissioner);
-                                var playerToCheck = GetPlayerInfo(parts[1]);
-                                if (playerToCheck != null && commissioner.PlayerToCheck == null)
-                                {
-                                    commissioner.PlayerToCheck = playerToCheck;
-                                    NightAction(currentPlayer.Role);
-                                    MessageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                    CheckNextCheckpoint();
-                                }
-                            }
-                            else if (currentPlayer.Role is Homeless && parts.Length > 1 && CurrentState == GameState.Night)
-                            {
-                                var homeless = (currentPlayer.Role as Homeless);
-                                var playerToCheck = GetPlayerInfo(parts[1]);
-                                if (playerToCheck != null && homeless.PlayerToCheck == null)
-                                {
-                                    homeless.PlayerToCheck = playerToCheck;
-                                    NightAction(currentPlayer.Role);
-                                    MessageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                    CheckNextCheckpoint();
-                                }
-                            }
-                            else if (currentPlayer.Role is Lawyer && parts.Length > 1 && CurrentState == GameState.Night)
-                            {
-                                var lawyer = (currentPlayer.Role as Lawyer);
-                                var playerToCheck = GetPlayerInfo(parts[1]);
-                                if (playerToCheck != null && lawyer.PlayerToCheck == null)
-                                {
-                                    lawyer.PlayerToCheck = playerToCheck;
-                                    NightAction(currentPlayer.Role);
-                                    var response = String.Format("Адвокат {0} выбрал {1} для проверки!", currentPlayer.GetName(), lawyer.PlayerToCheck.GetName());
-                                    MessageBuilder.Text(response).SendToTeam(Team.Mafia);
-                                    CheckNextCheckpoint();
-                                }
-                            }
-                        }
-                        return;
-                    case "/спать":
-                    case "/sleep":
-                        {
-                            if (currentPlayer == null)
-                            {
-                                return;
-                            }
-                            if (currentPlayer.Role is Wench && parts.Length > 1 && CurrentState == GameState.Night)
-                            {
-                                var wench = (currentPlayer.Role as Wench);
-                                var playerToCheck = GetPlayerInfo(parts[1]);
-                                if (playerToCheck != null && wench.PlayerToCheck == null)
-                                {
-                                    try
-                                    {
-                                        wench.PlayerToCheck = playerToCheck;
-                                        NightAction(currentPlayer.Role);
-                                        MessageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                        CheckNextCheckpoint();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                                    }
-                                }
-                            }
-                        }
-                        return;
-                    case "/блок":
-                    case "/block":
-                        {
-                            if (currentPlayer == null)
-                            {
-                                return;
-                            }
-                            if (currentPlayer.Role is Hoodlum && parts.Length > 1 && CurrentState == GameState.Night)
-                            {
-                                var hoodlum = (currentPlayer.Role as Hoodlum);
-                                var playerToBlock = GetPlayerInfo(parts[1]);
-                                if (playerToBlock != null && hoodlum.PlayerToBlock == null)
-                                {
-                                    try
-                                    {
-                                        hoodlum.PlayerToBlock = playerToBlock;
-                                        NightAction(currentPlayer.Role);
-                                        var response = String.Format("Громила {0} выбрал {1} для блокировки!", currentPlayer.GetName(), hoodlum.PlayerToBlock.GetName());
-                                        MessageBuilder.Text(response).SendToTeam(Team.Yakuza);
-                                        CheckNextCheckpoint();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                                    }
-                                }
-                            }
-                        }
-                        return;
-                    case "/лечить":
-                    case "/heal":
-                        {
-                            if (currentPlayer == null)
-                            {
-                                return;
-                            }
-                            if (currentPlayer.Role is Doctor && parts.Length > 1 && CurrentState == GameState.Night)
-                            {
-                                var doctor = (currentPlayer.Role as Doctor);
-                                var playerToHeal = GetPlayerInfo(parts[1]);
-                                if (playerToHeal != null && doctor.PlayerToHeal == null)
-                                {
-                                    try
-                                    {
-                                        doctor.PlayerToHeal = playerToHeal;
-                                        NightAction(currentPlayer.Role);
-                                        MessageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                        CheckNextCheckpoint();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                                    }
-                                }
-                            }
-                        }
-                        return;
-                    case "/оправдать":
-                    case "/justify":
-                        {
-                            if (currentPlayer == null)
-                            {
-                                return;
-                            }
-                            if (currentPlayer.Role is Judge && parts.Length > 1 && CurrentState == GameState.Day)
-                            {
-                                var judge = (currentPlayer.Role as Judge);
-                                var playerToJustify = GetPlayerInfo(parts[1]);
-                                if (playerToJustify != null && judge.PlayerToJustufy == null)
-                                {
-                                    try
-                                    {
-                                        judge.PlayerToJustufy = playerToJustify;
-                                        MessageBuilder.Text("Голос принят.").SendPrivate(currentPlayer);
-                                        CheckNextCheckpoint();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                                    }
-                                }
-                            }
-                        }
-                        return;
-                    case "/подорвать":
-                    case "/destroy":
-                        {
-                            if (currentPlayer == null)
-                            {
-                                return;
-                            }
-                            if (currentPlayer.Role is Demoman && parts.Length > 1 && CurrentState == GameState.Night)
-                            {
-                                var demoman = (currentPlayer.Role as Demoman);
-                                var placeToDestroy = GetPlaceInfo(parts[1]);
-                                if (placeToDestroy != null && demoman.PlaceToDestroy == null)
-                                {
-                                    try
-                                    {
-                                        demoman.PlaceToDestroy = placeToDestroy;
-                                        MessageBuilder.Text("Сегодня взорвем " + placeToDestroy.Name).SendPrivate(currentPlayer);
-                                        CheckNextCheckpoint();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                                    }
-                                }
-                            }
-                        }
-                        return;
-                    case "/пойти":
-                    case "/go":
-                        {
-                            if (currentPlayer == null)
-                            {
-                                return;
-                            }
-                            if (currentPlayer.Role.Team != Team.Mafia && parts.Length > 1 && CurrentState == GameState.Night)
-                            {
-                                var placeToGo = GetPlaceInfo(parts[1]);
-                                if (placeToGo != null)
-                                {
-                                    try
-                                    {
-                                        currentPlayer.PlaceToGo = placeToGo;
-                                        MessageBuilder.Text("Сегодня пойдем в " + placeToGo.Name).SendPrivate(currentPlayer);
-                                        CheckNextCheckpoint();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                                    }
-                                }
-                            }
-                        }
-                        return;
-                }
-            }
-            // Передача "командных" сообщений
-            if (currentPlayer?.Role != null)
-            {
-                if (currentPlayer.Role.Team == Team.Mafia || currentPlayer.Role.Team == Team.Yakuza)
-                {
-                    foreach (var player in PlayersList)
+                    if (currentPlayer.Role.Team == Team.Mafia || currentPlayer.Role.Team == Team.Yakuza)
                     {
-                        if (player.Role.Team == currentPlayer.Role.Team && !player.IsBot && player.User.Id != message.Author.Id)
+                        foreach (var player in PlayersList)
                         {
-                            MessageBuilder.Text($"{currentPlayer.GetName()}: {text}").SendPrivate(player);
+                            if (player.Role.Team == currentPlayer.Role.Team && !player.IsBot && player.User.Id != message.Author.Id)
+                            {
+                                MessageBuilder.Text($"{currentPlayer.GetName()}: {text}").SendPrivate(player);
+                            }
                         }
                     }
                 }
             }
         }
 
-        private void NightAction(BaseRole role)
+        internal void NightAction(BaseRole role)
         {
             if (Settings.ShowNightActions)
             {
@@ -635,18 +97,7 @@ namespace DiscordMafia
             }
         }
 
-        private void UnRegisterPlayer(UserWrapper player)
-        {
-            if (CurrentState == GameState.PlayerCollecting && CurrentPlayers.ContainsKey(player.Id))
-            {
-                var playerInfo = CurrentPlayers[player.Id];
-                CurrentPlayers.Remove(player.Id);
-                PlayersList.Remove(playerInfo);
-                MessageBuilder.Text(String.Format("{0} вышел из игры! ({1}) ", playerInfo.GetName(), CurrentPlayers.Count)).SendPublic(GameChannel);
-            }
-        }
-
-        private void DayVote(InGamePlayerInfo player, string voteForRequest)
+        internal void DayVote(InGamePlayerInfo player, InGamePlayerInfo choosenPlayer)
         {
             if (player == null)
             {
@@ -654,14 +105,13 @@ namespace DiscordMafia
             }
             if (CurrentState == GameState.Day)
             {
-                var voteFor = GetPlayerInfo(voteForRequest);
-                if (voteFor != null)
+                if (choosenPlayer != null)
                 {
                     try
                     {
-                        CurrentDayVote.Add(player, voteFor);
-                        var voteCount = CurrentDayVote.GetResult().VoteCountByPlayer[voteFor.User.Id];
-                        MessageBuilder.Text(String.Format("{0} голосует за {1} ({2})!", player.GetName(), voteFor.GetName(), voteCount)).SendPublic(GameChannel);
+                        CurrentDayVote.Add(player, choosenPlayer);
+                        var voteCount = CurrentDayVote.GetResult().VoteCountByPlayer[choosenPlayer.User.Id];
+                        MessageBuilder.Text(String.Format("{0} голосует за {1} ({2})!", player.GetName(), choosenPlayer.GetName(), voteCount)).SendPublic(GameChannel);
                     }
                     catch (ArgumentException)
                     {
@@ -671,7 +121,7 @@ namespace DiscordMafia
             }
         }
 
-        private void EveningVote(InGamePlayerInfo player, bool voteValue)
+        internal void EveningVote(InGamePlayerInfo player, bool voteValue)
         {
             if (player == null)
             {
@@ -688,14 +138,16 @@ namespace DiscordMafia
                         if (leader != player)
                         {
                             CurrentEveningVote.Add(player, voteValue);
-                            if (voteValue)
-                            {
-                                MessageBuilder.Text(String.Format("{0} уверен в виновности {1} ({2})!", player.GetName(), leader.GetName(), CurrentEveningVote.GetResult().YesCount)).SendPublic(GameChannel);
-                            }
-                            else
-                            {
-                                MessageBuilder.Text(String.Format("{0} требует оправдания {1} ({2})!", player.GetName(), leader.GetName(), CurrentEveningVote.GetResult().NoCount)).SendPublic(GameChannel);
-                            }
+                            MessageBuilder
+                                .PrepareTextReplacePlayer(
+                                    voteValue ? "EveningVote_Yes" : "EveningVote_No",
+                                    player,
+                                    additionalReplaceDictionary: new ReplaceDictionary {
+                                        ["toHang"] = Encode(leader.GetName()),
+                                        ["count"] = voteValue ? CurrentEveningVote.GetResult().YesCount : CurrentEveningVote.GetResult().NoCount
+                                    }
+                                )
+                                .SendPublic(GameChannel);
                         }
                         else
                         {
@@ -710,7 +162,7 @@ namespace DiscordMafia
             }
         }
 
-        private void NightVote(InGamePlayerInfo player, string voteForRequest)
+        internal void NightVote(InGamePlayerInfo player, InGamePlayerInfo choosenPlayer)
         {
             if (player == null)
             {
@@ -718,8 +170,7 @@ namespace DiscordMafia
             }
             if (CurrentState == GameState.Night)
             {
-                var voteFor = GetPlayerInfo(voteForRequest);
-                if (voteFor != null)
+                if (choosenPlayer != null)
                 {
                     if (player.Role is Mafioso)
                     {
@@ -729,9 +180,9 @@ namespace DiscordMafia
                             {
                                 NightAction(player.Role);
                             }
-                            CurrentMafiaVote.Add(player, voteFor);
-                            var voteCount = CurrentMafiaVote.GetResult().VoteCountByPlayer[voteFor.User.Id];
-                            var message = String.Format("{0} голосует за убийство {1} ({2})!", player.GetName(), voteFor.GetName(), voteCount);
+                            CurrentMafiaVote.Add(player, choosenPlayer);
+                            var voteCount = CurrentMafiaVote.GetResult().VoteCountByPlayer[choosenPlayer.User.Id];
+                            var message = String.Format("{0} голосует за убийство {1} ({2})!", player.GetName(), choosenPlayer.GetName(), voteCount);
                             MessageBuilder.Text(message).SendToTeam(Team.Mafia);
                         }
                         catch (ArgumentException)
@@ -747,9 +198,9 @@ namespace DiscordMafia
                             {
                                 NightAction(player.Role);
                             }
-                            CurrentYakuzaVote.Add(player, voteFor);
-                            var voteCount = CurrentYakuzaVote.GetResult().VoteCountByPlayer[voteFor.User.Id];
-                            var message = String.Format("{0} голосует за убийство {1} ({2})!", player.GetName(), voteFor.GetName(), voteCount);
+                            CurrentYakuzaVote.Add(player, choosenPlayer);
+                            var voteCount = CurrentYakuzaVote.GetResult().VoteCountByPlayer[choosenPlayer.User.Id];
+                            var message = String.Format("{0} голосует за убийство {1} ({2})!", player.GetName(), choosenPlayer.GetName(), voteCount);
                             MessageBuilder.Text(message).SendToTeam(Team.Yakuza);
                         }
                         catch (ArgumentException)
@@ -761,7 +212,7 @@ namespace DiscordMafia
             }
         }
 
-        private void StopGame()
+        internal void StopGame()
         {
             timer.Stop();
 
@@ -802,7 +253,7 @@ namespace DiscordMafia
              ), null);
         }
 
-        private void StopPlayerCollecting()
+        internal void StopPlayerCollecting()
         {
             if (PlayerCollectingRemainingTime > 1000)
             {
@@ -838,6 +289,15 @@ namespace DiscordMafia
                             yakuzaMessage += String.Format("{0} - {1} (`{2}`)", MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.Role.Name), player.GetName()) + Environment.NewLine;
                             break;
                     }
+                    if (player.Role is Sergeant)
+                    {
+                        var commissioner = (from p in PlayersList where p.Role is Commissioner select p).FirstOrDefault();
+                        if (commissioner != null)
+                        {
+                            MessageBuilder.PrepareTextReplacePlayer("CheckStatus", commissioner).SendPrivate(player);
+                            MessageBuilder.PrepareTextReplacePlayer("CheckStatus", player).SendPrivate(commissioner);
+                        }
+                    }
                 }
                 mafiaMessage += "Можете обсуждать свои действия в личных сообщениях или через бота.";
                 yakuzaMessage += "Можете обсуждать свои действия в личных сообщениях или через бота.";
@@ -864,7 +324,7 @@ namespace DiscordMafia
             }
         }
 
-        protected void CheckNextCheckpoint()
+        internal void CheckNextCheckpoint()
         {
             if (CurrentState == GameState.Day || CurrentState == GameState.Evening || CurrentState == GameState.Night)
             {
@@ -909,9 +369,9 @@ namespace DiscordMafia
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected InGamePlayerInfo GetPlayerInfo(string request, bool onlyAlive = true)
+        internal InGamePlayerInfo GetPlayerInfo(int playerNum, bool onlyAlive = true)
         {
-            if (int.TryParse(request, out int playerNum) && playerNum > 0 && playerNum <= PlayersList.Count)
+            if (playerNum > 0 && playerNum <= PlayersList.Count)
             {
                 var player = PlayersList[playerNum - 1];
                 if (!onlyAlive || player.IsAlive)
@@ -927,9 +387,9 @@ namespace DiscordMafia
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected Place GetPlaceInfo(string request)
+        internal Place GetPlaceInfo(int placeNum)
         {
-            if (int.TryParse(request, out int placeNum) && placeNum >= 0 && placeNum < Place.AvailablePlaces.Length)
+            if (placeNum >= 0 && placeNum < Place.AvailablePlaces.Length)
             {
                 return Place.AvailablePlaces[placeNum];
             }
@@ -941,7 +401,7 @@ namespace DiscordMafia
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected BaseItem GetItemInfo(string request)
+        internal BaseItem GetItemInfo(string request)
         {
             if (int.TryParse(request, out int itemNum) && itemNum > 0 && itemNum <= BaseItem.AvailableItems.Length)
             {
@@ -951,12 +411,12 @@ namespace DiscordMafia
         }
 
         /// <summary>
-        /// Возвращает игрока по его ID Telegram
+        /// Возвращает игрока по его ID Discord
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="onlyAlive"></param>
         /// <returns></returns>
-        protected InGamePlayerInfo GetPlayerInfo(ulong userId, bool onlyAlive = true)
+        internal InGamePlayerInfo GetPlayerInfo(ulong userId, bool onlyAlive = true)
         {
             if (CurrentPlayers.ContainsKey(userId))
             {
@@ -1043,7 +503,7 @@ namespace DiscordMafia
             var dayVoteResult = CurrentDayVote?.GetResult();
             if (dayVoteResult != null && dayVoteResult.HasOneLeader)
             {
-                MessageBuilder.PrepareText("EveningVoteInfo").SendPublic(GameChannel);
+                MessageBuilder.PrepareTextReplacePlayer("EveningVoteInfo", CurrentPlayers[dayVoteResult.Leader.Value]).SendPublic(GameChannel);
                 timer.Interval = Settings.EveningTime;
                 foreach (var player in PlayersList)
                 {
@@ -1320,8 +780,7 @@ namespace DiscordMafia
                     var role = player.Role as Homeless;
                     if (role.PlayerToCheck != null)
                     {
-                        var message = String.Format("Статус {0} - {1}", MessageBuilder.FormatName(role.PlayerToCheck), MessageBuilder.FormatRole(role.PlayerToCheck.Role.Name));
-                        MessageBuilder.Text(message, false).SendPrivate(player);
+                        MessageBuilder.PrepareTextReplacePlayer("CheckStatus", role.PlayerToCheck).SendPrivate(player);
                         MessageBuilder.PrepareTextReplacePlayer("HomelessCheck", role.PlayerToCheck).SendPublic(GameChannel);
                         if (role.PlayerToCheck.Role.Team == Team.Mafia || role.PlayerToCheck.Role.Team == Team.Yakuza)
                         {
@@ -1332,14 +791,18 @@ namespace DiscordMafia
                 }
                 #endregion
 
-                #region Комиссар
+                #region Комиссар и сержант
                 if (player.Role is Commissioner)
                 {
                     var role = player.Role as Commissioner;
                     if (role.PlayerToCheck != null)
                     {
-                        var message = String.Format("Статус {0} - {1}", MessageBuilder.FormatName(role.PlayerToCheck), MessageBuilder.FormatRole(role.PlayerToCheck.Role.Name));
-                        MessageBuilder.Text(message, false).SendPrivate(player);
+                        MessageBuilder.PrepareTextReplacePlayer("CheckStatus", role.PlayerToCheck).SendPrivate(player);
+                        var sergeant = (from p in PlayersList where (p.Role is Sergeant && p.IsAlive) select p).FirstOrDefault();
+                        if (sergeant != null)
+                        {
+                            MessageBuilder.PrepareTextReplacePlayer("CheckStatus", role.PlayerToCheck).SendPrivate(sergeant);
+                        }
                         switch (role.PlayerToCheck.Role.Team)
                         {
                             case Team.Civil:
@@ -1508,7 +971,7 @@ namespace DiscordMafia
                     var role = player.Role as Lawyer;
                     if (role.PlayerToCheck != null)
                     {
-                        MessageBuilder.PrepareTextReplacePlayer("LawyerCheck", role.PlayerToCheck).SendToTeam(Team.Mafia);
+                        MessageBuilder.PrepareTextReplacePlayer("CheckStatus", role.PlayerToCheck).SendToTeam(Team.Mafia);
                         if (role.PlayerToCheck.Role is Commissioner)
                         {
                             player.AddPoints("LawyerCheckCom");

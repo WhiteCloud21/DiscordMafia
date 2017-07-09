@@ -42,7 +42,7 @@ namespace DiscordMafia.Roles
                     {
                         return false;
                     }
-                    return false;
+                    return true;
                 default:
                     return false;
             }

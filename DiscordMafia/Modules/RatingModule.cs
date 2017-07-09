@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -9,8 +10,8 @@ using Microsoft.Data.Sqlite;
 
 namespace DiscordMafia.Modules
 {
-    [Group("top"), Alias("топ")]
-    public class RatingModule : ModuleBase
+    [Group("top"), Alias("топ"), Summary("Команды рейтинга")]
+    public class RatingModule : BaseModule
     {
         private const int PerPage = 20;
 
@@ -31,7 +32,7 @@ namespace DiscordMafia.Modules
             _connection = connection;
         }
 
-        [Command, Priority(-100)]
+        [Command, Priority(-100), Summary("Топ по умолчанию (может меняться)")]
         public async Task Default([Summary("Страница топа")] int page = 1)
         {
             await DrawTop(PointsField, page);
@@ -43,7 +44,7 @@ namespace DiscordMafia.Modules
             await DrawTop(PointsField, page);
         }
 
-        [Command("rate"), Summary("Топ по рейтингу"), Alias("рейтинга", "рейтинг", "рейтинги"), Priority(100)]
+        [Command("rate"), Summary("Топ по рейтингу"), Alias("rating", "рейтинга", "рейтинг", "рейтинги"), Priority(100)]
         public async Task RateTop([Summary("Страница топа")] int page = 1)
         {
             await DrawTop(RateField, page);
@@ -103,8 +104,7 @@ namespace DiscordMafia.Modules
             string title = $"Лучшие игроки по {name} (страница {page}/{maxPage})";
             builder.WithTitle(title);
 
-            var positions = "";
-            var points = "";
+            StringBuilder rating = new StringBuilder();
             var index = (page - 1) * PerPage;
 
             var reader = command.ExecuteReader();
@@ -117,22 +117,18 @@ namespace DiscordMafia.Modules
                 {
                     Username = '(' + Id.ToString() + ')';
                 }
-                positions += '`' + index.ToString().PadLeft(width, '0') + ". " + MessageBuilder.Encode(Username) + '`' + Environment.NewLine;
+
+                string point = "";
                 switch (field)
                 {
-                    case PointsField: points += "`  " + reader.GetInt64(2) + '`' + Environment.NewLine; break;
-                    case RateField: points += "`  " + reader.GetDouble(2).ToString("0.00") + '`' + Environment.NewLine; break;
-                    case GamesField: points += "`  " + reader.GetInt32(2) + '`' + Environment.NewLine; break;
-                    case SurvivabilityField: points += "`  " + reader.GetDouble(2).ToString("0.00") + '`' + Environment.NewLine; break;
+                    case PointsField: point = reader.GetInt64(2).ToString(); break;
+                    case RateField: point = reader.GetDouble(2).ToString("0.00"); break;
+                    case GamesField: point = reader.GetInt32(2).ToString(); break;
+                    case SurvivabilityField: point = reader.GetDouble(2).ToString("0.00"); break;
                 }
+                rating.AppendFormat("`{0}. {1} - {2}`", index.ToString().PadLeft(width, '0'), LimitLength(MessageBuilder.Encode(Username), 27), point);
+                rating.AppendLine();
             }
-
-            builder.AddField(x =>
-                {
-                    x.Name = "".PadLeft(width, '#') + ". Игрок";
-                    x.Value = positions;
-                    x.IsInline = true;
-                });
 
             string rateName = "";
             switch (field)
@@ -142,14 +138,20 @@ namespace DiscordMafia.Modules
                 case RateField: rateName = "Рейтинг"; break;
                 case GamesField: rateName = "Игр"; break;
             }
-            
+
             builder.AddField(x =>
                 {
-                    x.Name = rateName;
-                    x.Value = points;
+                    x.Name = "".PadLeft(width, '#') + ". Игрок - " + rateName;
+                    x.Value = rating.ToString();
                     x.IsInline = true;
                 });
             await ReplyAsync("", embed: builder.Build());
+        }
+
+        private string LimitLength(string value, int length)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+            return value.Length <= length ? value.PadRight(length) + ' ' : value.Substring(0, length) + '…';
         }
     }
 }

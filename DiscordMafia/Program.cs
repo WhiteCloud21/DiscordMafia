@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using Discord;
-using System.Threading;
 using DiscordMafia.Config;
 using System;
 using System.Reflection;
@@ -37,19 +36,6 @@ namespace DiscordMafia
             connection.Open();
             Migrate(connection);
 
-            //            SynchronizationContext.SetSynchronizationContext(SyncContext);
-            //            SyncContext.Post(obj => Run(), null);
-            //            try
-            //            {
-            //                SyncContext.RunMessagePump();
-            //            }
-            //            catch (Exception ex)
-            //            {
-            //                var message = $"[{DateTime.Now:s}] {ex}";
-            //                Console.Error.WriteLine(message);
-            //                System.IO.File.AppendAllText("error.log", message);
-            //            }
-
             client = new DiscordSocketClient();
             client.Log += Log;
 
@@ -61,6 +47,7 @@ namespace DiscordMafia
             serviceCollection.AddSingleton(client);
             serviceCollection.AddSingleton(connection);
             serviceCollection.AddSingleton(settings);
+            serviceCollection.AddSingleton(commands);
             serviceCollection.AddSingleton(_game);
 
             Connection = connection;
@@ -70,31 +57,28 @@ namespace DiscordMafia
 
             await InstallCommands();
 
-            client.MessageReceived += message =>
-            {
-                return Task.Run(() =>
-                {
-                    SyncContext.Post(state =>
-                    {
-                        if (message.Author.Id != client.CurrentUser.Id)
-                        {
-                            ProcessMessage(message);
-                        }
-                    }, null);
-                });
-            };
-
             await client.LoginAsync(TokenType.Bot, Settings.Token);
             await client.StartAsync();
-            //await client.SetGameAsync(null);
+            await client.SetGameAsync(null);
 
-            SyncContext.RunMessagePump();
+            try
+            {
+                SyncContext.RunMessagePump();
+            }
+            catch (Exception ex)
+            {
+                var message = $"[{DateTime.Now:s}] {ex}";
+                Console.Error.WriteLine(message);
+                System.IO.File.AppendAllText("error.log", message);
+            }
 
-            await Task.Delay(-1);
+            await Task.CompletedTask;
         }
 
         public async Task InstallCommands()
         {
+            commands.AddTypeReader<InGamePlayerInfo>(new TypeReaders.InGamePlayerInfoTypeReader());
+
             // Hook the MessageReceived Event into our Command Handler
             client.MessageReceived += HandleCommand;
             // Discover all of the commands in this assembly and load them.
@@ -108,18 +92,30 @@ namespace DiscordMafia
             if (message == null) return;
             // Create a number to track where the prefix ends and the command begins
             int argPos = 0;
-            // Determine if the message is a command, based on if it starts with '!' or a mention prefix
+            // Determine if the message is a command, based on if it starts with '/' or a mention prefix
             if (!(message.HasCharPrefix('/', ref argPos) ||
                   message.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
-            // Create a Command Context
-            var context = new CommandContext(client, message);
-            // Execute the command. (result does not indicate a return value, 
-            // rather an object stating if the command executed successfully)
-            var result = await commands.ExecuteAsync(context, argPos, services, MultiMatchHandling.Best);
-            if (!result.IsSuccess) {
-                //ProcessMessage(messageParam);
-            }
-            //    await context.Channel.SendMessageAsync(result.ErrorReason);
+
+            await Task.Run(() =>
+            {
+                SyncContext.Post(state =>
+                {
+                    // Create a Command Context
+                    var context = new CommandContext(client, message);
+                    // Execute the command. (result does not indicate a return value, 
+                    // rather an object stating if the command executed successfully)
+                    var result = commands.ExecuteAsync(context, argPos, services, MultiMatchHandling.Best);
+                    // if (!result.IsSuccess)
+                    // {
+                    //     await context.Channel.SendMessageAsync(result.ErrorReason);
+                    // }
+                    result.Wait();
+                    if (result.Status != TaskStatus.RanToCompletion && message.Author.Id != client.CurrentUser.Id)
+                    {
+                        ProcessMessage(message);
+                    }
+                }, null);
+            });
         }
 
         private static Task Log(LogMessage msg)
@@ -139,13 +135,9 @@ namespace DiscordMafia
 
         private static void ProcessMessage(SocketMessage message)
         {
-            if (message.Channel is SocketDMChannel)
+            if (message.Channel is IDMChannel)
             {
                 _game.OnPrivateMessage(message);
-            }
-            else
-            {
-                _game.OnPublicMessage(message);
             }
         }
     }
