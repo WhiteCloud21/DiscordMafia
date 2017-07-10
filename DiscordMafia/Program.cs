@@ -94,7 +94,14 @@ namespace DiscordMafia
             int argPos = 0;
             // Determine if the message is a command, based on if it starts with '/' or a mention prefix
             if (!(message.HasCharPrefix('/', ref argPos) ||
-                  message.HasMentionPrefix(client.CurrentUser, ref argPos))) return;
+                  message.HasMentionPrefix(client.CurrentUser, ref argPos)))
+            {
+                if (message.Author.Id != client.CurrentUser.Id)
+                {
+                    ProcessMessage(message);
+                }
+                return;
+            }
 
             await Task.Run(() =>
             {
@@ -110,10 +117,6 @@ namespace DiscordMafia
                     //     await context.Channel.SendMessageAsync(result.ErrorReason);
                     // }
                     result.Wait();
-                    if (result.Status != TaskStatus.RanToCompletion && message.Author.Id != client.CurrentUser.Id)
-                    {
-                        ProcessMessage(message);
-                    }
                 }, null);
             });
         }

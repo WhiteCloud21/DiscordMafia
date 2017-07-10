@@ -216,7 +216,7 @@ namespace DiscordMafia
         {
             timer.Stop();
 
-            AchievementAssigner.afterGame();
+            AchievementAssigner.AfterGame();
             AchievementManager.Apply();
 
             CurrentPlayers.Clear();

@@ -11,7 +11,7 @@
             _manager = game.AchievementManager;
         }
 
-        public void afterGame()
+        public void AfterGame()
         {
             foreach (var player in _game.PlayersList)
             {
