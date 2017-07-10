@@ -26,7 +26,7 @@ namespace DiscordMafia
         public GameState CurrentState { get; internal set; }
         public Dictionary<ulong, InGamePlayerInfo> CurrentPlayers { get; protected set; }
         public List<InGamePlayerInfo> PlayersList { get; protected set; }
-        public ulong GameChannel { get; protected set; }
+        public SocketTextChannel GameChannel { get; protected set; }
         protected RoleAssigner RoleAssigner { get; private set; }
         protected Vote CurrentDayVote { get; set; }
         protected BooleanVote CurrentEveningVote { get; set; }
@@ -39,9 +39,9 @@ namespace DiscordMafia
         public Achievement.AchievementAssigner AchievementAssigner { get; private set; }
         internal int PlayerCollectingRemainingTime = 0;
 
-        public Game(System.Threading.SynchronizationContext syncContext, DiscordSocketClient client, Config.MainSettings mainSettings)
+        public Game( System.Threading.SynchronizationContext syncContext, DiscordSocketClient client, Config.MainSettings mainSettings)
         {
-            GameChannel = mainSettings.GameChannel;
+            GameChannel = client.GetChannel(mainSettings.GameChannel) as SocketTextChannel;
             AchievementManager = new Achievement.AchievementManager(this);
             AchievementAssigner = new Achievement.AchievementAssigner(this);
 
@@ -219,6 +219,7 @@ namespace DiscordMafia
             AchievementAssigner.AfterGame();
             AchievementManager.Apply();
 
+            KillManager.Clear();
             CurrentPlayers.Clear();
             PlayersList.Clear();
             CurrentState = GameState.Stopped;

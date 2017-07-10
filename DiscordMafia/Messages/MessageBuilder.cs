@@ -135,15 +135,6 @@ namespace DiscordMafia.Config
             return PrivateChannels[user.Id];
         }
 
-        protected ISocketMessageChannel GetChannel(ulong channelId)
-        {
-            if (!Channels.ContainsKey(channelId))
-            {
-                Channels.Add(channelId, Client.GetChannel(channelId) as ISocketMessageChannel);
-            }
-            return Channels[channelId];
-        }
-
         public IMessage[] SendPublic(IMessageChannel channel, bool clear = true, bool tts = false)
         {
             IMessage[] messages = null;
@@ -157,11 +148,6 @@ namespace DiscordMafia.Config
                 Clear();
             }
             return messages;
-        }
-
-        public IMessage[] SendPublic(ulong chatId, bool clear = true, bool tts = false)
-        {
-            return SendPublic(GetChannel(chatId), clear, tts);
         }
 
         public void SendToTeam(DiscordMafia.Roles.Team team, bool clear = true)

@@ -36,30 +36,36 @@ namespace DiscordMafia
             connection.Open();
             Migrate(connection);
 
-            client = new DiscordSocketClient();
-            client.Log += Log;
-
-            _game = new Game(SyncContext, client, settings);
-
-            commands = new CommandService();
-
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton(client);
-            serviceCollection.AddSingleton(connection);
-            serviceCollection.AddSingleton(settings);
-            serviceCollection.AddSingleton(commands);
-            serviceCollection.AddSingleton(_game);
-
             Connection = connection;
             Settings = settings;
 
-            services = serviceCollection.BuildServiceProvider();
+            client = new DiscordSocketClient();
+            client.Log += Log;
 
-            await InstallCommands();
+            Func<Task> clientReadyHandler = null;
+            client.Ready += clientReadyHandler = async () =>
+            {
+                _game = new Game(SyncContext, client, settings);
+
+                commands = new CommandService();
+
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddSingleton(client);
+                serviceCollection.AddSingleton(connection);
+                serviceCollection.AddSingleton(settings);
+                serviceCollection.AddSingleton(commands);
+                serviceCollection.AddSingleton(_game);
+
+                services = serviceCollection.BuildServiceProvider();
+
+                await InstallCommands();
+
+                await client.SetGameAsync(null);
+                client.Ready -= clientReadyHandler;
+            };
 
             await client.LoginAsync(TokenType.Bot, Settings.Token);
             await client.StartAsync();
-            await client.SetGameAsync(null);
 
             try
             {

@@ -18,6 +18,7 @@ namespace DiscordMafia.Config
         public short MafPercent { get; protected set; }
         public short InfectionChancePercent { get; protected set; }
 
+        public bool MuteOnDeath { get; protected set; }
         public bool StartFromNight { get; protected set; }
         public bool ShowNightActions { get; protected set; }
         public bool IsYakuzaEnabled { get; protected set; }
@@ -44,6 +45,7 @@ namespace DiscordMafia.Config
                 { Team.Neutral, 1 },
                 { Team.Yakuza, 1 },
             };
+            MuteOnDeath = true;
             MinPlayers = 3;
             MafPercent = 34;
             StartFromNight = true;
@@ -117,6 +119,9 @@ namespace DiscordMafia.Config
                     // TODO Сделать нормальный парсер (на атрибутах свойств?)
                     switch (name)
                     {
+                        case "MuteOnDeath":
+                            MuteOnDeath = bool.Parse(reader.ReadElementContentAsString());
+                            break;
                         case "StartFromNight":
                             StartFromNight = bool.Parse(reader.ReadElementContentAsString());
                             break;
