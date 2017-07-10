@@ -18,7 +18,8 @@ namespace DiscordMafia.Modules
         private const string PointsField = "total_points as _data";
         private const string RateField = "rate as _data";
         private const string GamesField = "games as _data";
-        private const string SurvivabilityField = "(case when games > 0 then (100.0 * survivals / games) else 0.0 end) as _data";
+        private const string SurvivabilityField = "(case when games >= 25 then (100.0 * survivals / games) else NULL end) as _data";
+        private const string WinsField = "(case when games >= 25 then (100.0 * wins / games) else NULL end) as _data";
 
         private Game _game;
         private MainSettings _settings;
@@ -62,6 +63,12 @@ namespace DiscordMafia.Modules
             await DrawTop(SurvivabilityField, page);
         }
 
+        [Command("wins"), Summary("Топ по победам"), Alias("побед", "победителей"), Priority(100)]
+        public async Task WinsTop([Summary("Страница топа")] int page = 1)
+        {
+            await DrawTop(WinsField, page);
+        }
+
         private int GetPlayerCount()
         {
             var command = _connection.CreateCommand();
@@ -78,6 +85,7 @@ namespace DiscordMafia.Modules
             {
                 default: field = PointsField; name = "очкам"; break;
                 case SurvivabilityField: name = "выживаемости"; break;
+                case WinsField: name = "победам"; break;
                 case PointsField: name = "очкам"; break;
                 case RateField: name = "рейтингу"; break;
                 case GamesField: name = "играм"; break;
@@ -124,7 +132,10 @@ namespace DiscordMafia.Modules
                     case PointsField: point = reader.GetInt64(2).ToString(); break;
                     case RateField: point = reader.GetDouble(2).ToString("0.00"); break;
                     case GamesField: point = reader.GetInt32(2).ToString(); break;
-                    case SurvivabilityField: point = reader.GetDouble(2).ToString("0.00"); break;
+                    case SurvivabilityField:
+                    case WinsField:
+                        point = reader.IsDBNull(2) ? "Н/Д" : reader.GetDouble(2).ToString("0.00");
+                        break;
                 }
                 rating.AppendFormat("`{0}. {1} - {2}`", index.ToString().PadLeft(width, '0'), LimitLength(MessageBuilder.Encode(Username), 27), point);
                 rating.AppendLine();
@@ -134,6 +145,7 @@ namespace DiscordMafia.Modules
             switch (field)
             {
                 case SurvivabilityField: rateName = "% выживания"; break;
+                case WinsField: rateName = "% побед"; break;
                 case PointsField: rateName = "Очки"; break;
                 case RateField: rateName = "Рейтинг"; break;
                 case GamesField: rateName = "Игр"; break;
