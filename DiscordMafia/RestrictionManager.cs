@@ -23,7 +23,16 @@ namespace DiscordMafia
             {
                 return;
             }
-            Channel.AddPermissionOverwriteAsync(player.User.DiscordUser, new Discord.OverwritePermissions(sendMessages: Discord.PermValue.Deny));
+            var permissions = Channel.GetPermissionOverwrite(player.User.DiscordUser);
+            if (permissions.HasValue)
+            {
+                permissions.Value.Modify(sendMessages: Discord.PermValue.Deny);
+            }
+            else
+            {
+                permissions = new Discord.OverwritePermissions(sendMessages: Discord.PermValue.Deny);
+            }
+            Channel.AddPermissionOverwriteAsync(player.User.DiscordUser, permissions.Value);
         }
 
         public void UnbanPlayer(InGamePlayerInfo player)
@@ -32,7 +41,19 @@ namespace DiscordMafia
             {
                 return;
             }
-            Channel.RemovePermissionOverwriteAsync(player.User.DiscordUser);
+            var permissions = Channel.GetPermissionOverwrite(player.User.DiscordUser);
+            if (permissions.HasValue && permissions.Value.SendMessages == Discord.PermValue.Deny)
+            {
+                if (permissions.Value.ToDenyList().Count == 1)
+                {
+                    Channel.RemovePermissionOverwriteAsync(player.User.DiscordUser);
+                }
+                else
+                {
+                    permissions.Value.Modify(sendMessages: Discord.PermValue.Inherit);
+                    Channel.AddPermissionOverwriteAsync(player.User.DiscordUser, permissions.Value);
+                }
+            }
         }
 
         public void UnbanAll()
@@ -45,12 +66,17 @@ namespace DiscordMafia
             {
                 if (permissionOverwrite.TargetType == Discord.PermissionTarget.User && permissionOverwrite.Permissions.SendMessages == Discord.PermValue.Deny)
                 {
-                    if (permissionOverwrite.Permissions.ToDenyList().Count == 1)
+                    var user = Channel.GetUser(permissionOverwrite.TargetId);
+                    if (user != null)
                     {
-                        var user = Channel.GetUser(permissionOverwrite.TargetId);
-                        if (user != null)
+                        if (permissionOverwrite.Permissions.ToDenyList().Count == 1)
                         {
                             Channel.RemovePermissionOverwriteAsync(user);
+                        }
+                        else
+                        {
+                            permissionOverwrite.Permissions.Modify(sendMessages: Discord.PermValue.Inherit);
+                            Channel.AddPermissionOverwriteAsync(user, permissionOverwrite.Permissions);
                         }
                     }
                 }
