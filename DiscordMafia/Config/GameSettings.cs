@@ -45,7 +45,7 @@ namespace DiscordMafia.Config
                 { Team.Neutral, 1 },
                 { Team.Yakuza, 1 },
             };
-            MuteOnDeath = true;
+            MuteOnDeath = false;
             MinPlayers = 3;
             MafPercent = 34;
             StartFromNight = true;
