@@ -46,12 +46,12 @@ namespace DiscordMafia
             {
                 if (permissions.Value.ToDenyList().Count == 1)
                 {
-                    Channel.RemovePermissionOverwriteAsync(player.User.DiscordUser);
+                    Channel.RemovePermissionOverwriteAsync(player.User.DiscordUser).Wait();
                 }
                 else
                 {
                     var newPermissions = permissions.Value.Modify(sendMessages: Discord.PermValue.Inherit);
-                    Channel.AddPermissionOverwriteAsync(player.User.DiscordUser, newPermissions);
+                    Channel.AddPermissionOverwriteAsync(player.User.DiscordUser, newPermissions).Wait();
                 }
             }
         }
@@ -71,12 +71,12 @@ namespace DiscordMafia
                     {
                         if (permissionOverwrite.Permissions.ToDenyList().Count == 1)
                         {
-                            Channel.RemovePermissionOverwriteAsync(user);
+                            Channel.RemovePermissionOverwriteAsync(user).Wait();
                         }
                         else
                         {
                             var newPermissions = permissionOverwrite.Permissions.Modify(sendMessages: Discord.PermValue.Inherit);
-                            Channel.AddPermissionOverwriteAsync(user, newPermissions);
+                            Channel.AddPermissionOverwriteAsync(user, newPermissions).Wait();
                         }
                     }
                 }
