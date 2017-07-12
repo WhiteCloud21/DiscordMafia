@@ -26,13 +26,13 @@ namespace DiscordMafia
             var permissions = Channel.GetPermissionOverwrite(player.User.DiscordUser);
             if (permissions.HasValue)
             {
-                permissions.Value.Modify(sendMessages: Discord.PermValue.Deny);
+                permissions = permissions.Value.Modify(sendMessages: Discord.PermValue.Deny);
             }
             else
             {
                 permissions = new Discord.OverwritePermissions(sendMessages: Discord.PermValue.Deny);
             }
-            Channel.AddPermissionOverwriteAsync(player.User.DiscordUser, permissions.Value);
+            Channel.AddPermissionOverwriteAsync(player.User.DiscordUser, permissions.Value).Wait();
         }
 
         public void UnbanPlayer(InGamePlayerInfo player)
@@ -50,8 +50,8 @@ namespace DiscordMafia
                 }
                 else
                 {
-                    permissions.Value.Modify(sendMessages: Discord.PermValue.Inherit);
-                    Channel.AddPermissionOverwriteAsync(player.User.DiscordUser, permissions.Value);
+                    var newPermissions = permissions.Value.Modify(sendMessages: Discord.PermValue.Inherit);
+                    Channel.AddPermissionOverwriteAsync(player.User.DiscordUser, newPermissions);
                 }
             }
         }
@@ -75,8 +75,8 @@ namespace DiscordMafia
                         }
                         else
                         {
-                            permissionOverwrite.Permissions.Modify(sendMessages: Discord.PermValue.Inherit);
-                            Channel.AddPermissionOverwriteAsync(user, permissionOverwrite.Permissions);
+                            var newPermissions = permissionOverwrite.Permissions.Modify(sendMessages: Discord.PermValue.Inherit);
+                            Channel.AddPermissionOverwriteAsync(user, newPermissions);
                         }
                     }
                 }
