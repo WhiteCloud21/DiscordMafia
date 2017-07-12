@@ -80,6 +80,7 @@ namespace DiscordMafia.DB
 
         protected User PopulateRecord(DbDataReader reader)
         {
+            Settings = new UserSettings();
             if (reader.Read())
             {
                 Id = ulong.Parse(reader.GetValue(0).ToString());
