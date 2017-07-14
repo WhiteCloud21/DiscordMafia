@@ -146,11 +146,11 @@ namespace DiscordMafia.Modules
                     {
                         var elder = (currentPlayer.Role as Elder);
                         var playerToKill = player;
-                        if (playerToKill != null && elder.PlayerToKill == null)
+                        if (playerToKill != null && elder.PlayerToInteract == null)
                         {
                             try
                             {
-                                elder.PlayerToKill = playerToKill;
+                                elder.PlayerToInteract = playerToKill;
                                 await ReplyAsync("Голос принят.");
                                 _game.CheckNextCheckpoint();
                             }
@@ -271,44 +271,28 @@ namespace DiscordMafia.Modules
             {
                 if (currentPlayer.Role is Highlander)
                 {
-                    var highlander = (currentPlayer.Role as Highlander);
-                    if (player != null && highlander.PlayerToKill == null)
-                    {
-                        try
-                        {
-                            highlander.PlayerToKill = player;
-                            _game.NightAction(currentPlayer.Role);
-                            await ReplyAsync("Голос принят.");
-                            _game.CheckNextCheckpoint();
-                        }
-                        catch (Exception ex)
-                        {
-                            _game.MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
-                        }
-                    }
+                    (currentPlayer.Role as Highlander).PerformNightAction(player);
                     return;
                 }
                 if (currentPlayer.Role is Sheriff)
                 {
-                    var sheriff = (currentPlayer.Role as Sheriff);
-                    if (player != null && sheriff.PlayerToKill == null)
-                    {
-                        sheriff.PlayerToKill = player;
-                        _game.NightAction(currentPlayer.Role);
-                        await ReplyAsync("Голос принят.");
-                        _game.CheckNextCheckpoint();
-                    }
+                    (currentPlayer.Role as Sheriff).PerformNightAction(player);
+                    return;
+                }
+                if (currentPlayer.Role is Prosecutor)
+                {
+                    (currentPlayer.Role as Prosecutor).PerformNightAction(player);
                     return;
                 }
                 if (currentPlayer.Role is Killer)
                 {
                     var killer = (currentPlayer.Role as Killer);
-                    if (player != null && killer.PlayerToKill == null)
+                    if (player != null && killer.PlayerToInteract == null)
                     {
-                        killer.PlayerToKill = player;
+                        killer.PlayerToInteract = player;
                         _game.NightAction(currentPlayer.Role);
                         _game.MessageBuilder.
-                            PrepareTextReplacePlayer("NightAction_Killer_ToTeam", currentPlayer, additionalReplaceDictionary: new ReplaceDictionary { ["toKill"] = killer.PlayerToKill.GetName() }).
+                            PrepareTextReplacePlayer("NightAction_Killer_ToTeam", currentPlayer, additionalReplaceDictionary: new ReplaceDictionary { ["toKill"] = killer.PlayerToInteract.GetName() }).
                             SendToTeam(Team.Mafia);
                         _game.CheckNextCheckpoint();
                     }
@@ -316,14 +300,7 @@ namespace DiscordMafia.Modules
                 }
                 if (currentPlayer.Role is NeutralKiller)
                 {
-                    var maniac = (currentPlayer.Role as NeutralKiller);
-                    if (player != null && maniac.PlayerToKill == null)
-                    {
-                        maniac.PlayerToKill = player;
-                        _game.NightAction(currentPlayer.Role);
-                        await ReplyAsync("Голос принят.");
-                        _game.CheckNextCheckpoint();
-                    }
+                    (currentPlayer.Role as NeutralKiller).PerformNightAction(player);
                     return;
                 }
                 _game.NightVote(currentPlayer, player);
@@ -337,61 +314,47 @@ namespace DiscordMafia.Modules
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
-                var warlock = (currentPlayer.Role as Warlock);
-                if (player != null && warlock.PlayerToCurse == null)
-                {
-                    try
-                    {
-                        warlock.PlayerToCurse = player;
-                        _game.NightAction(currentPlayer.Role);
-                        await ReplyAsync("Голос принят.");
-                        _game.CheckNextCheckpoint();
-                    }
-                    catch (Exception ex)
-                    {
-                        _game.MessageBuilder.Text(ex.Message, false).SendPrivate(currentPlayer);
-                    }
-                }
+                (currentPlayer.Role as Warlock).PerformNightAction(player);
             }
             await Task.CompletedTask;
         }
 
-        [Command("check"), Summary("Проверить игрока."), Alias("пров", "проверить"), RequireContext(ContextType.DM), RequirePlayer(typeof(Commissioner), typeof(Homeless), typeof(Lawyer)), RequireGameState(GameState.Night)]
+        [Command("hack"), Summary("Хакнуть компьютер игрока."), Alias("хакнуть"), RequireContext(ContextType.DM), RequirePlayer(typeof(Hacker)), RequireGameState(GameState.Night)]
+        public async Task HackPlayer([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
+        {
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
+            {
+                (currentPlayer.Role as Hacker).PerformNightAction(player);
+            }
+            await Task.CompletedTask;
+        }
+
+        [Command("check"), Summary("Проверить игрока."), Alias("пров", "проверить"), RequireContext(ContextType.DM), RequirePlayer(typeof(Commissioner), typeof(Homeless), typeof(Lawyer), typeof(Spy)), RequireGameState(GameState.Night)]
         public async Task CheckPlayer([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 if (currentPlayer.Role is Commissioner)
                 {
-                    var commissioner = (currentPlayer.Role as Commissioner);
-                    if (player != null && commissioner.PlayerToCheck == null)
-                    {
-                        commissioner.PlayerToCheck = player;
-                        _game.NightAction(currentPlayer.Role);
-                        await ReplyAsync("Голос принят.");
-                        _game.CheckNextCheckpoint();
-                    }
+                    (currentPlayer.Role as Commissioner).PerformNightAction(player);
                 }
                 else if (currentPlayer.Role is Homeless)
                 {
-                    var homeless = (currentPlayer.Role as Homeless);
-                    if (player != null && homeless.PlayerToCheck == null)
-                    {
-                        homeless.PlayerToCheck = player;
-                        _game.NightAction(currentPlayer.Role);
-                        await ReplyAsync("Голос принят.");
-                        _game.CheckNextCheckpoint();
-                    }
+                    (currentPlayer.Role as Homeless).PerformNightAction(player);
+                }
+                else if (currentPlayer.Role is Spy)
+                {
+                    (currentPlayer.Role as Spy).PerformNightAction(player);
                 }
                 else if (currentPlayer.Role is Lawyer)
                 {
                     var lawyer = (currentPlayer.Role as Lawyer);
-                    if (player != null && lawyer.PlayerToCheck == null)
+                    if (player != null && lawyer.PlayerToInteract == null)
                     {
-                        lawyer.PlayerToCheck = player;
+                        lawyer.PlayerToInteract = player;
                         _game.NightAction(currentPlayer.Role);
                         _game.MessageBuilder.
-                            PrepareTextReplacePlayer("NightAction_Lawyer_ToTeam", currentPlayer, additionalReplaceDictionary: new ReplaceDictionary { ["toCheck"] = lawyer.PlayerToCheck.GetName() }).
+                            PrepareTextReplacePlayer("NightAction_Lawyer_ToTeam", currentPlayer, additionalReplaceDictionary: new ReplaceDictionary { ["toCheck"] = lawyer.PlayerToInteract.GetName() }).
                             SendToTeam(Team.Mafia);
                         _game.CheckNextCheckpoint();
                     }
@@ -405,21 +368,7 @@ namespace DiscordMafia.Modules
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
-                var wench = (currentPlayer.Role as Wench);
-                if (player != null && wench.PlayerToCheck == null)
-                {
-                    try
-                    {
-                        wench.PlayerToCheck = player;
-                        _game.NightAction(currentPlayer.Role);
-                        await ReplyAsync("Голос принят.");
-                        _game.CheckNextCheckpoint();
-                    }
-                    catch (Exception ex)
-                    {
-                        _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                    }
-                }
+                (currentPlayer.Role as Wench).PerformNightAction(player);
             }
             await Task.CompletedTask;
         }
@@ -429,23 +378,7 @@ namespace DiscordMafia.Modules
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
-                var hoodlum = (currentPlayer.Role as Hoodlum);
-                if (player != null && hoodlum.PlayerToBlock == null)
-                {
-                    try
-                    {
-                        hoodlum.PlayerToBlock = player;
-                        _game.NightAction(currentPlayer.Role);
-                        _game.MessageBuilder.
-                            PrepareTextReplacePlayer("NightAction_Hoodlum_ToTeam", currentPlayer, additionalReplaceDictionary: new ReplaceDictionary { ["toBlock"] = hoodlum.PlayerToBlock.GetName() }).
-                            SendToTeam(Team.Yakuza);
-                        _game.CheckNextCheckpoint();
-                    }
-                    catch (Exception ex)
-                    {
-                        _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                    }
-                }
+                (currentPlayer.Role as Hoodlum).PerformNightAction(player);
             }
             await Task.CompletedTask;
         }
@@ -455,21 +388,7 @@ namespace DiscordMafia.Modules
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
-                var doctor = (currentPlayer.Role as Doctor);
-                if (player != null && doctor.PlayerToHeal == null)
-                {
-                    try
-                    {
-                        doctor.PlayerToHeal = player;
-                        _game.NightAction(currentPlayer.Role);
-                        await ReplyAsync("Голос принят.");
-                        _game.CheckNextCheckpoint();
-                    }
-                    catch (Exception ex)
-                    {
-                        _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                    }
-                }
+                (currentPlayer.Role as Doctor).PerformNightAction(player);
             }
             await Task.CompletedTask;
         }
@@ -479,20 +398,7 @@ namespace DiscordMafia.Modules
         {
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
-                var judge = (currentPlayer.Role as Judge);
-                if (player != null && judge.PlayerToJustufy == null)
-                {
-                    try
-                    {
-                        judge.PlayerToJustufy = player;
-                        await ReplyAsync("Голос принят.");
-                        _game.CheckNextCheckpoint();
-                    }
-                    catch (Exception ex)
-                    {
-                        _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
-                    }
-                }
+                (currentPlayer.Role as Judge).PerformNightAction(player);
             }
             await Task.CompletedTask;
         }

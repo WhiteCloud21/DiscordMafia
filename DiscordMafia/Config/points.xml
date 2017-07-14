@@ -175,4 +175,18 @@
       <string>Нейтральному персонажу за каждое убийство</string>
     </PointsInfo>
   </Item>
+  <Item>
+    <string>HackerHack</string>
+    <PointsInfo>
+      <int>1</int>
+      <string>Хакеру за каждую проверку</string>
+    </PointsInfo>
+  </Item>
+  <Item>
+    <string>HackerHackUnique</string>
+    <PointsInfo>
+      <int>2</int>
+      <string>Хакеру за проверку уникальной роли (не чижа, мафа или якудзы) (прибавляется к очкам за проверку)</string>
+    </PointsInfo>
+  </Item>
 </Points>

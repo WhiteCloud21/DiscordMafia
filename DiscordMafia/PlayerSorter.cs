@@ -16,12 +16,15 @@ namespace DiscordMafia
         {
             _nightSortPositions = new string[]
             {
+                typeof(Mirror).Name,
                 typeof(Ninja).Name,
                 typeof(Hoodlum).Name,
                 typeof(Wench).Name,
+                typeof(Hacker).Name,
                 typeof(Maniac).Name,
                 typeof(RobinHood).Name,
                 typeof(Homeless).Name,
+                typeof(Spy).Name,
                 typeof(Commissioner).Name,
                 typeof(Sheriff).Name,
                 typeof(Killer).Name,
@@ -32,6 +35,7 @@ namespace DiscordMafia
             _daySortPositions = new string[] {
                 typeof(Judge).Name,
                 typeof(Elder).Name,
+                typeof(Prosecutor).Name,
             };
         }
 

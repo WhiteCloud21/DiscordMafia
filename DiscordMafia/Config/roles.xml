@@ -40,10 +40,25 @@
     <IsRandom>true</IsRandom>
     <MinPlayers>3</MinPlayers>
   </Role>
+  <Role Id="Prosecutor">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Mirror">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>10</MinPlayers>
+  </Role>
   <Role Id="Sergeant">
     <IsEnabled>true</IsEnabled>
     <IsRandom>false</IsRandom>
     <MinPlayers>13</MinPlayers>
+  </Role>
+  <Role Id="Spy">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>15</MinPlayers>
   </Role>
   <Role Id="Killer">
     <IsEnabled>true</IsEnabled>
@@ -74,5 +89,10 @@
     <IsEnabled>true</IsEnabled>
     <IsRandom>true</IsRandom>
     <MinPlayers>8</MinPlayers>
+  </Role>
+  <Role Id="Hacker">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>12</MinPlayers>
   </Role>
 </Roles>

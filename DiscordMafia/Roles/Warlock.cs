@@ -1,6 +1,6 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Warlock : UniqueRole
+    public class Warlock : UniqueRole, ITargetedRole
     {
         public override string Name
         {
@@ -36,7 +36,7 @@
         public int AvailableCursesCount { get; set; }
 
         private InGamePlayerInfo playerToCurse = null;
-        public InGamePlayerInfo PlayerToCurse
+        public InGamePlayerInfo PlayerToInteract
         {
             get
             {
@@ -54,11 +54,11 @@
         
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToCurse == onlyAgainstTarget)
+            if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
             {
-                PlayerToCurse = null;
-                base.ClearActivity(cancel);
+                PlayerToInteract = null;
             }
+            base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
@@ -76,18 +76,13 @@
             switch (currentState)
             {
                 case GameState.Night:
-                    if (PlayerToCurse == null && AvailableCursesCount > 0)
+                    if (PlayerToInteract == null && AvailableCursesCount > 0)
                     {
                         return false;
                     }
                     break;
             }
             return base.IsReady(currentState);
-        }
-
-        public override bool HasActivityAgainst(InGamePlayerInfo target)
-        {
-            return target == PlayerToCurse;
         }
     }
 }

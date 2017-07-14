@@ -18,7 +18,7 @@ namespace DiscordMafia
         public bool IsBot { get; set; }
         public long CurrentGamePoints { get; set; }
         public int? DelayedDeath { get; set; }
-        protected Game Game { get; set; }
+        public Game Game { get; protected set; }
         protected List<BaseActivity> ActivityList { get; set; }
         public VoteActivity VoteFor { get; set; }
         public BooleanVoteActivity EveningVoteActivity { get; set; }

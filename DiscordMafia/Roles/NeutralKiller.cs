@@ -1,6 +1,6 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public abstract class NeutralKiller : UniqueRole
+    public abstract class NeutralKiller : UniqueRole, ITargetedRole
     {
         public override Team Team
         {
@@ -10,15 +10,15 @@
             }
         }
 
-        public InGamePlayerInfo PlayerToKill { get; set; }
+        public InGamePlayerInfo PlayerToInteract { get; set; }
         
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToKill == onlyAgainstTarget)
+            if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
             {
-                PlayerToKill = null;
-                base.ClearActivity(cancel);
+                PlayerToInteract = null;
             }
+            base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
@@ -32,18 +32,13 @@
             switch (currentState)
             {
                 case GameState.Night:
-                    if (PlayerToKill == null)
+                    if (PlayerToInteract == null)
                     {
                         return false;
                     }
                     break;
             }
             return base.IsReady(currentState);
-        }
-
-        public override bool HasActivityAgainst(InGamePlayerInfo target)
-        {
-            return target == PlayerToKill;
         }
     }
 }

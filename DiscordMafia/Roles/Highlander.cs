@@ -1,6 +1,6 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Highlander : UniqueRole
+    public class Highlander : UniqueRole, ITargetedRole
     {
         public override string Name
         {
@@ -34,7 +34,7 @@
         }
 
         private InGamePlayerInfo playerToKill;
-        public InGamePlayerInfo PlayerToKill
+        public InGamePlayerInfo PlayerToInteract
         {
             get { return playerToKill; }
             set {
@@ -50,12 +50,12 @@
 
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToKill == onlyAgainstTarget)
+            if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
             {
-                PlayerToKill = null;
+                PlayerToInteract = null;
                 WasAttacked = false;
-                base.ClearActivity(cancel);
             }
+            base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
@@ -69,18 +69,13 @@
             switch (currentState)
             {
                 case GameState.Night:
-                    if (PlayerToKill == null)
+                    if (PlayerToInteract == null)
                     {
                         return false;
                     }
                     break;
             }
             return base.IsReady(currentState);
-        }
-
-        public override bool HasActivityAgainst(InGamePlayerInfo target)
-        {
-            return target == PlayerToKill;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Elder : UniqueRole
+    public class Elder : UniqueRole, ITargetedRole
     {
         public override string Name
         {
@@ -34,7 +34,7 @@
         }
 
         private InGamePlayerInfo playerToKill;
-        public InGamePlayerInfo PlayerToKill
+        public InGamePlayerInfo PlayerToInteract
         {
             get { return playerToKill; }
             set {
@@ -46,13 +46,16 @@
             }
         }
 
+        public bool WasAttacked { get; set; }
+
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToKill == onlyAgainstTarget)
+            if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
             {
-                PlayerToKill = null;
-                base.ClearActivity(cancel);
+                PlayerToInteract = null;
+                WasAttacked = false;
             }
+            base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
         public override void DayInfo(Game game, InGamePlayerInfo currentPlayer)
@@ -66,18 +69,13 @@
             switch (currentState)
             {
                 case GameState.Evening:
-                    if (PlayerToKill == null)
+                    if (PlayerToInteract == null)
                     {
                         return false;
                     }
                     break;
             }
             return base.IsReady(currentState);
-        }
-
-        public override bool HasActivityAgainst(InGamePlayerInfo target)
-        {
-            return target == PlayerToKill;
         }
     }
 }

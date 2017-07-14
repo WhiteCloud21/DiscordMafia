@@ -2,7 +2,7 @@
 
 namespace DiscordMafia.Roles
 {
-    public class Judge : UniqueRole
+    public class Judge : UniqueRole, ITargetedRole
     {
         public override string Name
         {
@@ -36,7 +36,7 @@ namespace DiscordMafia.Roles
         }
 
         private JustifyActivity justifyActivity;
-        public InGamePlayerInfo PlayerToJustufy
+        public InGamePlayerInfo PlayerToInteract
         {
             get { return justifyActivity?.Accused; }
             set
@@ -62,11 +62,11 @@ namespace DiscordMafia.Roles
 
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToJustufy == onlyAgainstTarget)
+            if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
             {
-                PlayerToJustufy = null;
-                base.ClearActivity(cancel);
+                PlayerToInteract = null;
             }
+            base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
         public override void DayInfo(Game game, InGamePlayerInfo currentPlayer)
@@ -80,18 +80,13 @@ namespace DiscordMafia.Roles
             switch (currentState)
             {
                 case GameState.Evening:
-                    if (PlayerToJustufy == null)
+                    if (PlayerToInteract == null)
                     {
                         return false;
                     }
                     break;
             }
             return base.IsReady(currentState);
-        }
-
-        public override bool HasActivityAgainst(InGamePlayerInfo target)
-        {
-            return target == PlayerToJustufy;
         }
     }
 }

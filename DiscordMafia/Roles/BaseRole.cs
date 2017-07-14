@@ -50,6 +50,10 @@ namespace DiscordMafia.Roles
 
         public virtual bool HasActivityAgainst(InGamePlayerInfo target)
         {
+            if (this is ITargetedRole directedRole)
+            {
+                return target == directedRole.PlayerToInteract;
+            }
             return false;
         }
     }

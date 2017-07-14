@@ -1,12 +1,12 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Wench : UniqueRole, ITargetedRole
+    public class Hacker : UniqueRole, ITargetedRole
     {
         public override string Name
         {
             get
             {
-                return "Путана";
+                return "Хакер";
             }
         }
 
@@ -15,12 +15,12 @@
             get
             {
                 return new string[] {
-                    "путана",
-                    "путаны",
-                    "путане",
-                    "путану",
-                    "путаной",
-                    "путане",
+                    "хакер",
+                    "хакера",
+                    "хакеру",
+                    "хакера",
+                    "хакером",
+                    "хакере",
                 };
             }
         }
@@ -29,27 +29,14 @@
         {
             get
             {
-                return Team.Civil;
+                return Team.Neutral;
             }
         }
-
-        private InGamePlayerInfo playerToCheck;
+        
         public InGamePlayerInfo PlayerToInteract
         {
-            get { return playerToCheck; }
-            set {
-                if (value != null && value == LastPlayerToCheck)
-                {
-                    throw new System.ArgumentException("Нельзя ходить к одному игроку 2 раза подряд.");
-                }
-                if (value == Player)
-                {
-                    throw new System.ArgumentException("Нельзя ходить к себе.");
-                }
-                playerToCheck = value;
-            }
+            get; set;
         }
-        public InGamePlayerInfo LastPlayerToCheck { get; set; }
         
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
@@ -62,8 +49,8 @@
 
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
         {
-            base.NightInfo(game, currentPlayer);
-            game.GetAlivePlayersMesssage(true, true, currentPlayer, "/спать");
+                base.NightInfo(game, currentPlayer);
+                game.GetAlivePlayersMesssage(true, true, currentPlayer, "/hack");
         }
 
         public override bool IsReady(GameState currentState)

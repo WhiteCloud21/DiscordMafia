@@ -57,8 +57,8 @@ namespace DiscordMafia.Roles
             if (onlyAgainstTarget == null)
             {
                 PlaceToDestroy = null;
-                base.ClearActivity(cancel);
             }
+            base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)

@@ -1,12 +1,12 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Wench : UniqueRole, ITargetedRole
+    public class Prosecutor : UniqueRole, ITargetedRole
     {
         public override string Name
         {
             get
             {
-                return "Путана";
+                return "Прокурор";
             }
         }
 
@@ -15,12 +15,12 @@
             get
             {
                 return new string[] {
-                    "путана",
-                    "путаны",
-                    "путане",
-                    "путану",
-                    "путаной",
-                    "путане",
+                    "прокурор",
+                    "прокурора",
+                    "прокурору",
+                    "прокурора",
+                    "прокурором",
+                    "прокуроре",
                 };
             }
         }
@@ -33,27 +33,11 @@
             }
         }
 
-        private InGamePlayerInfo playerToCheck;
-        public InGamePlayerInfo PlayerToInteract
-        {
-            get { return playerToCheck; }
-            set {
-                if (value != null && value == LastPlayerToCheck)
-                {
-                    throw new System.ArgumentException("Нельзя ходить к одному игроку 2 раза подряд.");
-                }
-                if (value == Player)
-                {
-                    throw new System.ArgumentException("Нельзя ходить к себе.");
-                }
-                playerToCheck = value;
-            }
-        }
-        public InGamePlayerInfo LastPlayerToCheck { get; set; }
-        
+        public InGamePlayerInfo PlayerToInteract { get; set; }
+
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
+            if (Player.Game.CurrentState == GameState.Evening && (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget))
             {
                 PlayerToInteract = null;
             }
@@ -63,7 +47,7 @@
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
         {
             base.NightInfo(game, currentPlayer);
-            game.GetAlivePlayersMesssage(true, true, currentPlayer, "/спать");
+            game.GetAlivePlayersMesssage(true, true, currentPlayer, "/kill");
         }
 
         public override bool IsReady(GameState currentState)

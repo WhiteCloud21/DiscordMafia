@@ -2,7 +2,7 @@
 
 namespace DiscordMafia.Roles
 {
-    public class Doctor : UniqueRole
+    public class Doctor : UniqueRole, ITargetedRole
     {
         public override string Name
         {
@@ -37,7 +37,7 @@ namespace DiscordMafia.Roles
 
         private HealActivity healActivity;
         private bool wasHealed = false;
-        public InGamePlayerInfo PlayerToHeal
+        public InGamePlayerInfo PlayerToInteract
         {
             get { return healActivity?.Patient; }
             set {
@@ -73,11 +73,11 @@ namespace DiscordMafia.Roles
 
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToHeal == onlyAgainstTarget)
+            if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
             {
-                PlayerToHeal = null;
-                base.ClearActivity(cancel);
+                PlayerToInteract = null;
             }
+            base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
@@ -91,18 +91,13 @@ namespace DiscordMafia.Roles
             switch (currentState)
             {
                 case GameState.Night:
-                    if (PlayerToHeal == null)
+                    if (PlayerToInteract == null)
                     {
                         return false;
                     }
                     break;
             }
             return base.IsReady(currentState);
-        }
-
-        public override bool HasActivityAgainst(InGamePlayerInfo target)
-        {
-            return target == PlayerToHeal;
         }
     }
 }

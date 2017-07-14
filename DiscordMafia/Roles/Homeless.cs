@@ -1,6 +1,6 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Homeless : UniqueRole
+    public class Homeless : UniqueRole, ITargetedRole
     {
         public override string Name
         {
@@ -33,15 +33,15 @@
             }
         }
 
-        public InGamePlayerInfo PlayerToCheck { get; set; }
+        public InGamePlayerInfo PlayerToInteract { get; set; }
         
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToCheck == onlyAgainstTarget)
+            if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
             {
-                PlayerToCheck = null;
-                base.ClearActivity(cancel);
+                PlayerToInteract = null;
             }
+            base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
@@ -55,18 +55,13 @@
             switch (currentState)
             {
                 case GameState.Night:
-                    if (PlayerToCheck == null)
+                    if (PlayerToInteract == null)
                     {
                         return false;
                     }
                     break;
             }
             return base.IsReady(currentState);
-        }
-
-        public override bool HasActivityAgainst(InGamePlayerInfo target)
-        {
-            return target == PlayerToCheck;
         }
     }
 }

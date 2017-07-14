@@ -1,6 +1,6 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Hoodlum : UniqueRole
+    public class Hoodlum : UniqueRole, ITargetedRole
     {
         public override string Name
         {
@@ -34,7 +34,7 @@
         }
 
         private InGamePlayerInfo playerToBlock;
-        public InGamePlayerInfo PlayerToBlock
+        public InGamePlayerInfo PlayerToInteract
         {
             get { return playerToBlock; }
             set {
@@ -53,11 +53,11 @@
         
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToBlock == onlyAgainstTarget)
+            if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
             {
-                PlayerToBlock = null;
-                base.ClearActivity(cancel);
+                PlayerToInteract = null;
             }
+            base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
@@ -71,18 +71,13 @@
             switch (currentState)
             {
                 case GameState.Night:
-                    if (PlayerToBlock == null)
+                    if (PlayerToInteract == null)
                     {
                         return false;
                     }
                     break;
             }
             return base.IsReady(currentState);
-        }
-
-        public override bool HasActivityAgainst(InGamePlayerInfo target)
-        {
-            return target == PlayerToBlock;
         }
     }
 }
