@@ -12,7 +12,7 @@ namespace DiscordMafia.DB
     [Table("user")]
     public class User
     {
-        [Key, Column("id")]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("id")]
         public ulong Id { get; set; }
 
         [Column("username")]
@@ -46,7 +46,7 @@ namespace DiscordMafia.DB
         public bool IsRegistered { get; set; } = false;
 
         [Column("settings")]
-        public String SerializedSettings
+        public string SerializedSettings
         {
             get => Settings?.Serialized;
             set => Settings = new UserSettings {Serialized = value};
@@ -80,18 +80,18 @@ namespace DiscordMafia.DB
                 return dbUser;
             }
         }
-        
-        public static bool TryToSave(User user)
+
+        public bool TryToSave()
         {
             try
             {
                 using (var context = new GameContext())
                 {
-                    context.Users.Add(user);
+                    context.Users.Add(this);
                     context.SaveChanges();
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -220,12 +220,13 @@ namespace DiscordMafia.DB
             {
                 return Newtonsoft.Json.JsonConvert.SerializeObject(this);
             }
-            
-            public String Serialized {
+
+            public string Serialized
+            {
                 get => Newtonsoft.Json.JsonConvert.SerializeObject(_internalDictionary);
                 set
                 {
-                    if(string.IsNullOrEmpty(value)) return;
+                    if (string.IsNullOrEmpty(value)) return;
                     var metaData = Newtonsoft.Json.JsonConvert.DeserializeObject<UserSettings>(value);
                     _internalDictionary = metaData._internalDictionary ?? new Dictionary<string, object>();
                 }
