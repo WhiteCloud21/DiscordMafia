@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -43,22 +44,29 @@ namespace DiscordMafia.Modules
         public async Task SettingsUpdate([Summary("Название параметра")] string name, [Summary("Значение параметра")] string value)
         {
             var user = new UserWrapper(Context.User);
-            var dbUser = User.FindById(user.Id);
+            using (var context = new GameContext())
+            {
+                var dbUser = context.Users.SingleOrDefault(u => u.Id == user.Id);
+                if (dbUser == null)
+                {
+                    dbUser = new User {Id = user.Id};
+                }
 
-            if (!dbUser.Settings.ContainsKey(name))
-            {
-                await ReplyAsync($"Неизвестный параметр {name}");
-                return;
-            }
-            try
-            {
-                dbUser.Settings[name] = value;
-                dbUser.UpdateFields(nameof(dbUser.Settings));
-                await ReplyAsync("Настройки успешно обновлены");
-            }
-            catch (Exception ex)
-            {
-                await ReplyAsync($"Ошибка при обновлении настроек: {ex.Message}");
+                if (!dbUser.Settings.ContainsKey(name))
+                {
+                    await ReplyAsync($"Неизвестный параметр {name}");
+                    return;
+                }
+                try
+                {
+                    dbUser.Settings[name] = value;
+                    context.SaveChanges();
+                    await ReplyAsync("Настройки успешно обновлены");
+                }
+                catch (Exception ex)
+                {
+                    await ReplyAsync($"Ошибка при обновлении настроек: {ex.Message}");
+                }                
             }
         }
     }

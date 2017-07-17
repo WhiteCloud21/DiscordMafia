@@ -1,111 +1,59 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
-using Microsoft.Data.Sqlite;
-using System.Reflection;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace DiscordMafia.DB
 {
+    [Table("user")]
     public class User
     {
-        public ulong Id;
-        public string Username = "";
-        public string FirstName = "";
-        public string LastName = "";
-        public long TotalPoints = 0;
-        public int GamesPlayed = 0;
-        public int Wins = 0;
-        public int Survivals = 0;
-        public int Draws = 0;
-        public UserSettings Settings;
-        public double Rate = 0.0;
-        public bool IsRegistered = false;
-        public bool IsNewRecord = true;
+        [Key, Column("id")]
+        public ulong Id { get; set; }
 
-        private static IDictionary<string, string> fieldDictionary = new Dictionary<string, string>()
-        {
-            {nameof(Id), "id"},
-            {nameof(Username), "username"},
-            {nameof(FirstName), "first_name"},
-            {nameof(LastName), "last_name"},
-            {nameof(TotalPoints), "total_points"},
-            {nameof(GamesPlayed), "games"},
-            {nameof(Wins), "wins"},
-            {nameof(Survivals), "survivals"},
-            {nameof(Draws), "draws"},
-            {nameof(Rate), "rate"},
-            {nameof(Settings), "settings"},
-            {nameof(IsRegistered), "is_registered"},
-        };
+        [Column("username")]
+        public string Username { get; set; } = "";
 
-        public static User FindById(ulong id)
+        [Column("first_name")]
+        public string FirstName { get; set; } = "";
+
+        [Column("last_name")]
+        public string LastName { get; set; } = "";
+
+        [Column("total_points")]
+        public long TotalPoints { get; set; } = 0;
+
+        [Column("games")]
+        public int GamesPlayed { get; set; } = 0;
+
+        [Column("wins")]
+        public int Wins { get; set; } = 0;
+
+        [Column("survivals")]
+        public int Survivals { get; set; } = 0;
+
+        [Column("draws")]
+        public int Draws { get; set; } = 0;
+
+        [Column("rate")]
+        public double Rate { get; set; } = 0.0;
+
+        [Column("is_registered")]
+        public bool IsRegistered { get; set; } = false;
+
+        [Column("settings")]
+        public String SerializedSettings
         {
-            var user = new User() { Id = id };
-            var connection = Program.Connection;
-            var command = connection.CreateCommand();
-            command.CommandText = GetSelect() + "WHERE id = :id";
-            command.Parameters.AddWithValue(":id", id);
-            var reader = command.ExecuteReader();
-            user.PopulateRecord(reader);
-            return user;
+            get => Settings?.Serialized;
+            set => Settings = new UserSettings {Serialized = value};
         }
 
-        public static IEnumerable<User> FindAllByCondition(string condition, SqliteParameter[] parameters)
-        {
-            var connection = Program.Connection;
-            var command = connection.CreateCommand();
-            var users = new List<User>();
-            command.CommandText = GetSelect() + condition;
-            command.Parameters.AddRange(parameters);
-            var reader = command.ExecuteReader();
-            do
-            {
-                var user = new User();
-                user.PopulateRecord(reader);
-                if (user.Id == 0)
-                {
-                    break;
-                }
-                users.Add(user);
-
-            } while (true);
-            return users;
-        }
-
-        public static IEnumerable<User> FindAllByCondition(string condition)
-        {
-            return FindAllByCondition(condition, new SqliteParameter[0]);
-        }
-
-        protected User PopulateRecord(DbDataReader reader)
-        {
-            Settings = new UserSettings();
-            if (reader.Read())
-            {
-                Id = ulong.Parse(reader.GetValue(0).ToString());
-                Username = reader.GetString(1);
-                FirstName = reader.GetString(2);
-                LastName = reader.GetString(3);
-                TotalPoints = reader.GetInt64(4);
-                GamesPlayed = reader.GetInt32(5);
-                Wins = reader.GetInt32(6);
-                Survivals = reader.GetInt32(7);
-                Draws = reader.GetInt32(8);
-                Rate = reader.GetDouble(9);
-                IsRegistered = reader.GetBoolean(10);
-                var settingsObject = reader.IsDBNull(11) ? null : reader.GetString(11);
-                var settings = Newtonsoft.Json.JsonConvert.DeserializeObject<UserSettings>(settingsObject ?? "{}");
-                Settings = settings ?? new UserSettings();
-                IsNewRecord = false;
-            }
-            return this;
-        }
-
-        protected static string GetSelect()
-        {
-            return "SELECT id, username, first_name, last_name, total_points, games, wins, survivals, draws, rate, is_registered, settings FROM user ";
-        }
+        [NotMapped]
+        public UserSettings Settings { get; set; }
 
         public void RecalculateStats()
         {
@@ -119,58 +67,36 @@ namespace DiscordMafia.DB
             }
         }
 
-        public bool Save()
+        public static User FindById(ulong id)
         {
-            var connection = Program.Connection;
-            var command = connection.CreateCommand();
-            if (IsNewRecord)
+            using (var context = new GameContext())
             {
-                command.CommandText = @"INSERT OR REPLACE INTO user (id, username, first_name, last_name, total_points, games, wins, survivals, draws, rate, settings, is_registered)
-                                    VALUES (:id, :uname, :fname, :lname, :tpoints, :games, :wins, :survivals, :draws, :rate, :settings, 1)";
-            }
-            else
-            {
-                command.CommandText = @"UPDATE user SET id = :id, username = :uname, first_name = :fname, last_name = :lname, total_points = :tpoints,
-                                    games = :games, wins = :wins, survivals = :survivals, draws = :draws, rate = :rate, settings = :settings, is_registered = 1 WHERE id = :id";
-            }
-            command.Parameters.AddWithValue(":id", Id);
-            command.Parameters.AddWithValue(":uname", Username);
-            command.Parameters.AddWithValue(":fname", FirstName);
-            command.Parameters.AddWithValue(":lname", LastName);
-            command.Parameters.AddWithValue(":tpoints", TotalPoints);
-            command.Parameters.AddWithValue(":games", GamesPlayed);
-            command.Parameters.AddWithValue(":wins", Wins);
-            command.Parameters.AddWithValue(":survivals", Survivals);
-            command.Parameters.AddWithValue(":draws", Draws);
-            command.Parameters.AddWithValue(":rate", Rate);
-            command.Parameters.AddWithValue(":settings", Settings.ToString());
+                var dbUser = context.Users.AsNoTracking().SingleOrDefault(u => u.Id == id);
+                if (dbUser == null)
+                {
+                    dbUser = new User {Id = id};
+                }
 
-            return command.ExecuteNonQuery() > 0;
+                return dbUser;
+            }
         }
-
-        public bool UpdateFields(params string[] fields)
+        
+        public static bool TryToSave(User user)
         {
-            if (fields.Length == 0)
+            try
             {
-                throw new ArgumentException("fields", "fields cannot be empty.");
+                using (var context = new GameContext())
+                {
+                    context.Users.Add(user);
+                    context.SaveChanges();
+                }
             }
-            if (IsNewRecord)
+            catch (Exception e)
             {
-                return Save();
+                return false;
             }
-            var connection = Program.Connection;
-            var command = connection.CreateCommand();
-            command.CommandText = @"UPDATE user SET ";
-            foreach (var field in fields)
-            {
-                var fieldName = fieldDictionary[field];
-                command.CommandText += $"{fieldName} = :{fieldName} ";
-                command.Parameters.AddWithValue($":{fieldName}", GetType().GetField(field).GetValue(this).ToString());
-            }
-            command.CommandText += "WHERE id = :id";
-            command.Parameters.AddWithValue(":id", Id);
 
-            return command.ExecuteNonQuery() > 0;
+            return true;
         }
 
         public enum Gender
@@ -179,15 +105,16 @@ namespace DiscordMafia.DB
             Female
         }
 
-        public class UserSettings: IDictionary<string, object>
+        public class UserSettings : IDictionary<string, object>
         {
             private Dictionary<string, object> _internalDictionary = new Dictionary<string, object>();
 
-            protected static IDictionary<string, object> AllowedSettings => new Dictionary<string, object>() {
-                { "gender", Gender.Male }
+            protected static IDictionary<string, object> AllowedSettings => new Dictionary<string, object>()
+            {
+                {"gender", Gender.Male}
             };
 
-            public Gender Gender => (Gender)this["gender"];
+            public Gender Gender => (Gender) this["gender"];
 
             public ICollection<string> Keys => AllowedSettings.Keys;
 
@@ -197,7 +124,8 @@ namespace DiscordMafia.DB
 
             public bool IsReadOnly => false;
 
-            public object this[string key] {
+            public object this[string key]
+            {
                 get
                 {
                     if (_internalDictionary.ContainsKey(key))
@@ -222,7 +150,7 @@ namespace DiscordMafia.DB
                 {
                     throw new ArgumentOutOfRangeException("key", $"User parameter {key} not found.");
                 }
-                
+
                 switch (key)
                 {
                     case "gender":
@@ -277,7 +205,9 @@ namespace DiscordMafia.DB
             {
                 foreach (var paramInfo in AllowedSettings)
                 {
-                    yield return _internalDictionary.ContainsKey(paramInfo.Key) ? new KeyValuePair<string, object>(paramInfo.Key, _internalDictionary[paramInfo.Key]) : paramInfo;
+                    yield return _internalDictionary.ContainsKey(paramInfo.Key)
+                        ? new KeyValuePair<string, object>(paramInfo.Key, _internalDictionary[paramInfo.Key])
+                        : paramInfo;
                 }
             }
 
@@ -289,6 +219,16 @@ namespace DiscordMafia.DB
             public override string ToString()
             {
                 return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            }
+            
+            public String Serialized {
+                get => Newtonsoft.Json.JsonConvert.SerializeObject(_internalDictionary);
+                set
+                {
+                    if(string.IsNullOrEmpty(value)) return;
+                    var metaData = Newtonsoft.Json.JsonConvert.DeserializeObject<UserSettings>(value);
+                    _internalDictionary = metaData._internalDictionary ?? new Dictionary<string, object>();
+                }
             }
         }
     }

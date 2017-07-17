@@ -58,7 +58,6 @@ namespace DiscordMafia
             DbUser.FirstName = User.FirstName ?? "";
             DbUser.LastName = User.LastName ?? "";
             DbUser.RecalculateStats();
-            DbUser.Save();
         }
 
         public string GetName()
