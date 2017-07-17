@@ -53,7 +53,7 @@ namespace DiscordMafia.DB
         }
 
         [NotMapped]
-        public UserSettings Settings { get; set; }
+        public UserSettings Settings { get; set; } = new UserSettings();
 
         public void RecalculateStats()
         {
