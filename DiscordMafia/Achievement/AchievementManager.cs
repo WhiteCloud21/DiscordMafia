@@ -1,6 +1,9 @@
 ﻿using DiscordMafia.Client;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using DiscordMafia.DB;
+using Microsoft.EntityFrameworkCore;
 using static DiscordMafia.Config.MessageBuilder;
 
 namespace DiscordMafia.Achievement
@@ -50,25 +53,35 @@ namespace DiscordMafia.Achievement
             if (AllowedAchievements.ContainsKey(achievementId))
             {
                 var achievement = AllowedAchievements[achievementId];
-                DB.Achievement dbAchievement = DB.Achievement.FindUserAchievement(user.Id, achievementId);
-                if (dbAchievement == null)
+                using (var gameContext = new GameContext())
                 {
-                    dbAchievement = new DB.Achievement()
+                    var dbAchievement = gameContext.Achievements
+                        .Where(a => a.UserId == user.Id).SingleOrDefault(a => a.AchievementId == achievementId);
+                    
+                    if (dbAchievement == null)
                     {
-                        UserId = user.Id,
-                        AchievementId = achievementId,
-                        AchievedAt = DateTime.Now
-                    };
-                    var result = dbAchievement.Save();
-                    if (result)
-                    {
-                        var messageBuilder = Game.MessageBuilder;
-                        var achievementText = $"<b>{achievement.Icon} {achievement.Name}</b>";
-                        messageBuilder
-                            .PrepareTextReplacePlayer("AchievementUnlocked", new InGamePlayerInfo(user, Game), additionalReplaceDictionary: new ReplaceDictionary { ["achievement"] = achievementText })
-                            .SendPublic(Game.GameChannel);
+                        dbAchievement = new DB.Achievement()
+                        {
+                            UserId = user.Id,
+                            AchievementId = achievementId,
+                            AchievedAt = DateTime.Now
+                        };
+                        gameContext.Achievements.Add(dbAchievement);
+                        try
+                        {
+                            gameContext.SaveChanges();
+                            var messageBuilder = Game.MessageBuilder;
+                            var achievementText = $"<b>{achievement.Icon} {achievement.Name}</b>";
+                            messageBuilder
+                                .PrepareTextReplacePlayer("AchievementUnlocked", new InGamePlayerInfo(user, Game), additionalReplaceDictionary: new ReplaceDictionary { ["achievement"] = achievementText })
+                                .SendPublic(Game.GameChannel);
+                            return true;
+                        }
+                        catch (Exception)
+                        {
+                            // ignored
+                        }
                     }
-                    return result;
                 }
             }
             return false;
@@ -85,13 +98,16 @@ namespace DiscordMafia.Achievement
 
         public IList<DB.Achievement> GetAchievements(UserWrapper user)
         {
-            return DB.Achievement.FindUserAchievements(user.Id);
+            using (var gameContext = new GameContext())
+            {
+                return gameContext.Achievements.AsNoTracking().Where(u => u.UserId == user.Id).ToList();
+            }
         }
 
         public string GetAchievementsAsString(UserWrapper user)
         {
             var builder = new System.Text.StringBuilder();
-            var achievements = DB.Achievement.FindUserAchievements(user.Id);
+            var achievements = GetAchievements(user);
             builder.AppendLine("<b><u>Достижения:</u></b>");
             foreach (var dbAchievement in achievements)
             {

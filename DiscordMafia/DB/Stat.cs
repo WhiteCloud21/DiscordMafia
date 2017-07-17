@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using System.Linq;
 using DiscordMafia.Client;
+using Microsoft.EntityFrameworkCore;
 
 namespace DiscordMafia.DB
 {
@@ -21,17 +22,40 @@ namespace DiscordMafia.DB
             }
             var limit = Math.Min(Math.Max(countPerPage, 1), 300);
             var offset = (Math.Max(fromPage, 1) - 1) * countPerPage;
-            var parameters = new SqliteParameter[] { new SqliteParameter(":limit", limit), new SqliteParameter(":offset", offset) };
-            return User.FindAllByCondition($"ORDER BY {field} DESC, username ASC LIMIT :limit OFFSET :offset", parameters);
+
+            using (var context = new GameContext())
+            {
+                var dbUsers = context.Users.AsNoTracking().Skip(offset).Take(limit);
+                switch (field)
+                {
+                    case "total_points":
+                        dbUsers = dbUsers.OrderByDescending(u => u.TotalPoints);
+                        break;
+                    case "rate":
+                        dbUsers = dbUsers.OrderByDescending(u => u.Rate);
+                        break;
+                    case "games":
+                        dbUsers = dbUsers.OrderByDescending(u => u.GamesPlayed);
+                        break;
+                    case "wins":
+                        dbUsers = dbUsers.OrderByDescending(u => u.Wins);
+                        break;
+                }
+
+                return dbUsers.ToList();
+            }
         }
 
         public static void RecalculateAll()
         {
-            var users = User.FindAllByCondition($"", new SqliteParameter[0]);
-            foreach (var user in users)
+            using (var context = new GameContext())
             {
-                user.RecalculateStats();
-                user.Save();
+                var dbUsers = context.Users.ToList();
+                foreach (var user in dbUsers)
+                {
+                    user.RecalculateStats();
+                }
+                context.SaveChanges();
             }
         }
 
