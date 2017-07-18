@@ -52,6 +52,9 @@ namespace DiscordMafia.DB
             set => Settings = new UserSettings {Serialized = value};
         }
 
+        [InverseProperty("User")]
+        public List<GameUser> Games { get; set; }
+
         [NotMapped]
         public UserSettings Settings { get; set; } = new UserSettings();
 

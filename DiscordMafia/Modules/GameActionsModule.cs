@@ -37,6 +37,7 @@ namespace DiscordMafia.Modules
             _game.timer.Interval = Math.Min(_game.Settings.PlayerCollectingTime, 60000);
             _game.PlayerCollectingRemainingTime = (int)(_game.Settings.PlayerCollectingTime - _game.timer.Interval);
             _game.timer.Start();
+            _game.StartedAt = DateTime.Now;
             await _client.SetGameAsync("Мафия (ожидание игроков)");
         }
 

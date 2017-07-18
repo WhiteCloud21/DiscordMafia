@@ -123,6 +123,10 @@ namespace DiscordMafia
                     //     await context.Channel.SendMessageAsync(result.ErrorReason);
                     // }
                     result.Wait();
+                    if (!result.Result.IsSuccess)
+                    {
+                        Console.WriteLine(result.Result);                        
+                    }
                 }, null);
             });
         }

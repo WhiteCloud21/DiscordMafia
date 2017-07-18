@@ -14,6 +14,7 @@ using DiscordMafia.Voting;
 using DiscordMafia.Lib;
 using Microsoft.EntityFrameworkCore;
 using static DiscordMafia.Config.MessageBuilder;
+using DiscordMafia.Extensions;
 
 namespace DiscordMafia
 {
@@ -29,6 +30,8 @@ namespace DiscordMafia
         public Dictionary<ulong, InGamePlayerInfo> CurrentPlayers { get; protected set; }
         public List<InGamePlayerInfo> PlayersList { get; protected set; }
         public SocketTextChannel GameChannel { get; protected set; }
+        public DateTime StartedAt { get; set; }
+        public string GameMode { get; set; } 
         protected RoleAssigner RoleAssigner { get; private set; }
         protected Vote CurrentDayVote { get; set; }
         protected BooleanVote CurrentEveningVote { get; set; }
@@ -64,6 +67,7 @@ namespace DiscordMafia
         {
             Settings = new Config.GameSettings(gametype);
             MessageBuilder = new Config.MessageBuilder(Settings, client, PlayersList);
+            GameMode = gametype;
             Console.WriteLine("Settings loaded");
         }
 
@@ -1595,6 +1599,9 @@ namespace DiscordMafia
 
             using (var gameContext = new GameContext())
             {
+                var game = new DB.Game();
+                game.StartedAt = StartedAt;
+                game.FinishedAt = DateTime.Now;
                 foreach (var player in PlayersList)
                 {
                     if (player.IsAlive)
@@ -1626,7 +1633,27 @@ namespace DiscordMafia
                     player.DbUser.TotalPoints += player.CurrentGamePoints;
                     player.ActualizeDbUser();
                     gameContext.Entry(player.DbUser).State = EntityState.Modified;
+                    
+                    var gameUser = new GameUser();
+                    gameUser.UserId = player.DbUser.Id;
+                    gameUser.StartRole = player.StartRole.GetType().Name;
+                    gameUser.Role = player.Role.GetType().Name;
+                    gameUser.Score = player.CurrentGamePoints;
+                    gameUser.RatingAfterGame = player.DbUser.Rate;
+                    gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Survive, player.IsAlive);
+                    gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Win, player.StartRole.Team == team);
+                    gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Draw, player.StartRole.Team == Team.None);
+
+                    gameUser.Game = game;
+                    gameContext.GameUsers.Add(gameUser);
                 }
+
+                game.PlayersCount = PlayersList.Count;
+                game.Winner = team;
+                game.GameMode = GameMode;
+
+                gameContext.Games.Add(game);
+                
                 gameContext.SaveChanges();
             }
 
