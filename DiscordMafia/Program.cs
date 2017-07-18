@@ -123,9 +123,9 @@ namespace DiscordMafia
                     //     await context.Channel.SendMessageAsync(result.ErrorReason);
                     // }
                     result.Wait();
-                    if (!result.Result.IsSuccess)
+                    if (!result.Result.IsSuccess && !(result.Result is PreconditionResult))
                     {
-                        Console.WriteLine(result.Result);                        
+                        Console.Error.WriteLine(result.Result);                        
                     }
                 }, null);
             });

@@ -10,8 +10,6 @@ namespace DiscordMafia.Extensions
             {
                 return (T) (object) ((int) (object) type | (int) (object) enumFlag);
             }
-            
-            
             return (T) (object) ((int) (object) type & ~(int) (object) enumFlag);
         }
     }
