@@ -13,9 +13,15 @@ namespace DiscordMafia.DB
         public ulong Id { get; set; }
 
         [Column("started_at"), Required]
-        public DateTime StartedAt { get; set; }
+        public long StartedAtInt { get { return StartedAt.ToBinary(); } set { StartedAt = DateTime.FromBinary(value); } }
 
         [Column("finished_at"), Required]
+        public long FinishedAtInt { get { return FinishedAt.ToBinary(); } set { FinishedAt = DateTime.FromBinary(value); } }
+
+        [NotMapped]
+        public DateTime StartedAt { get; set; }
+
+        [NotMapped]
         public DateTime FinishedAt { get; set; }
 
         [Column("players_count"), Required]

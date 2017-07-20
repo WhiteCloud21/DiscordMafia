@@ -10,10 +10,13 @@ namespace DiscordMafia.DB
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("id")]
         public long Id { get; set; }
         [Column("user_id")]
-        public ulong UserId  { get; set; }
+        public ulong UserId { get; set; }
         [Column("achievement_id")]
-        public string AchievementId  { get; set; }
+        public string AchievementId { get; set; }
         [Column("achieved_at")]
-        public DateTime AchievedAt  { get; set; }
+        public long AchievedAtInt { get { return AchievedAt.ToBinary(); } set { AchievedAt = DateTime.FromBinary(value); } }
+
+        [NotMapped]
+        public DateTime AchievedAt { get; set; }
     }
 }
