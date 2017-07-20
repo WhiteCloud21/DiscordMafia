@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace DiscordMafia.DB
 {
@@ -13,6 +14,10 @@ namespace DiscordMafia.DB
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite(Program.Connection.ConnectionString);
+#if DEBUG
+            optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.UseLoggerFactory((new LoggerFactory()).AddConsole());
+#endif
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

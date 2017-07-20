@@ -1599,9 +1599,11 @@ namespace DiscordMafia
 
             using (var gameContext = new GameContext())
             {
-                var game = new DB.Game();
-                game.StartedAt = StartedAt;
-                game.FinishedAt = DateTime.Now;
+                var game = new DB.Game()
+                {
+                    StartedAt = StartedAt,
+                    FinishedAt = DateTime.Now
+                };
                 foreach (var player in PlayersList)
                 {
                     if (player.IsAlive)
@@ -1633,13 +1635,15 @@ namespace DiscordMafia
                     player.DbUser.TotalPoints += player.CurrentGamePoints;
                     player.ActualizeDbUser();
                     gameContext.Entry(player.DbUser).State = EntityState.Modified;
-                    
-                    var gameUser = new GameUser();
-                    gameUser.UserId = player.DbUser.Id;
-                    gameUser.StartRole = player.StartRole.GetType().Name;
-                    gameUser.Role = player.Role.GetType().Name;
-                    gameUser.Score = player.CurrentGamePoints;
-                    gameUser.RatingAfterGame = player.DbUser.Rate;
+
+                    var gameUser = new GameUser()
+                    {
+                        UserId = player.DbUser.Id,
+                        StartRole = player.StartRole.GetType().Name,
+                        Role = player.Role.GetType().Name,
+                        Score = player.CurrentGamePoints,
+                        RatingAfterGame = player.DbUser.Rate
+                    };
                     gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Survive, player.IsAlive);
                     gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Win, player.StartRole.Team == team);
                     gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Draw, player.StartRole.Team == Team.None);

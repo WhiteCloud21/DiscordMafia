@@ -70,36 +70,45 @@ namespace DiscordMafia.DB
             }
         }
 
-        public static User FindById(ulong id)
+        public static User FindById(ulong id, GameContext context = null)
         {
-            using (var context = new GameContext())
+            if (context != null)
             {
-                var dbUser = context.Users.AsNoTracking().SingleOrDefault(u => u.Id == id);
+                var dbUser = context.Users.SingleOrDefault(u => u.Id == id);
                 if (dbUser == null)
                 {
-                    dbUser = new User {Id = id};
+                    dbUser = new User { Id = id };
+                    dbUser.TryToSave(context);
                 }
 
                 return dbUser;
             }
+            using (context = new GameContext())
+            {
+                return FindById(id, context);
+            }
         }
 
-        public bool TryToSave()
+        public bool TryToSave(GameContext context = null)
         {
-            try
+            if (context != null)
             {
-                using (var context = new GameContext())
+                try
                 {
                     context.Users.Add(this);
                     context.SaveChanges();
                 }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+                catch (Exception)
+                {
+                    return false;
+                }
 
-            return true;
+                return true;
+            }
+            using (context = new GameContext())
+            {
+                return TryToSave(context);
+            }
         }
 
         public enum Gender

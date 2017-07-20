@@ -49,7 +49,6 @@ namespace DiscordMafia.Modules
             if (!_game.CurrentPlayers.ContainsKey(Context.User.Id))
             {
                 var playerInfo = new InGamePlayerInfo(user, _game);
-                playerInfo.DbUser.TryToSave();
                 playerInfo.IsBot = Context.User.IsBot;
                 _game.CurrentPlayers.Add(Context.User.Id, playerInfo);
                 _game.PlayersList.Add(playerInfo);

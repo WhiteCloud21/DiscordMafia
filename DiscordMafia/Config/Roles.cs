@@ -98,6 +98,16 @@ namespace DiscordMafia.Config
             return result;
         }
 
+        public static BaseRole GetRoleInstance(string roleName)
+        {
+            var roleType = Type.GetType(typeof(BaseRole).Namespace + "." + roleName, false);
+            if (roleType != null)
+            {
+                return roleType.GetTypeInfo().GetConstructor(Type.EmptyTypes).Invoke(new object[0]) as BaseRole;
+            }
+            return null;
+        }
+
         protected void FillCache(bool clear = false)
         {
             if (clear && _typeCache != null)
