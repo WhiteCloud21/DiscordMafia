@@ -13,10 +13,10 @@ namespace DiscordMafia.DB
         public ulong Id { get; set; }
 
         [Column("started_at"), Required]
-        public long StartedAtInt { get { return StartedAt.ToBinary(); } set { StartedAt = DateTime.FromBinary(value); } }
+        public long StartedAtInt { get { return StartedAt.Ticks; } set { StartedAt = new DateTime(value, DateTimeKind.Utc); } }
 
         [Column("finished_at"), Required]
-        public long FinishedAtInt { get { return FinishedAt.ToBinary(); } set { FinishedAt = DateTime.FromBinary(value); } }
+        public long FinishedAtInt { get { return FinishedAt.Ticks; } set { FinishedAt = new DateTime(value, DateTimeKind.Utc); } }
 
         [NotMapped]
         public DateTime StartedAt { get; set; }

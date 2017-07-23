@@ -28,12 +28,12 @@ namespace DiscordMafia.DB
         [Column("rating_after_game")]
         public double RatingAfterGame { get; set; }
 
-        [ForeignKey("game_id"), Required]
+        [Required]
         public Game Game { get; set; }
 
-        [ForeignKey("user_id"), Required]
+        [Required]
         public User User { get; set; }
-
+        
         [Flags]
         public enum ResultFlags
         {

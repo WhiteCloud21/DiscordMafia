@@ -1,0 +1,17 @@
+﻿@model IEnumerable<DiscordMafia.DB.Game>
+
+@(Html
+    .Grid(Model)
+    .Build(columns =>
+    {
+        columns.Add(model => model.Id).Titled("ID").RenderedAs(model => Html.ActionLink(model.Id.ToString(), "Index", "Game", new { id = model.Id }));
+        columns.Add(model => model.StartedAt).Titled("Время начала").RenderedAs(model => model.StartedAt);
+        columns.Add(model => model.FinishedAt).Titled("Время окончания").RenderedAs(model => model.FinishedAt);
+        columns.Add(model => model.PlayersCount).Titled("Игроков");
+        columns.Add(model => model.Winner).Titled("Победитель").RenderedAs(model => model.Winner.GetDescription());
+        columns.Add(model => model.GameMode).Titled("Режим");
+    })
+    .Filterable()
+    .Sortable()
+    .Pageable()
+)

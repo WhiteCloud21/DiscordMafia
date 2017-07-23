@@ -1,0 +1,4 @@
+wwwroot/lib
+wwwroot/css/site.min.css
+wwwroot/js/site.min.js
+appsettings.local.json

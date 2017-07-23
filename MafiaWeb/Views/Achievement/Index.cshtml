@@ -1,0 +1,14 @@
+﻿@model MafiaWeb.ViewModels.Achievement.View
+@{
+    ViewData["Title"] = $"Достижение {Model.Achievement.Name}";
+}
+<achievement>@Model.Achievement.Id</achievement>
+<p>@Model.Achievement.Description</p>
+@(Html
+    .Grid(Model.DbAchievements)
+    .Build(columns =>
+    {
+        columns.Add(model => model.User.Username).Titled("Имя").RenderedAs(model => Html.ActionLink(model.User.Username, "Index", "User", new { id = model.UserId }));
+        columns.Add(model => model.AchievedAt).Titled("Заработано");
+    })
+)

@@ -5,12 +5,13 @@ using System.Linq;
 using DiscordMafia.DB;
 using Microsoft.EntityFrameworkCore;
 using static DiscordMafia.Config.MessageBuilder;
+using System.Collections.ObjectModel;
 
 namespace DiscordMafia.Achievement
 {
     public class AchievementManager
     {
-        protected readonly Dictionary<string, Achievement> AllowedAchievements = new Dictionary<string, Achievement>();
+        protected static readonly Dictionary<string, Achievement> AllowedAchievements = new Dictionary<string, Achievement>();
 
         protected readonly List<Tuple<UserWrapper, Achievement>> Achievements = new List<Tuple<UserWrapper, Achievement>>();
 
@@ -19,7 +20,11 @@ namespace DiscordMafia.Achievement
         public AchievementManager(Game game)
         {
             Game = game;
+        }
 
+        static AchievementManager()
+        {
+            AllowedAchievements.Clear();
             var achievementsToRegister = new List<Achievement>
             {
                 new Achievement { Id = Achievement.Id10K, Icon = "\U0001F949", Name = "Первая зарплата", Description = "Набрать 10000 очков" },
@@ -111,12 +116,27 @@ namespace DiscordMafia.Achievement
             builder.AppendLine("<b><u>Достижения:</u></b>");
             foreach (var dbAchievement in achievements)
             {
-                if (AllowedAchievements.TryGetValue(dbAchievement.AchievementId, out Achievement achievement))
+                var achievement = GetAchievementInfo(dbAchievement.AchievementId);
+                if (achievement != null)
                 {
                     builder.AppendLine($"<b>{achievement.Icon} {achievement.Name}</b> ({achievement.Description}) - заработано {dbAchievement.AchievedAt.ToString()}");
                 }
             }
             return builder.ToString();
+        }
+
+        public static Achievement GetAchievementInfo(string achievementId)
+        {
+            if (AllowedAchievements.TryGetValue(achievementId, out Achievement achievement))
+            {
+                return achievement;
+            }
+            return null;
+        }
+
+        public static IReadOnlyCollection<Achievement> GetAllowedAchievements()
+        {
+            return new ReadOnlyCollection<Achievement>(AllowedAchievements.Values.ToList());
         }
     }
 }

@@ -14,9 +14,12 @@ namespace DiscordMafia.DB
         [Column("achievement_id")]
         public string AchievementId { get; set; }
         [Column("achieved_at")]
-        public long AchievedAtInt { get { return AchievedAt.ToBinary(); } set { AchievedAt = DateTime.FromBinary(value); } }
+        public long AchievedAtInt { get { return AchievedAt.Ticks; } set { AchievedAt = new DateTime(value, DateTimeKind.Utc); } }
 
         [NotMapped]
         public DateTime AchievedAt { get; set; }
+
+        [Required]
+        public User User { get; set; }
     }
 }

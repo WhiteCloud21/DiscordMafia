@@ -1,0 +1,34 @@
+﻿@model DiscordMafia.DB.User
+@{
+    ViewData["Title"] = Model.Username;
+}
+<div class="row">
+    <div class="col-sm-4">
+        @foreach (var achievement in Model.Achievements)
+        {
+            <achievement data-achieved-at="@achievement.AchievedAt">@achievement.AchievementId</achievement>
+        }
+    </div>
+    <div class="col-sm-8">
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-xs-6">Игр</div>
+                <div class="col-xs-6"><a asp-controller="Game" asp-action="List" asp-route-userId="@Model.Id" title="Все игры игрока">@Model.GamesPlayed</a></div>
+                <div class="col-xs-6">Побед</div>
+                <div class="col-xs-6">@Model.Wins (@(String.Format("{0:0.00}", Model.Wins * 100.00 / Model.GamesPlayed))%)</div>
+                <div class="col-xs-6">Поражений</div>
+                <div class="col-xs-6">@(Model.GamesPlayed - Model.Wins - Model.Draws) (@(String.Format("{0:0.00}", (Model.GamesPlayed - Model.Wins - Model.Draws) * 100.00 / Model.GamesPlayed))%)</div>
+                <div class="col-xs-6">Выживаемость</div>
+                <div class="col-xs-6">@(String.Format("{0:0.00}", Model.Survivals * 100.00 / Model.GamesPlayed))%</div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-xs-6">Рейтинг</div>
+                <div class="col-xs-6"><a asp-action="Rating" asp-route-id="@Model.Id" title="График изменения рейтинга">@String.Format("{0:0.00}", Model.Rate)</a></div>
+                <div class="col-xs-6">Очки</div>
+                <div class="col-xs-6">@Model.TotalPoints</div>
+            </div>
+        </div>
+    </div>
+</div>
