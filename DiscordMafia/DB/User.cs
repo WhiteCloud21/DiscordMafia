@@ -13,7 +13,7 @@ namespace DiscordMafia.DB
     public class User
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("id")]
-        public ulong Id { get; set; }
+        public ulong  Id { get; set; }
 
         [Column("username")]
         public string Username { get; set; } = "";
@@ -54,6 +54,9 @@ namespace DiscordMafia.DB
 
         [InverseProperty("User")]
         public List<GameUser> Games { get; set; }
+
+        [InverseProperty("User")]
+        public List<Achievement> Achievements { get; set; }
 
         [NotMapped]
         public UserSettings Settings { get; set; } = new UserSettings();

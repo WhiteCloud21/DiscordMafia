@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Игроки";
+}
+
+@model IEnumerable<DiscordMafia.DB.User>
+
+@(Html
+    .Grid(Model)
+    .Build(columns =>
+    {
+        columns.Add(model => model.Username).Titled("Имя").RenderedAs(model => Html.ActionLink(model.Username, "Index", "User", new { id = model.Id }));
+        columns.Add(model => model.GamesPlayed).Titled("Сыграно игр");
+        columns.Add(model => model.Wins).Titled("Побед");
+        columns.Add(model => model.Rate).Titled("Рейтинг").Formatted("{0:0.00}");
+        columns.Add(model => model.TotalPoints).Titled("Очки");
+    })
+    .Filterable()
+    .Sortable()
+    .Pageable()
+)

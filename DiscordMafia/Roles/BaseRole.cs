@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace DiscordMafia.Roles
 {
@@ -60,10 +61,15 @@ namespace DiscordMafia.Roles
 
     public enum Team
     {
+        [Description("Нет")]
         None = 0,
+        [Description("Мирные")]
         Civil = 1,
+        [Description("Нейтральный")]
         Neutral = 2,
+        [Description("Мафия")]
         Mafia = 200,
+        [Description("Якудза")]
         Yakuza = 201,
     }
 }
