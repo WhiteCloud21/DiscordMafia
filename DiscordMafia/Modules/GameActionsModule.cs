@@ -46,11 +46,13 @@ namespace DiscordMafia.Modules
         public async Task Register([Remainder] string ignored = null)
         {
             var user = new UserWrapper(Context.User);
-            if (!_game.CurrentPlayers.ContainsKey(Context.User.Id))
+            if (!_game.CurrentPlayers.ContainsKey(user.Id))
             {
-                var playerInfo = new InGamePlayerInfo(user, _game);
-                playerInfo.IsBot = Context.User.IsBot;
-                _game.CurrentPlayers.Add(Context.User.Id, playerInfo);
+                var playerInfo = new InGamePlayerInfo(user, _game)
+                {
+                    IsBot = Context.User.IsBot
+                };
+                _game.CurrentPlayers.Add(user.Id, playerInfo);
                 _game.PlayersList.Add(playerInfo);
                 _game.MessageBuilder
                     .PrepareTextReplacePlayer("PlayerRegister", playerInfo, additionalReplaceDictionary: new ReplaceDictionary { ["count"] = _game.CurrentPlayers.Count })

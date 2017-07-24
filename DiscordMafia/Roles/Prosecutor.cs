@@ -37,7 +37,9 @@
 
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (Player.Game.CurrentState == GameState.Night && (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget))
+            var nightCancel = cancel && Player.Game.CurrentState == GameState.Night && (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget);
+            var eveningClear = !cancel && Player.Game.CurrentState == GameState.Evening && (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget);
+            if (nightCancel || eveningClear)
             {
                 PlayerToInteract = null;
             }

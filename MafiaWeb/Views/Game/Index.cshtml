@@ -10,7 +10,7 @@
         columns.Add(model => model.User.Username).Titled("Имя").RenderedAs(model => Html.ActionLink(model.User.Username, "Index", "User", new { id = model.UserId }));
         columns.Add(model => model.StartRole).Titled("Роль").RenderedAs(model => Html.Role(model.StartRole));
         columns.Add(model => model.Result).Titled("Результат").RenderedAs(model => model.Result.HasFlag(GameUser.ResultFlags.Win) ? "Победа" : (model.Result.HasFlag(GameUser.ResultFlags.Draw) ? "Ничья" : "Поражение"));
-        columns.Add(model => model.Result).Titled("Пережил").RenderedAs(model => model.Result.HasFlag(GameUser.ResultFlags.Win));
+        columns.Add(model => model.Result).Titled("Пережил").RenderedAs(model => model.Result.HasFlag(GameUser.ResultFlags.Survive));
         columns.Add(model => model.Score).Titled("Счёт");
     })
 )

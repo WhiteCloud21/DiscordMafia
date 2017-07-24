@@ -1646,7 +1646,7 @@ namespace DiscordMafia
                     };
                     gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Survive, player.IsAlive);
                     gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Win, player.StartRole.Team == team);
-                    gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Draw, player.StartRole.Team == Team.None);
+                    gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Draw, team == Team.None);
 
                     gameUser.Game = game;
                     gameContext.GameUsers.Add(gameUser);
