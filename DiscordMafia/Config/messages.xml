@@ -823,7 +823,7 @@
   <Item>
     <string>NightAction_Killer_ToTeam</string>
     <ArrayOfString>
-      <string>Киллекр {nameSimple} {gender:выбрал|выбрала} в качестве жертвы {toKill}!</string>
+      <string>Киллер {nameSimple} {gender:выбрал|выбрала} в качестве жертвы {toKill}!</string>
     </ArrayOfString>
   </Item>
   <Item>
