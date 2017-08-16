@@ -18,7 +18,7 @@ namespace DiscordMafia.Lib
 
         public void Start()
         {
-            InternalTimer.Change(Interval, Interval);
+            InternalTimer.Change(Interval, Timeout.Infinite);
         }
 
         public void Stop()
