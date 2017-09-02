@@ -772,12 +772,9 @@ namespace DiscordMafia
             // Предметы
             foreach (var player in PlayersList)
             {
-                foreach (var item in player.OwnedItems)
+                foreach (var item in player.OwnedItems.SortForUse(CurrentState))
                 {
-                    if (item.IsActive)
-                    {
-                        item.Use(player, PlayersList);
-                    }
+                    item.Use(player, PlayersList);
                 }
             }
 

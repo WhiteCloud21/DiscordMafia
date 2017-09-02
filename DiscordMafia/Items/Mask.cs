@@ -49,6 +49,11 @@ namespace DiscordMafia.Items
             {
                 if (player != currentPlayer)
                 {
+                    if (player.GetItem(new AntiMask(), true) != null)
+                    {
+                        // AntiMask позволяет действовать сквозь маскировку
+                        continue;
+                    }
                     player.CancelActivity(currentPlayer);
                 }
             }

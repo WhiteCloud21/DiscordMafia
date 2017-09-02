@@ -29,6 +29,7 @@ namespace DiscordMafia.Items
                     _availableItems = new BaseItem[]
                     {
                         new Mask(),
+                        new AntiMask(),
                     };
                 }
                 return _availableItems;
