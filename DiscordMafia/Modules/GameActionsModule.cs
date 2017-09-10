@@ -10,6 +10,9 @@ using DiscordMafia.Items;
 using DiscordMafia.Preconditions;
 using DiscordMafia.Roles;
 using static DiscordMafia.Config.MessageBuilder;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace DiscordMafia.Modules
 {
@@ -38,7 +41,40 @@ namespace DiscordMafia.Modules
             _game.PlayerCollectingRemainingTime = (int)(_game.Settings.PlayerCollectingTime - _game.timer.Interval);
             _game.timer.Start();
             _game.StartedAt = DateTime.Now;
+            NotifyAboutNewGame();
             await _client.SetGameAsync("Мафия (ожидание игроков)");
+        }
+
+        private void NotifyAboutNewGame()
+        {
+            var diff = DateTime.Now - _game.LastNotification;
+            if (_game.Settings.MaxUsersToNotify > 0 && diff.TotalSeconds > _game.Settings.MinNotificationInterval)
+            {
+                byte remainingUserCount = _game.Settings.MaxUsersToNotify;
+                var usersToNotify = new List<IGuildUser>();
+                using (var context = new GameContext())
+                {
+                    var userIds = context.Users.AsNoTracking().Where(u => u.IsNotificationEnabled == true).ToDictionary(u => u.Id, u => u.Id);
+                    foreach (var user in _game.GameChannel.Users)
+                    {
+                        if (user.Status != UserStatus.Offline && user.Status != UserStatus.Invisible && userIds.ContainsKey(user.Id))
+                        {
+                            remainingUserCount--;
+                            usersToNotify.Add(user);
+                            if (remainingUserCount == 0)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (usersToNotify.Count > 0)
+                {
+                    string notificationMessage = usersToNotify.Aggregate("", (s, u) => s += u.Mention + " ");
+                    _game.MessageBuilder.Text(notificationMessage, false).SendPublic(_game.GameChannel);
+                    _game.LastNotification = DateTime.Now;
+                }
+            }
         }
 
         [Command("join"), Summary("Присоединяет игрока к игре."), RequireGameState(GameState.PlayerCollecting),
@@ -201,45 +237,47 @@ namespace DiscordMafia.Modules
             await ReplyAsync(MessageBuilder.Encode($"Текущий режим игры: {_game.Settings.GameType}"));
         }
 
-        [Command("buy"), Summary("Выводит список предметов."), Alias("купить"), RequireContext(ContextType.DM), RequirePlayer]
+        [Command("buy"), Summary("Выводит список предметов."), Alias("купить"), RequireContext(ContextType.DM)]
         public async Task BuyItem()
         {
-            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
+            _game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer);
+            if (BaseItem.AvailableItems.Length > 0)
             {
-                if (BaseItem.AvailableItems.Length > 0)
+                var response = "Предметы, доступные для покупки: " + Environment.NewLine;
+                for (var i = 0; i < BaseItem.AvailableItems.Length; i++)
                 {
-                    var response = "Предметы, доступные для покупки: " + Environment.NewLine;
-                    for (var i = 0; i < BaseItem.AvailableItems.Length; i++)
+                    var item = BaseItem.AvailableItems[i];
+                    BaseItem itemInPlayer = null;
+                    if (currentPlayer != null)
                     {
-                        var item = BaseItem.AvailableItems[i];
-                        var itemInPlayer = currentPlayer.GetItem(item);
-                        response += String.Format("{0}. <b>{1}</b> - предмет ", i + 1, item.Name);
-                        if (itemInPlayer != null)
+                        itemInPlayer = currentPlayer.GetItem(item);
+                    }
+                    response += String.Format("{0}. <b>{1}</b> - предмет ", i + 1, item.Name);
+                    if (itemInPlayer != null)
+                    {
+                        if (itemInPlayer.IsActive)
                         {
-                            if (itemInPlayer.IsActive)
-                            {
-                                response += "будет использован этой ночью";
-                            }
-                            else
-                            {
-                                response += "уже использован";
-                            }
+                            response += "будет использован этой ночью";
                         }
                         else
                         {
-                            response += "доступен для покупки";
+                            response += "уже использован";
                         }
-                        response += ". Цена: " + item.Cost + Environment.NewLine;
-                        response += "<i>" + item.Description + "</i>";
-                        response += Environment.NewLine;
-                        response += Environment.NewLine;
                     }
-                    _game.MessageBuilder.Text(response, false).SendPrivate(currentPlayer);
+                    else
+                    {
+                        response += "доступен для покупки";
+                    }
+                    response += ". Цена: " + item.Cost + Environment.NewLine;
+                    response += "<i>" + item.Description + "</i>";
+                    response += Environment.NewLine;
+                    response += Environment.NewLine;
                 }
-                else
-                {
-                    _game.MessageBuilder.PrepareText("ShopDisabled").SendPrivate(currentPlayer);
-                }
+                _game.MessageBuilder.Text(response, false).SendPrivate(Context.User);
+            }
+            else
+            {
+                _game.MessageBuilder.PrepareText("ShopDisabled").SendPrivate(Context.User);
             }
             await Task.CompletedTask;
         }

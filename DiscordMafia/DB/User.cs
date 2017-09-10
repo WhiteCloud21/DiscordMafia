@@ -45,6 +45,9 @@ namespace DiscordMafia.DB
         [Column("is_registered")]
         public bool IsRegistered { get; set; } = false;
 
+        [Column("is_notification_enabled")]
+        public bool IsNotificationEnabled { get; set; } = false;
+
         [Column("settings")]
         public string SerializedSettings
         {

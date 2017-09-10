@@ -30,6 +30,7 @@ namespace DiscordMafia.Items
                     {
                         new Mask(),
                         new AntiMask(),
+                        new Antidote(),
                     };
                 }
                 return _availableItems;

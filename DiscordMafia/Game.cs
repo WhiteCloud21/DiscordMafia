@@ -43,6 +43,7 @@ namespace DiscordMafia
         public Achievement.AchievementManager AchievementManager { get; private set; }
         public Achievement.AchievementAssigner AchievementAssigner { get; private set; }
         internal int PlayerCollectingRemainingTime = 0;
+        internal DateTime LastNotification = new DateTime(0);
 
         public Game( System.Threading.SynchronizationContext syncContext, DiscordSocketClient client, Config.MainSettings mainSettings)
         {
