@@ -2,8 +2,8 @@
 
 @model IGrid
 
-<div id="@Model.Name" class="mvc-grid">
-    <table class="table @Model.CssClasses">
+<div@(Html.Raw(Model.Name != null ? " id=\"" + Model.Name + "\"" : "")) class="mvc-grid">
+    <table class="table @Model.CssClasses"@Model.Attributes>
         <thead>
             <tr>
                 @foreach (IGridColumn column in Model.Columns)
@@ -56,13 +56,19 @@
             }
             else if (Model.EmptyText != null)
             {
-                <tr>
+                <tr class="mvc-grid-empty-row">
                     <td class="mvc-grid-empty" colspan="@Model.Columns.Count()">
                         @Model.EmptyText
                     </td>
                 </tr>
             }
         </tbody>
+        @if (Model.FooterPartialViewName != null)
+        {
+            <tfoot>
+                @Html.Partial(Model.FooterPartialViewName, Model)
+            </tfoot>
+        }
     </table>
     @if (Model.Pager != null)
     {
