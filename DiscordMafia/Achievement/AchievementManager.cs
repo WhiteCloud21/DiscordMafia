@@ -31,11 +31,19 @@ namespace DiscordMafia.Achievement
                 new Achievement { Id = Achievement.Id25K, Icon = "\U0001F948", Name = "Толстосум", Description = "Набрать 25000 очков" },
                 new Achievement { Id = Achievement.Id50K, Icon = "\U0001F947", Name = "Мешок золота", Description = "Набрать 50000 очков" },
                 new Achievement { Id = Achievement.Id100K, Icon = "\U0001F3C6", Name = "Финансовый воротила", Description = "Набрать 100000 очков" },
+                new Achievement { Id = Achievement.IdPointsPerGame, Icon = "\U0001F4B0", Name = "Нужно больше золота", Description = "Заработать 30 очков за одну игру" },
                 new Achievement { Id = Achievement.IdRatingBronze, Icon = "\U0001F949", Name = "Первые шаги", Description = "Набрать 2000 рейтинга" },
                 new Achievement { Id = Achievement.IdRatingSilver, Icon = "\U0001F948", Name = "Знаток правил", Description = "Набрать 3500 рейтинга" },
                 new Achievement { Id = Achievement.IdRatingGold, Icon = "\U0001F947", Name = "Профи", Description = "Набрать 5000 рейтинга" },
                 new Achievement { Id = Achievement.IdRatingChampion, Icon = "\U0001F3C6", Name = "Безусловный чемпион", Description = "Набрать 10000 рейтинга" },
+                new Achievement { Id = Achievement.IdGamesBronze, Icon = "\U0001F949", Name = "Всё только начинается", Description = "Сыграть игру" },
+                new Achievement { Id = Achievement.IdGamesSilver, Icon = "\U0001F948", Name = "Может ещё партеечку?", Description = "Сыграть 1501 игру" },
+                new Achievement { Id = Achievement.IdGamesGold, Icon = "\U0001F947", Name = "Золотой игрок", Description = "Сыграть 3000 игр" },
+                new Achievement { Id = Achievement.IdGamesChampion, Icon = "\U0001F3C6", Name = "Что наша жизнь? Игра!", Description = "Сыграть 5000 игр" },
+                new Achievement { Id = Achievement.IdWinStreak, Icon = "\U0001F638", Name = "Превзошедший богов", Description = "Выиграть 10 игр подряд, не проиграв ни одной" },
+                new Achievement { Id = Achievement.IdLoseStreak, Icon = "\U0001F62D", Name = "Забытый призраками", Description = "Проиграть 10 игр подряд, не выиграв ни одной" },
                 new Achievement { Id = Achievement.IdCivilKillCom, Icon = "\U0000267F", Name = "Одно убийство — одно разочарование", Description = "Убить комиссара, играя за шерифа или горца" },
+                new Achievement { Id = Achievement.IdDemomanMaster, Icon = "\U0001F4A5", Name = "Запрещен в РФ", Description = "Подорвать половину игроков" },
             };
             foreach (var achievement in achievementsToRegister)
             {

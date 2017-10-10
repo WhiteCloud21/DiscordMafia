@@ -52,6 +52,8 @@ namespace DiscordMafia.Roles
         }
         public int Counter { get; protected set; }
 
+        public int TotalVictims { get; set; } = 0;
+
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
             if (onlyAgainstTarget == null)

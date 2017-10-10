@@ -48,6 +48,12 @@ namespace DiscordMafia.DB
         [Column("is_notification_enabled")]
         public bool IsNotificationEnabled { get; set; } = false;
 
+        [Column("win_streak")]
+        public int WinStreak { get; set; } = 0;
+
+        [Column("lose_streak")]
+        public int LoseStreak { get; set; } = 0;
+
         [Column("settings")]
         public string SerializedSettings
         {

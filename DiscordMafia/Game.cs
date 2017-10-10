@@ -1185,6 +1185,7 @@ namespace DiscordMafia
 
                         if (killedPlayers.Count > 0)
                         {
+                            role.TotalVictims += killedPlayers.Count;
                             killedPlayersMessage += "к сожалению, убило взрывом :(";
                         }
                         else
@@ -1628,6 +1629,13 @@ namespace DiscordMafia
                     {
                         player.AddPoints("Win");
                         player.DbUser.Wins++;
+                        player.DbUser.WinStreak++;
+                        player.DbUser.LoseStreak = 0;
+                    }
+                    else if (team != Team.None && player.Role.Team != Team.Neutral)
+                    {
+                        player.DbUser.WinStreak = 0;
+                        player.DbUser.LoseStreak++;
                     }
                     player.DbUser.GamesPlayed++;
                     player.DbUser.TotalPoints += player.CurrentGamePoints;

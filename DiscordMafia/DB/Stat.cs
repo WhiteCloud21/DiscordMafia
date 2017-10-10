@@ -87,6 +87,7 @@ namespace DiscordMafia.DB
             message += $"Всего игр: {dbUser.GamesPlayed}{Environment.NewLine}";
             message += $"Пережил игр: {dbUser.Survivals} ({survivalsPercent.ToString("0.00")}%){Environment.NewLine}";
             message += $"Побед: {dbUser.Wins} ({winsPercent.ToString("0.00")}%){Environment.NewLine}";
+            message += $"Текущая серия побед / поражений: {dbUser.WinStreak} / {dbUser.LoseStreak}{Environment.NewLine}";
             message += $"Очков: {dbUser.TotalPoints} (в среднем за игру {pointsAverage.ToString("0.00")}){Environment.NewLine}";
             message += $"Рейтинг: {dbUser.Rate.ToString("0.00")}{Environment.NewLine}";
             return message;
