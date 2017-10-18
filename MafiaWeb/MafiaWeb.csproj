@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Content Include="wwwroot\css\mvc-grid.css" />
+    <Content Include="wwwroot\css\GridGlyphs.woff" />
     <Content Include="wwwroot\images\emoji\sheet_messenger_32.png" />
     <Content Include="wwwroot\js\mvc-grid.js" />
   </ItemGroup>
