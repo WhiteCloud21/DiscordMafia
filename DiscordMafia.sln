@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiscordMafia", "DiscordMafia\DiscordMafia.csproj", "{E1C4F26E-6A7B-435D-A0FE-1494809D0A38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MafiaWeb", "MafiaWeb\MafiaWeb.csproj", "{D339264B-BF37-4522-921E-17CA34CC9E58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MafiaWeb", "MafiaWeb\MafiaWeb.csproj", "{D339264B-BF37-4522-921E-17CA34CC9E58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

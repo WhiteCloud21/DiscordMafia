@@ -269,6 +269,7 @@ namespace DiscordMafia
 
         internal void StopPlayerCollecting()
         {
+            timer.Stop();
             if (PlayerCollectingRemainingTime > 1000)
             {
                 var message = String.Format("Осталось <b>{0}</b> секунд. Ещё есть шанс поиграть!", PlayerCollectingRemainingTime / 1000);
@@ -371,9 +372,8 @@ namespace DiscordMafia
                 }
                 if (isAllReady)
                 {
-                    timer.Stop();
                     timer.Interval = 1;
-                    timer.Start();
+                    timer.SafeChange();
                 }
             }
         }

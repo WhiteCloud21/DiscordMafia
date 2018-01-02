@@ -10,6 +10,8 @@ namespace DiscordMafia.Lib
         public event Action<object> Elapsed;
 
         public int Interval { get; set; }
+        protected bool WasElapsed;
+        protected object WasElapsedLock = new object();
 
         public Timer()
         {
@@ -18,7 +20,11 @@ namespace DiscordMafia.Lib
 
         public void Start()
         {
-            InternalTimer.Change(Interval, Timeout.Infinite);
+            lock (WasElapsedLock)
+            {
+                WasElapsed = false;
+                InternalTimer.Change(Interval, Timeout.Infinite);
+            }
         }
 
         public void Stop()
@@ -26,9 +32,28 @@ namespace DiscordMafia.Lib
             InternalTimer.Change(Timeout.Infinite, Timeout.Infinite);
         }
        
+        public void SafeChange()
+        {
+            lock (WasElapsedLock)
+            {
+                if (!WasElapsed)
+                {
+                    InternalTimer.Change(Interval, Timeout.Infinite);
+                }
+            }
+        }
 
         protected virtual void OnElapsed(object o)
         {
+            lock (WasElapsedLock)
+            {
+                Stop();
+                if (WasElapsed)
+                {
+                    return;
+                }
+                WasElapsed = true;
+            }
             Elapsed?.Invoke(o);
         }
 
