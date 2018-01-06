@@ -33,9 +33,10 @@ namespace DiscordMafia.Modules
         [Command("start"), Summary("Запускает игру."), Alias("старт"), RequireContext(ContextType.Guild), RequireGameState(GameState.Stopped)]
         public async Task Start([Remainder] string ignored = null)
         {
-            var message = $"Начинаю набор игроков. У вас <b>{_game.Settings.PlayerCollectingTime / 1000}</b> секунд.";
-            message += Environment.NewLine + "<b>/join</b> (<b>/я</b>) - Присоединиться к игре";
-            _game.MessageBuilder.Text(message, false).SendPublic(_game.GameChannel);
+            _game.MessageBuilder.PrepareText("PlayerCollectingStart", new Dictionary<string, object>
+            {
+                ["seconds"] = _game.Settings.PlayerCollectingTime / 1000
+            }).SendPublic(_game.GameChannel);
             _game.CurrentState = GameState.PlayerCollecting;
             _game.timer.Interval = Math.Min(_game.Settings.PlayerCollectingTime, 60000);
             _game.PlayerCollectingRemainingTime = (int)(_game.Settings.PlayerCollectingTime - _game.timer.Interval);
@@ -118,7 +119,7 @@ namespace DiscordMafia.Modules
                     if (Context.Channel is IDMChannel)
                     {
                         currentPlayer.CancelActivity();
-                        await ReplyAsync("Ваш голос отменен");
+                        await ReplyAsync(_game.MessageBuilder.GetText("YouCanceledVote"));
                     }
                     else if (_game.CurrentState == GameState.Day)
                     {
@@ -145,12 +146,12 @@ namespace DiscordMafia.Modules
                 {
                     if (currentPlayer.SkipTurn())
                     {
-                        await ReplyAsync("Вы пропустили ход.");
+                        await ReplyAsync(_game.MessageBuilder.GetText("YourTurnSkipped"));
                         _game.CheckNextCheckpoint();
                     }
                     else
                     {
-                        await ReplyAsync("Вы уже пропустили ход.");
+                        await ReplyAsync(_game.MessageBuilder.GetText("YourTurnAlreadySkipped"));
                     }
                 }
                 else
@@ -189,7 +190,7 @@ namespace DiscordMafia.Modules
                             try
                             {
                                 elder.PlayerToInteract = playerToKill;
-                                await ReplyAsync("Голос принят.");
+                                await ReplyAsync(_game.MessageBuilder.GetText("OK"));
                                 _game.CheckNextCheckpoint();
                             }
                             catch (Exception ex)
@@ -243,33 +244,30 @@ namespace DiscordMafia.Modules
             _game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer);
             if (BaseItem.AvailableItems.Length > 0)
             {
-                var response = "Предметы, доступные для покупки: " + Environment.NewLine;
+                var response = "";
                 for (var i = 0; i < BaseItem.AvailableItems.Length; i++)
                 {
                     var item = BaseItem.AvailableItems[i];
+                    string itemStatusKey = "ShopItemStatus_";
                     BaseItem itemInPlayer = null;
                     if (currentPlayer != null)
                     {
                         itemInPlayer = currentPlayer.GetItem(item);
                     }
-                    response += String.Format("{0}. <b>{1}</b> - предмет ", i + 1, item.Name);
                     if (itemInPlayer != null)
                     {
-                        if (itemInPlayer.IsActive)
-                        {
-                            response += "будет использован этой ночью";
-                        }
-                        else
-                        {
-                            response += "уже использован";
-                        }
+                        itemStatusKey += itemInPlayer.IsActive ? "IsActive" : "Unavailable";
                     }
                     else
                     {
-                        response += "доступен для покупки";
+                        itemStatusKey += "IsAvailable";
                     }
-                    response += ". Цена: " + item.Cost + Environment.NewLine;
-                    response += "<i>" + item.Description + "</i>";
+                    response += _game.MessageBuilder.GetText("ShopItemInfo", new Dictionary<string, object>() {
+                        ["idx"] = i + 1,
+                        ["name"] = item.Name,
+                        ["status"] = _game.MessageBuilder.GetText(itemStatusKey),
+                        ["description"] = item.Description
+                    });
                     response += Environment.NewLine;
                     response += Environment.NewLine;
                 }
@@ -293,7 +291,10 @@ namespace DiscordMafia.Modules
                     try
                     {
                         currentPlayer.Buy(itemToBuy);
-                        await ReplyAsync(MessageBuilder.Encode("Вы купили " + itemToBuy.Name));
+                        await ReplyAsync(_game.MessageBuilder.GetText("ShopItemBought", new Dictionary<string, object>()
+                        {
+                            ["name"] = itemToBuy.Name,
+                        }));
                     }
                     catch (Exception ex)
                     {
@@ -455,7 +456,7 @@ namespace DiscordMafia.Modules
                     try
                     {
                         demoman.PlaceToDestroy = placeToDestroy;
-                        await ReplyAsync(MessageBuilder.Encode("Сегодня взорвем " + placeToDestroy.Name));
+                        await ReplyAsync(_game.MessageBuilder.GetText("OK"));
                         _game.CheckNextCheckpoint();
                     }
                     catch (Exception ex)
@@ -480,7 +481,7 @@ namespace DiscordMafia.Modules
                         try
                         {
                             currentPlayer.PlaceToGo = placeToGo;
-                            await ReplyAsync(MessageBuilder.Encode("Сегодня пойдем в " + placeToGo.Name));
+                            await ReplyAsync(_game.MessageBuilder.GetText("OK"));
                             _game.CheckNextCheckpoint();
                         }
                         catch (Exception ex)
@@ -515,16 +516,16 @@ namespace DiscordMafia.Modules
                 if (_game.Settings.IsValidGametype(mode))
                 {
                     _game.LoadSettings(mode);
-                    await ReplyAsync(MessageBuilder.Encode($"Режим игры успешно изменен на {_game.Settings.GameType}."));
+                    await ReplyAsync(_game.MessageBuilder.GetText("GamemodeChangeSuccess"));
                 }
                 else
                 {
-                    await ReplyAsync("Неизвестный режим игры.");
+                    await ReplyAsync(_game.MessageBuilder.GetText("GamemodeChangeFail"));
                 }
             }
             else
             {
-                await ReplyAsync("Менять режим игры нельзя, пока игра не завершена.");
+                await ReplyAsync(_game.MessageBuilder.GetText("GamemodeChangeInProgress"));
             }
             await Task.CompletedTask;
         }

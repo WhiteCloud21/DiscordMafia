@@ -63,7 +63,7 @@
         public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
         {
             base.NightInfo(game, currentPlayer);
-            game.GetAlivePlayersMesssage(true, true, currentPlayer, "/блок");
+            game.SendAlivePlayersMesssage(currentPlayer);
         }
 
         public override bool IsReady(GameState currentState)

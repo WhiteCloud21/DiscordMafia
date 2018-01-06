@@ -66,7 +66,7 @@
             if (AvailableCursesCount > 0)
             {
                 base.NightInfo(game, currentPlayer);
-                game.GetAlivePlayersMesssage(true, true, currentPlayer, "/curse");
+                game.SendAlivePlayersMesssage(currentPlayer);
                 game.MessageBuilder.Text($"Осталось проклятий: {AvailableCursesCount}").SendPrivate(currentPlayer);
             }
         }

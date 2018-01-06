@@ -72,7 +72,7 @@ namespace DiscordMafia.Roles
         public override void DayInfo(Game game, InGamePlayerInfo currentPlayer)
         {
             base.DayInfo(game, currentPlayer);
-            game.GetAlivePlayersMesssage(true, true, currentPlayer, "/оправдать");
+            game.SendAlivePlayersMesssage(currentPlayer);
         }
 
         public override bool IsReady(GameState currentState)

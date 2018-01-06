@@ -19,7 +19,7 @@ namespace DiscordMafia.Roles
                 {
                     role.PlayerToInteract = target;
                     role.Player.Game.NightAction(role);
-                    role.Player.Game.MessageBuilder.Text("Голос принят.").SendPrivate(role.Player);
+                    role.Player.Game.MessageBuilder.PrepareText("OK").SendPrivate(role.Player);
                     role.Player.Game.CheckNextCheckpoint();
                 }
                 catch (Exception ex)
