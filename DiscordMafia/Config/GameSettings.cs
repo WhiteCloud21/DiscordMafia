@@ -35,7 +35,7 @@ namespace DiscordMafia.Config
         public Points Points { get; private set; }
         public Roles Roles { get; private set; }
 
-        public GameSettings(string gametype)
+        public GameSettings(MainSettings mainSettings, string gametype)
         {
             GameType = gametype;
 
@@ -65,7 +65,7 @@ namespace DiscordMafia.Config
 
             ReadConfig();
 
-            Messages = Messages.GetInstance(GetFilePath("messages.xml"));
+            Messages = Messages.GetInstance(GetFilePath($"Lang/{mainSettings.Language}/messages.xml"));
             Console.WriteLine("Сообщения загружены");
             Points = Points.GetInstance(GetFilePath("points.xml"));
             Console.WriteLine("Конфигурация очков загружена");

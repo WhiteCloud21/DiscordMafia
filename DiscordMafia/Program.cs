@@ -31,6 +31,7 @@ namespace DiscordMafia
         public async Task Start()
         {
             var settings = new MainSettings("Config/mainSettings.xml", "Config/Local/mainSettings.xml");
+            settings.Validate();
 
             var connection = new SqliteConnection($"Data Source={settings.DatabasePath};");
             connection.Open();

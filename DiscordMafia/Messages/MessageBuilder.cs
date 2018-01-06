@@ -48,9 +48,9 @@ namespace DiscordMafia.Config
             return this;
         }
 
-        public MessageBuilder PrepareText(string key)
+        public MessageBuilder PrepareText(string key, IDictionary<string, object> replaceDictionary = null)
         {
-            BuiltMessage += GetText(key);
+            BuiltMessage += GetText(key, replaceDictionary);
             return this;
         }
 
@@ -90,9 +90,14 @@ namespace DiscordMafia.Config
             return Format(messageTemplate, replaceDictionary);
         }
 
-        public string GetText(string key)
+        public string GetText(string key, IDictionary<string, object> replaceDictionary = null)
         {
-            return Storage.get(key);
+            var message = Storage.get(key);
+            if (replaceDictionary != null && !string.IsNullOrEmpty(message))
+            {
+                message = Format(message, replaceDictionary);
+            }
+            return message;
         }
 
         public MessageBuilder AddImage(string photoPathOnServer)

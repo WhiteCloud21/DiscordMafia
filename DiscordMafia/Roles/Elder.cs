@@ -61,7 +61,7 @@
         public override void DayInfo(Game game, InGamePlayerInfo currentPlayer)
         {
             base.DayInfo(game, currentPlayer);
-            game.GetAlivePlayersMesssage(true, true, currentPlayer, "/посадить");
+            game.SendAlivePlayersMesssage(currentPlayer);
         }
 
         public override bool IsReady(GameState currentState)

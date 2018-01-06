@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -16,6 +17,7 @@ namespace DiscordMafia.Config
         public string DatabasePath { get; protected set; }
         public ulong  GameChannel { get; protected set; }
         public HashSet<ulong> AdminId { get; protected set; }
+        public string Language { get; protected set; }
 
         public MainSettings(params string[] filenames)
         {
@@ -74,6 +76,9 @@ namespace DiscordMafia.Config
                         case "AdminID":
                             AdminId.Add(ulong.Parse(reader.ReadElementContentAsString()));
                             break;
+                        case "Language":
+                            Language = reader.ReadElementContentAsString();
+                            break;
                         default:
                             reader.Skip();
                             break;
@@ -94,6 +99,23 @@ namespace DiscordMafia.Config
         public XmlSchema GetSchema()
         {
             return null;
+        }
+
+        public void Validate()
+        {
+            if (!IsValidLanguage(Language))
+            {
+                throw new Exception("Language is not valid in mainSettings!");
+            }
+        }
+
+        public bool IsValidLanguage(string language)
+        {
+            if (!Regex.IsMatch(language, @"[a-zA-Z0-9\-]+"))
+            {
+                return false;
+            }
+            return Directory.Exists($"Config/Lang/{language}");
         }
     }
 }

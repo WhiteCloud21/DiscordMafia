@@ -13,15 +13,110 @@
     </ArrayOfString>
   </Item>
   <Item>
+    <string>PlayerCollectingStart</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Начинаю набор игроков. У вас <b>{seconds}</b> секунд.
+        		<b>/join</b> (<b>/я</b>) - присоединиться к игре]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PlayerCollectingAdditionalTime</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Осталось <b>{seconds}</b> секунд. Ещё есть шанс поиграть!
+        		<b>/join</b> (<b>/я</b>) - присоединиться к игре]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PlayerCollectingSuccess</string>
+    <ArrayOfString>
+      <string>Набор игроков окончен. Участвуют: {count}</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PlayerCollectingFailed</string>
+    <ArrayOfString>
+      <string>Недостаточно игроков ({count}/{minCount})</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafiaWelcome</string>
+    <ArrayOfString>
+      <string>
+        Состав мафии:
+        {players}
+        Можете обсуждать свои действия в личных сообщениях или через бота.
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaWelcome</string>
+    <ArrayOfString>
+      <string>
+        Состав японской мафии:
+        {players}
+        Можете обсуждать свои действия в личных сообщениях или через бота.
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RemainingPlayers</string>
+    <ArrayOfString>
+      <string>
+        Оставшиеся игроки:
+        {players}
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>OK</string>
+    <ArrayOfString>
+      <string>Голос принят.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YouCanceledVote</string>
+    <ArrayOfString>
+      <string>Ваш голос отменён.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>PlayerCanceledVote</string>
     <ArrayOfString>
       <string>{nameSimple} {gender:отменил|отменила} свой голос.</string>
     </ArrayOfString>
   </Item>
   <Item>
+    <string>YourTurnSkipped</string>
+    <ArrayOfString>
+      <string>Вы пропустили ход.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YourTurnAlreadySkipped</string>
+    <ArrayOfString>
+      <string>Вы уже пропустили ход.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>PlayerSkippedTurn</string>
     <ArrayOfString>
       <string>{nameSimple} {gender:пропустил|пропустила} ход.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>VoteForYourself</string>
+    <ArrayOfString>
+      <string>{nameSimple} - нельзя голосовать за себя!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayVote</string>
+    <ArrayOfString>
+      <string>{nameSimple} голосует за {toHang} ({count}).</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -34,6 +129,12 @@
     <string>EveningVote_No</string>
     <ArrayOfString>
       <string>{nameSimple} требует оправдания {toHang} ({count}).</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightVote</string>
+    <ArrayOfString>
+      <string>{nameSimple} голосует за убийство {toKill} ({count})!</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -52,6 +153,57 @@
     <string>ShopDisabled</string>
     <ArrayOfString>
       <string>В этом игровом режиме магазин отключен.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ShopItemInfo</string>
+    <ArrayOfString>
+      <string><![CDATA[{idx}. <b>{name}</b> - предмет {status}. Цена: {cost}
+      <i>{description}</i>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ShopItemStatus_IsActive</string>
+    <ArrayOfString>
+      <string>будет использован этой ночью</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ShopItemStatus_IsAvailable</string>
+    <ArrayOfString>
+      <string>доступен для покупки</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ShopItemStatus_NotAvailable</string>
+    <ArrayOfString>
+      <string>недоступен</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ShopItemBought</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Вы купили <b>{name}</b>.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>GamemodeChangeSuccess</string>
+    <ArrayOfString>
+      <string>Режим игры успешно изменён.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>GamemodeChangeFail</string>
+    <ArrayOfString>
+      <string>Неизвестный режим игры.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>GamemodeChangeFailInProgress</string>
+    <ArrayOfString>
+      <string>Менять режим игры нельзя, пока игра не завершена.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -627,6 +779,18 @@
     </ArrayOfString>
   </Item>
   <Item>
+    <string>DemomanExplosionSuccess</string>
+    <ArrayOfString>
+      <string>💣 Сегодня был взорван {place}. {players}к сожалению, убило взрывом :(</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DemomanExplosionFailed</string>
+    <ArrayOfString>
+      <string>💣 Сегодня был взорван {place}. К счастью, никто не погиб.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>ComKillMaf</string>
     <ArrayOfString>
       <string>🕵 Комиссар провел ночь не зря, он вычислил и убил {name}, {gender:который оказался|которая оказалась} {role4}.</string>
@@ -702,6 +866,12 @@
     <string>RobinHoodKillCitizen</string>
     <ArrayOfString>
       <string>👨‍ Робин Гуд уже собрался стрелять, но увидел, что перед ним {role0}, и передумал.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>WarlockCurseSuccess</string>
+    <ArrayOfString>
+      <string>㊙ Неудачно сегодня закончилась ночь для {players} - не надо было трогать проклятого чернокнижником игрока...</string>
     </ArrayOfString>
   </Item>
   <Item>
