@@ -15,7 +15,7 @@ namespace DiscordMafia.Lib
 
         public Timer()
         {
-            InternalTimer = new System.Threading.Timer(OnElapsed, null, 0, 0);
+            InternalTimer = new System.Threading.Timer(OnElapsed, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public void Start()
