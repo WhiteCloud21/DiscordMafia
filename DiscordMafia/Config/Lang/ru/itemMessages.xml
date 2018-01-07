@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Messages>
+  <Item>
+    <string>Mask</string>
+    <Info>
+      <Name>Маскировочный комплект</Name>
+      <NameCases>
+        <string>маскировочный комплект</string>
+        <string>маскировочного комплекта</string>
+        <string>маскировочному комплекту</string>
+        <string>маскировочный комплект</string>
+        <string>маскировочным комплектом</string>
+        <string>маскировочном комплекте</string>
+      </NameCases>
+      <Description>Покупая комплект, игрок в ближайшую ночь избегает встречи с персонажами. Т.е. маф не убьет, комиссар не проверит, путана не заблокирует. Можно купить только 1 раз за игру.</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>AntiMask</string>
+    <Info>
+      <Name>Прибор ночного видения</Name>
+      <NameCases>
+        <string>прибор ночного видения</string>
+        <string>прибора ночного видения</string>
+        <string>прибору ночного видения</string>
+        <string>прибор ночного видения</string>
+        <string>прибором ночного видения</string>
+        <string>приборе ночного видения</string>
+      </NameCases>
+      <Description>Покупая прибор ночного видения, игрок в ближайшую ночь получает способность видеть и действовать сквозь маски. Таким образом, ПНВ является контрпредметом маске.</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>Antidote</string>
+    <Info>
+      <Name>Антидот</Name>
+      <NameCases>
+        <string>антидот</string>
+        <string>антидота</string>
+        <string>антидоту</string>
+        <string>антидот</string>
+        <string>антидотом</string>
+        <string>антидоте</string>
+      </NameCases>
+      <Description>Покупая антидот, игрок в ближайшую ночь снимает с себя все эффекты, ведущие к отложенной смерти (например, инфекция путаны или отравление отравителя).</Description>
+    </Info>
+  </Item>
+</Messages>

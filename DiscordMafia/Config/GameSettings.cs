@@ -5,6 +5,7 @@ using DiscordMafia.Roles;
 using System.Xml.Serialization;
 using System.Xml;
 using System.Xml.Schema;
+using DiscordMafia.Config.Lang;
 
 namespace DiscordMafia.Config
 {
@@ -31,6 +32,7 @@ namespace DiscordMafia.Config
         public byte MaxUsersToNotify { get; protected set; }
         public int MinNotificationInterval { get; protected set; }
 
+        public Language Language { get; private set; }
         public Messages Messages { get; private set; }
         public Points Points { get; private set; }
         public Roles Roles { get; private set; }
@@ -65,12 +67,31 @@ namespace DiscordMafia.Config
 
             ReadConfig();
 
-            Messages = Messages.GetInstance(GetFilePath($"Lang/{mainSettings.Language}/messages.xml"));
-            Console.WriteLine("Сообщения загружены");
+            Language = new Language();
+            Language.Load($"Config/Lang/{mainSettings.Language}");
+
+            /*var im = new PlaceMessages();
+            var items = DiscordMafia.Roles.Places.Place.AvailablePlaces;
+            foreach (var item in items)
+            {
+                im.Add(item.Id, new PlaceMessages.PlaceMessage() { Name = item.Name });
+            }
+            using (System.IO.Stream stream = new System.IO.FileStream(GetFilePath($"Lang/{mainSettings.Language}/placeMessages.xml"), System.IO.FileMode.OpenOrCreate))
+            {
+                var serializer = new XmlSerializer(im.GetType());
+                //Create our own namespaces for the output
+                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+
+                //Add an empty namespace and empty value
+                ns.Add("", "");
+                serializer.Serialize(stream, im, ns);
+            }*/
+
+            Console.WriteLine("Messages successfully loaded");
             Points = Points.GetInstance(GetFilePath("points.xml"));
-            Console.WriteLine("Конфигурация очков загружена");
+            Console.WriteLine("Points configuration successfully loaded");
             Roles = Roles.GetInstance(GetFilePath("roles.xml"));
-            Console.WriteLine("Конфигурация ролей загружена");
+            Console.WriteLine("Role configuration successfully loaded");
         }
 
         protected void ReadConfig()

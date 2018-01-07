@@ -2,29 +2,6 @@
 {
     public class Hacker : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Хакер";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "хакер",
-                    "хакера",
-                    "хакеру",
-                    "хакера",
-                    "хакером",
-                    "хакере",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

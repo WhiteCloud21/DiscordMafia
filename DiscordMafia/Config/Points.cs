@@ -36,8 +36,7 @@ namespace DiscordMafia.Config
         public long GetPoints(string key)
         {
             long result = 0;
-            PointsInfo info = null;
-            if (TryGetValue(key, out info))
+            if (TryGetValue(key, out PointsInfo info))
             {
                 result = info.Points;
             }

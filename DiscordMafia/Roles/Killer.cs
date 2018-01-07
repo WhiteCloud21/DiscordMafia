@@ -2,29 +2,6 @@
 {
     public class Killer : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Киллер";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "киллер",
-                    "киллера",
-                    "киллеру",
-                    "киллера",
-                    "киллером",
-                    "киллере",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

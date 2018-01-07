@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using DiscordMafia.Lib;
 using DiscordMafia.Roles;
 using System.Text;
+using DiscordMafia.Services;
 
 namespace DiscordMafia.Config
 {
@@ -90,7 +90,7 @@ namespace DiscordMafia.Config
                     if ((kvp.Value.IsEnabled || !onlyEnabled) && kvp.Value.IsRandom == isRandom && playersCount >= kvp.Value.MinPlayers)
                     {
                         var constructor = _typeCache[kvp.Key];
-                        var role = constructor.Invoke(new object[0]) as BaseRole;
+                        var role = GetRoleInstance(constructor);
                         result.Add(role);
                     }
                 }
@@ -103,7 +103,16 @@ namespace DiscordMafia.Config
             var roleType = Type.GetType(typeof(BaseRole).Namespace + "." + roleName, false);
             if (roleType != null)
             {
-                return roleType.GetTypeInfo().GetConstructor(Type.EmptyTypes).Invoke(new object[0]) as BaseRole;
+                return GetRoleInstance(roleType.GetTypeInfo().GetConstructor(Type.EmptyTypes));
+            }
+            return null;
+        }
+
+        public static BaseRole GetRoleInstance(ConstructorInfo ctor)
+        {
+            if (ctor != null)
+            {
+                return ctor.Invoke(new object[0]) as BaseRole;
             }
             return null;
         }
@@ -137,7 +146,7 @@ namespace DiscordMafia.Config
             }
         }
 
-        public string RolesHelp()
+        public string RolesHelp(ILanguage language)
         {
             FillCache();
             var result = new StringBuilder();
@@ -146,8 +155,8 @@ namespace DiscordMafia.Config
                 if (_typeCache.ContainsKey(kvp.Key))
                 {
                     var constructor = _typeCache[kvp.Key];
-                    var role = constructor.Invoke(new object[0]) as BaseRole;
-                    result.Append($"<b>{role.Name}</b> - ");
+                    var role = GetRoleInstance(constructor);
+                    result.Append($"<b>{role.GetName(language)}</b> - ");
                     result.Append(kvp.Value.IsEnabled ? "доступна, " : "недоступна, ");
                     result.Append(kvp.Value.IsRandom ? "одна из случайных, " : "в игре при достаточном количестве игроков, ");
                     result.AppendLine($"минимум игроков для появления - {kvp.Value.MinPlayers}");

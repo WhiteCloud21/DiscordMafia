@@ -22,7 +22,6 @@
     <Folder Include="Client" />
     <Folder Include="Config\Gametypes\yakuza" />
     <Folder Include="Messages" />
-    <Folder Include="Roles\Places" />
     <Folder Include="Voting" />
   </ItemGroup>
 </Project>

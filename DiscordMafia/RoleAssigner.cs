@@ -55,7 +55,7 @@ namespace DiscordMafia
             if ((remainingPlayerCount <= remainingMafCount || remainingPlayerCount <= remainingYakuzaCount) &&
                 role.Team != Team.Mafia && role.Team != Team.Yakuza || remainingPlayerCount == 0)
             {
-                Console.WriteLine("Недостаточно игроков для назначения роли {0}.", role.Name);
+                Console.WriteLine("Недостаточно игроков для назначения роли {0}.", role.GetType().Name);
                 return;
             }
             if (role is Warlock)
@@ -63,7 +63,7 @@ namespace DiscordMafia
                 (role as Warlock).AvailableCursesCount = totalMafCount;
             }
             var playerIndex = random.Next(remainingPlayerCount);
-            Console.WriteLine("Assined: {0} {1}", playerIndex, role.Name);
+            Console.WriteLine("Assined: {0} {1}", playerIndex, role.GetType().Name);
             foreach (var player in players)
             {
                 if (player.Role is Citizen)

@@ -5,11 +5,13 @@ namespace DiscordMafia.Roles
 {
     public abstract class BaseRole
     {
-        public abstract string Name { get; }
-        public abstract string[] NameCases { get; }
         public abstract Team Team { get; }
 
         public InGamePlayerInfo Player { get; internal set; }
+
+        public BaseRole()
+        {
+        }
 
         public virtual void ClearActivity(bool cancel = false, InGamePlayerInfo onlyAgainstTarget = null)
         {

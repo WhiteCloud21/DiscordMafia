@@ -35,7 +35,7 @@ namespace DiscordMafia.Modules
             {
                 message += " " + Environment.NewLine;
                 message += "<b>=========== Помощь по статусу===========</b>" + Environment.NewLine;
-                message += "Ваш статус - " + _game.MessageBuilder.FormatRole(currentPlayer.Role.Name) + Environment.NewLine;
+                message += "Ваш статус - " + _game.MessageBuilder.FormatRole(currentPlayer.Role.GetName(_game.Settings.Language)) + Environment.NewLine;
                 switch (currentPlayer.Role.Team)
                 {
                     case Team.Civil:
@@ -61,7 +61,7 @@ namespace DiscordMafia.Modules
             message += $"Якудза: {_game.Settings.IsYakuzaEnabled}" + Environment.NewLine;
             message += $"Мафов из каждой группировки: {_game.Settings.MafPercent}%" + Environment.NewLine;
             message += "<u><b>Доступные роли</b></u>" + Environment.NewLine;
-            message += _game.Settings.Roles.RolesHelp();
+            message += _game.Settings.Roles.RolesHelp(_game.Settings.Language);
 
             message += " " + Environment.NewLine;
             message += "<b>======Помощь по начислению очков======</b>" + Environment.NewLine;

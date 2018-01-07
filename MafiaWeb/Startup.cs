@@ -39,6 +39,12 @@ namespace MafiaWeb
                     options.AddCloudscribeNavigationBootstrap3Views();
                 });
             services.AddMvcGrid();
+
+            var dirSection = Configuration.GetSection("Directories");
+            var lang = new DiscordMafia.Config.Lang.Language();
+            // TODO Make language configurable
+            lang.Load(System.IO.Path.Combine(dirSection["Config"], "Lang/ru"));
+            services.AddSingleton(typeof(DiscordMafia.Services.ILanguage), lang);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

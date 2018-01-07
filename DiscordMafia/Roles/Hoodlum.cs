@@ -2,29 +2,6 @@
 {
     public class Hoodlum : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Громила";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "громила",
-                    "громилы",
-                    "громиле",
-                    "громилу",
-                    "громилой",
-                    "громиле",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

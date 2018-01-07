@@ -5,36 +5,6 @@ namespace DiscordMafia.Items
 {
     public class Antidote : BaseItem
     {
-        public override string Name
-        {
-            get
-            {
-                return "Антидот";
-            }
-        }
-        public override string Description
-        {
-            get
-            {
-                return "Покупая антидот, игрок в ближайшую ночь снимает с себя все эффекты, ведущие к отложенной смерти (например, инфекция путаны или отравление отравителя).";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "антидот",
-                    "антидота",
-                    "антидоту",
-                    "антидот",
-                    "антидотом",
-                    "антидоте",
-                };
-            }
-        }
-
         public override int Cost
         {
             get

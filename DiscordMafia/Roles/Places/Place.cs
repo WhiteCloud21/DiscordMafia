@@ -9,7 +9,7 @@ namespace DiscordMafia.Roles.Places
     public class Place
     {
         private static Place[] _places;
-        public string Name { get; protected set; }
+        public string Id { get; protected set; }
 
         protected Place() { }
 
@@ -21,9 +21,9 @@ namespace DiscordMafia.Roles.Places
                 {
                     _places = new Place[]
                     {
-                        new Place() { Name = "Дом" },
-                        new Place() { Name = "Супермаркет" },
-                        new Place() { Name = "Стадион" },
+                        new Place() { Id = "House" },
+                        new Place() { Id = "Supermarket" },
+                        new Place() { Id = "Stadium" },
                     };
                 }
                 return _places;

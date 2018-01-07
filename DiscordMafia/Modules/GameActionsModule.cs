@@ -264,9 +264,10 @@ namespace DiscordMafia.Modules
                     }
                     response += _game.MessageBuilder.GetText("ShopItemInfo", new Dictionary<string, object>() {
                         ["idx"] = i + 1,
-                        ["name"] = item.Name,
+                        ["name"] = item.GetName(_game.Settings.Language),
                         ["status"] = _game.MessageBuilder.GetText(itemStatusKey),
-                        ["description"] = item.Description
+                        ["cost"] = item.Cost,
+                        ["description"] = item.GetDescription(_game.Settings.Language)
                     });
                     response += Environment.NewLine;
                     response += Environment.NewLine;
@@ -293,7 +294,7 @@ namespace DiscordMafia.Modules
                         currentPlayer.Buy(itemToBuy);
                         await ReplyAsync(_game.MessageBuilder.GetText("ShopItemBought", new Dictionary<string, object>()
                         {
-                            ["name"] = itemToBuy.Name,
+                            ["name"] = itemToBuy.GetName(_game.Settings.Language),
                         }));
                     }
                     catch (Exception ex)

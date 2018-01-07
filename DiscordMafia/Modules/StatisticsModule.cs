@@ -66,7 +66,7 @@ namespace DiscordMafia.Modules
             _roleDataCache[user.Id] = (lastActualAt, rolesInfo);
 
             var message = "<b><u>Игр по ролям:</u></b>" + Environment.NewLine;
-            message += string.Join(Environment.NewLine, rolesInfo.OrderByDescending(r => r.Value).Select(r => $"<b>{Config.Roles.GetRoleInstance(r.Key)?.Name}</b> — {r.Value}"));
+            message += string.Join(Environment.NewLine, rolesInfo.OrderByDescending(r => r.Value).Select(r => $"<b>{Config.Roles.GetRoleInstance(r.Key)?.GetName(_game.Settings.Language)}</b> — {r.Value}"));
             await ReplyAsync(MessageBuilder.Markup(message));
         }
 

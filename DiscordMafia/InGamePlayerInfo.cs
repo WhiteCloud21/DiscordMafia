@@ -195,11 +195,11 @@ namespace DiscordMafia
         {
             if (GetItem(itemToBuy) != null)
             {
-                throw new InvalidOperationException(itemToBuy.NameCases[3] + " можно покупать только один раз за игру.");
+                throw new InvalidOperationException(itemToBuy.GetNameCases(Game.Settings.Language)[3] + " можно покупать только один раз за игру.");
             }
             if (DbUser.TotalPoints < itemToBuy.Cost)
             {
-                throw new InvalidOperationException("Недостаточно очков для покупки " + itemToBuy.NameCases[1]);
+                throw new InvalidOperationException("Недостаточно очков для покупки " + itemToBuy.GetNameCases(Game.Settings.Language)[1]);
             }
             OwnedItems.Add(itemToBuy);
             AddPoints(-itemToBuy.Cost);
