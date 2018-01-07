@@ -101,6 +101,19 @@ namespace DiscordMafia.Config
             }
             return message;
         }
+        
+        public string GetTextSimple(string key, IDictionary<string, object> replaceDictionary = null)
+        {
+            if (Language.SimpleMessages.TryGetValue(key, out string message))
+            {
+                if (replaceDictionary != null && !string.IsNullOrEmpty(message))
+                {
+                    message = Format(message, replaceDictionary);
+                }
+                return message;
+            }
+            return $"#UNK_SIMPLE_MESSAGE_{key}";
+        }
 
         public MessageBuilder AddImage(string photoPathOnServer)
         {

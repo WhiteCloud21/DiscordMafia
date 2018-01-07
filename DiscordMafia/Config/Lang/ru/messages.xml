@@ -37,7 +37,7 @@
     </ArrayOfString>
   </Item>
   <Item>
-    <string>PlayerCollectingFailed</string>
+    <string>PlayerCollectingFail</string>
     <ArrayOfString>
       <string>Недостаточно игроков ({count}/{minCount})</string>
     </ArrayOfString>
@@ -153,57 +153,6 @@
     <string>ShopDisabled</string>
     <ArrayOfString>
       <string>В этом игровом режиме магазин отключен.</string>
-    </ArrayOfString>
-  </Item>
-  <Item>
-    <string>ShopItemInfo</string>
-    <ArrayOfString>
-      <string><![CDATA[{idx}. <b>{name}</b> - предмет {status}. Цена: {cost}
-      <i>{description}</i>]]></string>
-    </ArrayOfString>
-  </Item>
-  <Item>
-    <string>ShopItemStatus_IsActive</string>
-    <ArrayOfString>
-      <string>будет использован этой ночью</string>
-    </ArrayOfString>
-  </Item>
-  <Item>
-    <string>ShopItemStatus_IsAvailable</string>
-    <ArrayOfString>
-      <string>доступен для покупки</string>
-    </ArrayOfString>
-  </Item>
-  <Item>
-    <string>ShopItemStatus_NotAvailable</string>
-    <ArrayOfString>
-      <string>недоступен</string>
-    </ArrayOfString>
-  </Item>
-  <Item>
-    <string>ShopItemBought</string>
-    <ArrayOfString>
-      <string>
-        <![CDATA[Вы купили <b>{name}</b>.]]>
-      </string>
-    </ArrayOfString>
-  </Item>
-  <Item>
-    <string>GamemodeChangeSuccess</string>
-    <ArrayOfString>
-      <string>Режим игры успешно изменён.</string>
-    </ArrayOfString>
-  </Item>
-  <Item>
-    <string>GamemodeChangeFail</string>
-    <ArrayOfString>
-      <string>Неизвестный режим игры.</string>
-    </ArrayOfString>
-  </Item>
-  <Item>
-    <string>GamemodeChangeFailInProgress</string>
-    <ArrayOfString>
-      <string>Менять режим игры нельзя, пока игра не завершена.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -785,7 +734,7 @@
     </ArrayOfString>
   </Item>
   <Item>
-    <string>DemomanExplosionFailed</string>
+    <string>DemomanExplosionFail</string>
     <ArrayOfString>
       <string>💣 Сегодня был взорван {place}. К счастью, никто не погиб.</string>
     </ArrayOfString>

@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<Messages>
+  <Item>
+    <string>N/A</string>
+    <string>Н/Д</string>
+  </Item>
+  <Item>
+    <string>ShopItemInfo</string>
+    <string>
+      <![CDATA[{idx}. <b>{name}</b> - предмет {status}. Цена: {cost}
+      <i>{description}</i>]]>
+    </string>
+  </Item>
+  <Item>
+    <string>ShopItemStatus_IsActive</string>
+    <string>будет использован этой ночью</string>
+  </Item>
+  <Item>
+    <string>ShopItemStatus_IsAvailable</string>
+    <string>доступен для покупки</string>
+  </Item>
+  <Item>
+    <string>ShopItemStatus_NotAvailable</string>
+    <string>недоступен</string>
+  </Item>
+  <Item>
+    <string>ShopItemBought</string>
+    <string>
+      <![CDATA[Вы купили <b>{name}</b>.]]>
+    </string>
+  </Item>
+  <Item>
+    <string>PersonalSettingsChangeSuccess</string>
+    <string>Настройки успешно обновлены.</string>
+  </Item>
+  <Item>
+    <string>PersonalSettingsChangeFail</string>
+    <string>Ошибка при обновлении настроек: {message}.</string>
+  </Item>
+  <Item>
+    <string>PersonalSettingsChangeFailUnkParameter</string>
+    <string>Неизвестный параметр {name}.</string>
+  </Item>
+  <Item>
+    <string>GamemodeChangeSuccess</string>
+    <string>Режим игры успешно изменён.</string>
+  </Item>
+  <Item>
+    <string>GamemodeChangeFail</string>
+    <string>Неизвестный режим игры.</string>
+  </Item>
+  <Item>
+    <string>GamemodeChangeFailInProgress</string>
+    <string>Менять режим игры нельзя, пока игра не завершена.</string>
+  </Item>
+  <Item>
+    <string>RatingHeader</string>
+    <string>Лучшие игроки по {name} (страница {page}/{maxPage})</string>
+  </Item>
+  <Item>
+    <string>RatingHeaderFormat</string>
+    <string>{idx}. Игрок - {ratingColumn}</string>
+  </Item>
+  <Item>
+    <string>RatingFieldName_Points</string>
+    <string>очкам</string>
+  </Item>
+  <Item>
+    <string>RatingFieldColumn_Points</string>
+    <string>Очки</string>
+  </Item>
+  <Item>
+    <string>RatingFieldName_Survivability</string>
+    <string>выживаемости</string>
+  </Item>
+  <Item>
+    <string>RatingFieldColumn_Survivability</string>
+    <string>% выживания</string>
+  </Item>
+  <Item>
+    <string>RatingFieldName_Wins</string>
+    <string>победам</string>
+  </Item>
+  <Item>
+    <string>RatingFieldColumn_Wins</string>
+    <string>% побед</string>
+  </Item>
+  <Item>
+    <string>RatingFieldName_Rate</string>
+    <string>рейтингу</string>
+  </Item>
+  <Item>
+    <string>RatingFieldColumn_Rate</string>
+    <string>Рейтинг</string>
+  </Item>
+  <Item>
+    <string>RatingFieldName_Games</string>
+    <string>играм</string>
+  </Item>
+  <Item>
+    <string>RatingFieldColumn_Games</string>
+    <string>Игр</string>
+  </Item>
+</Messages>

@@ -6,6 +6,7 @@ using DiscordMafia.Client;
 using DiscordMafia.Config;
 using DiscordMafia.DB;
 using Microsoft.Data.Sqlite;
+using System.Collections.Generic;
 
 namespace DiscordMafia.Modules
 {
@@ -50,11 +51,11 @@ namespace DiscordMafia.Modules
                 {
                     dbUser.IsNotificationEnabled = value;
                     context.SaveChanges();
-                    await ReplyAsync("Настройки успешно обновлены");
+                    await ReplyAsync(_game.MessageBuilder.GetTextSimple("PersonalSettingsChangeSuccess"));
                 }
                 catch (Exception ex)
                 {
-                    await ReplyAsync($"Ошибка при обновлении настроек: {ex.Message}");
+                    await ReplyAsync(_game.MessageBuilder.GetTextSimple("PersonalSettingsChangeFail", new Dictionary<string, object> { ["message"] = ex.Message }));
                 }
             }
         }

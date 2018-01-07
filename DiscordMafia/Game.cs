@@ -351,7 +351,7 @@ namespace DiscordMafia
             }
             else
             {
-                MessageBuilder.PrepareText("PlayerCollectingFailed", new Dictionary<string, object>
+                MessageBuilder.PrepareText("PlayerCollectingFail", new Dictionary<string, object>
                 {
                     ["count"] = CurrentPlayers.Count,
                     ["minCount"] = Settings.MinPlayers,
@@ -1213,7 +1213,7 @@ namespace DiscordMafia
                         }
                         else
                         {
-                            MessageBuilder.PrepareText("DemomanExplosionFailed", new Dictionary<string, object>
+                            MessageBuilder.PrepareText("DemomanExplosionFail", new Dictionary<string, object>
                             {
                                 ["place"] = role.PlaceToDestroy.GetName(Settings.Language),
                             }).SendPublic(GameChannel);
