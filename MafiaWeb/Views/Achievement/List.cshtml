@@ -1,12 +1,13 @@
-﻿@model IEnumerable<DiscordMafia.Achievement.Achievement>
+﻿@using DiscordMafia.Achievement
+@model IEnumerable<DiscordMafia.Achievement.Achievement>
 
 @(Html
     .Grid(Model)
     .Build(columns =>
     {
         columns.Add(model => model.Icon).Titled("Иконка").RenderedAs(model => $"<a href=\"{Url.RouteUrl("default", new { controller = "Achievement", action = "Index", id = model.Id })}\"><span class=\"achievement\">{model.Icon}</span>").Encoded(false);
-        columns.Add(model => model.Name).Titled("Название");
-        columns.Add(model => model.Description).Titled("Описание");
+        columns.Add(model => model.GetName(Language)).Titled("Название");
+        columns.Add(model => model.GetDescription(Language)).Titled("Описание");
     })
     .Filterable()
     .Sortable()

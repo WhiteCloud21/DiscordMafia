@@ -101,4 +101,38 @@
     <string>RatingFieldColumn_Games</string>
     <string>Игр</string>
   </Item>
+  <Item>
+    <string>UserStatTemplate</string>
+    <string>
+Статистика игрока {name}:
+Всего игр: {gamesPlayed}
+Пережил игр: {survivabilityTotal} ({survivabilityPercent}%)
+Побед: {wins} ({winsPercent}%)
+Текущая серия побед / поражений: {winStreak} / {loseStreak}
+Очков: {totalPoints} (в среднем за игру {averagePoints})
+Рейтинг: {rate}
+    </string>
+  </Item>
+  <Item>
+    <string>UserAchievementsStatTemplate</string>
+    <string>
+      <![CDATA[<b><u>Достижения:</u></b>
+{rows}
+      ]]>
+    </string>
+  </Item>
+  <Item>
+    <string>UserAchievementsStatRowTemplate</string>
+    <string>
+      <![CDATA[<b>{icon} {name}</b> ({description}) - заработано {achievedAt}]]>
+    </string>
+  </Item>
+  <Item>
+    <string>UserRolesStatTemplate</string>
+    <string>
+      <![CDATA[<b><u>Игр по ролям:</u></b>
+{rows}
+      ]]>
+    </string>
+  </Item>
 </Messages>

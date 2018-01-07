@@ -17,7 +17,6 @@
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Achievement" />
     <Folder Include="Activity" />
     <Folder Include="Client" />
     <Folder Include="Config\Gametypes\yakuza" />

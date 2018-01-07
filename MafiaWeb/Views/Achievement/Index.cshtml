@@ -1,9 +1,10 @@
-﻿@model MafiaWeb.ViewModels.Achievement.View
+﻿@using DiscordMafia.Achievement
+@model MafiaWeb.ViewModels.Achievement.View
 @{
-    ViewData["Title"] = $"Достижение {Model.Achievement.Name}";
+    ViewData["Title"] = $"Достижение {Model.Achievement.GetName(Language)}";
 }
 <achievement>@Model.Achievement.Id</achievement>
-<p>@Model.Achievement.Description</p>
+<p>@Model.Achievement.GetDescription(Language)</p>
 @(Html
     .Grid(Model.DbAchievements)
     .Build(columns =>
