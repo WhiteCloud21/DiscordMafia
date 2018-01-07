@@ -262,10 +262,10 @@ namespace DiscordMafia.Modules
                     {
                         itemStatusKey += "IsAvailable";
                     }
-                    response += _game.MessageBuilder.GetText("ShopItemInfo", new Dictionary<string, object>() {
+                    response += _game.MessageBuilder.GetTextSimple("ShopItemInfo", new Dictionary<string, object>() {
                         ["idx"] = i + 1,
                         ["name"] = item.GetName(_game.Settings.Language),
-                        ["status"] = _game.MessageBuilder.GetText(itemStatusKey),
+                        ["status"] = _game.MessageBuilder.GetTextSimple(itemStatusKey),
                         ["cost"] = item.Cost,
                         ["description"] = item.GetDescription(_game.Settings.Language)
                     });
@@ -517,16 +517,16 @@ namespace DiscordMafia.Modules
                 if (_game.Settings.IsValidGametype(mode))
                 {
                     _game.LoadSettings(mode);
-                    await ReplyAsync(_game.MessageBuilder.GetText("GamemodeChangeSuccess"));
+                    await ReplyAsync(_game.MessageBuilder.GetTextSimple("GamemodeChangeSuccess"));
                 }
                 else
                 {
-                    await ReplyAsync(_game.MessageBuilder.GetText("GamemodeChangeFail"));
+                    await ReplyAsync(_game.MessageBuilder.GetTextSimple("GamemodeChangeFail"));
                 }
             }
             else
             {
-                await ReplyAsync(_game.MessageBuilder.GetText("GamemodeChangeInProgress"));
+                await ReplyAsync(_game.MessageBuilder.GetTextSimple("GamemodeChangeInProgress"));
             }
             await Task.CompletedTask;
         }
