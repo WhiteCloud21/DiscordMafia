@@ -2,29 +2,6 @@
 {
     public class Spy : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Шпион";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "шпион",
-                    "шпиона",
-                    "шпиону",
-                    "шпиона",
-                    "шпионом",
-                    "шпионе",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

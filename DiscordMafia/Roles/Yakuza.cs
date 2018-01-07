@@ -2,29 +2,6 @@
 {
     public class Yakuza : BaseRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Якудза";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "якудза",
-                    "якудзы",
-                    "якудзе",
-                    "якудзу",
-                    "якудзой",
-                    "якудзе",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

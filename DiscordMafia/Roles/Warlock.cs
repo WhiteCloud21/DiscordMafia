@@ -2,29 +2,6 @@
 {
     public class Warlock : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Чернокнижник";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "чернокнижник",
-                    "чернокнижника",
-                    "чернокнижнику",
-                    "чернокнижника",
-                    "чернокнижником",
-                    "чернокнижнике",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

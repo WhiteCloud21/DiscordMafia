@@ -6,12 +6,14 @@ using System.Text.RegularExpressions;
 using Discord.WebSocket;
 using DiscordMafia.Client;
 using DiscordMafia.Messages;
+using DiscordMafia.Roles;
+using DiscordMafia.Config.Lang;
 
 namespace DiscordMafia.Config
 {
     public class MessageBuilder
     {
-        protected Messages Storage;
+        protected Language Language;
         protected DiscordSocketClient Client;
         private IList<InGamePlayerInfo> _playersList;
         protected Dictionary<ulong, IDMChannel> PrivateChannels = new Dictionary<ulong, IDMChannel>();
@@ -23,7 +25,7 @@ namespace DiscordMafia.Config
 
         public MessageBuilder(GameSettings settings, DiscordSocketClient client, IList<InGamePlayerInfo> playersList)
         {
-            this.Storage = settings.Messages;
+            this.Language = settings.Language;
             this.Client = client;
             this._playersList = playersList;
         }
@@ -71,13 +73,13 @@ namespace DiscordMafia.Config
             {
                 { "name", FormatName(player) },
                 { "nameSimple", Encode(player.GetName()) },
-                { "role", FormatRole(player.StartRole?.Name) },
-                { "role0", FormatRole(player.StartRole?.NameCases[0]) },
-                { "role1", FormatRole(player.StartRole?.NameCases[1]) },
-                { "role2", FormatRole(player.StartRole?.NameCases[2]) },
-                { "role3", FormatRole(player.StartRole?.NameCases[3]) },
-                { "role4", FormatRole(player.StartRole?.NameCases[4]) },
-                { "role5", FormatRole(player.StartRole?.NameCases[5]) },
+                { "role", FormatRole(player.StartRole?.GetName(Language)) },
+                { "role0", FormatRole(player.StartRole?.GetNameCases(Language)[0]) },
+                { "role1", FormatRole(player.StartRole?.GetNameCases(Language)[1]) },
+                { "role2", FormatRole(player.StartRole?.GetNameCases(Language)[2]) },
+                { "role3", FormatRole(player.StartRole?.GetNameCases(Language)[3]) },
+                { "role4", FormatRole(player.StartRole?.GetNameCases(Language)[4]) },
+                { "role5", FormatRole(player.StartRole?.GetNameCases(Language)[5]) },
             };
 
             messageTemplate = GenderRegex.Replace(messageTemplate, player.DbUser.Settings.Gender == DB.User.Gender.Male ? "$1" : "$2");
@@ -92,7 +94,7 @@ namespace DiscordMafia.Config
 
         public string GetText(string key, IDictionary<string, object> replaceDictionary = null)
         {
-            var message = Storage.get(key);
+            var message = Language.Messages.get(key);
             if (replaceDictionary != null && !string.IsNullOrEmpty(message))
             {
                 message = Format(message, replaceDictionary);

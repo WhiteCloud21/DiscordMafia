@@ -4,29 +4,6 @@ namespace DiscordMafia.Roles
 {
     public class Demoman : UniqueRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Подрывник";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "подрывник",
-                    "подрывника",
-                    "подрывнику",
-                    "подрывника",
-                    "подрывником",
-                    "подрывнике",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

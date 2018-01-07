@@ -2,29 +2,6 @@
 {
     public class Lawyer : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Адвокат";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "адвокат",
-                    "адвоката",
-                    "адвокату",
-                    "адвоката",
-                    "адвокатом",
-                    "адвокате",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

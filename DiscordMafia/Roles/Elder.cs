@@ -2,29 +2,6 @@
 {
     public class Elder : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Старейшина";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "старейшина",
-                    "старейшины",
-                    "старейшине",
-                    "старейшину",
-                    "старейшиной",
-                    "старейшине",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

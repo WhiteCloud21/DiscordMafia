@@ -1,4 +1,5 @@
 ﻿using DiscordMafia.Roles;
+using DiscordMafia.Services;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
@@ -11,11 +12,11 @@ namespace MafiaWeb.HtmlHelpers
     {
         private static Dictionary<string, BaseRole> instanceCache = new Dictionary<string, BaseRole>();
 
-        public static HtmlString Role(this IHtmlHelper html, string roleId)
+        public static HtmlString Role(this IHtmlHelper html, string roleId, ILanguage lang)
         {
             string result = "<span>";
             var role = GetRoleInstance(roleId);
-            result += html.Encode(role != null ? role.Name : roleId);
+            result += html.Encode(role != null ? role.GetName(lang) : roleId);
             result += "</span>";
             return new HtmlString(result);
         }

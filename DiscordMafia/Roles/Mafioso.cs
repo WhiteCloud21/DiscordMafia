@@ -2,29 +2,6 @@
 {
     public class Mafioso : BaseRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Маф";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "маф",
-                    "мафа",
-                    "мафу",
-                    "мафа",
-                    "мафом",
-                    "мафе",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

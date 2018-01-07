@@ -2,29 +2,6 @@
 {
     public class Wench : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Путана";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "путана",
-                    "путаны",
-                    "путане",
-                    "путану",
-                    "путаной",
-                    "путане",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

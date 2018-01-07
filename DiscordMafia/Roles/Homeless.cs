@@ -2,29 +2,6 @@
 {
     public class Homeless : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Бомж";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "бомж",
-                    "бомжа",
-                    "бомжу",
-                    "бомжа",
-                    "бомжом",
-                    "бомже",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

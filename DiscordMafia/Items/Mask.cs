@@ -5,36 +5,6 @@ namespace DiscordMafia.Items
 {
     public class Mask : BaseItem
     {
-        public override string Name
-        {
-            get
-            {
-                return "Маскировочный комплект";
-            }
-        }
-        public override string Description
-        {
-            get
-            {
-                return "Покупая комплект, игрок в ближайшую ночь избегает встречи с персонажами. Т.е. маф не убьет, комиссар не проверит, путана не заблокирует. Можно купить только 1 раз за игру.";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "маскировочный комплект",
-                    "маскировочного комплекта",
-                    "маскировочному комплекту",
-                    "маскировочный комплект",
-                    "маскировочным комплектом",
-                    "маскировочном комплекте",
-                };
-            }
-        }
-
         public override int Cost
         {
             get

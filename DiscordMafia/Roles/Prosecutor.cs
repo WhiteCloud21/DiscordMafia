@@ -2,29 +2,6 @@
 {
     public class Prosecutor : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Прокурор";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "прокурор",
-                    "прокурора",
-                    "прокурору",
-                    "прокурора",
-                    "прокурором",
-                    "прокуроре",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

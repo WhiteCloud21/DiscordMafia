@@ -2,29 +2,6 @@
 {
     public class Sheriff : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Шериф";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "шериф",
-                    "шерифа",
-                    "шерифу",
-                    "шерифа",
-                    "шерифом",
-                    "шерифе",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

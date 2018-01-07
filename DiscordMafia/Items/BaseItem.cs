@@ -8,9 +8,6 @@ namespace DiscordMafia.Items
 {
     public abstract class BaseItem
     {
-        public abstract string Name { get; }
-        public abstract string Description { get; }
-        public abstract string[] NameCases { get; }
         public abstract int Cost { get; }
         public virtual bool IsActive { get; protected set; }
 

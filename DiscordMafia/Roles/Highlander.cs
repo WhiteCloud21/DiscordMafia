@@ -2,29 +2,6 @@
 {
     public class Highlander : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Горец";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "горец",
-                    "горца",
-                    "горцу",
-                    "горца",
-                    "горцем",
-                    "горце",
-                };
-            }
-        }
-
         public override Team Team
         {
             get

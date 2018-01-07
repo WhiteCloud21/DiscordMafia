@@ -4,29 +4,6 @@ namespace DiscordMafia.Roles
 {
     public class Judge : UniqueRole, ITargetedRole
     {
-        public override string Name
-        {
-            get
-            {
-                return "Судья";
-            }
-        }
-
-        public override string[] NameCases
-        {
-            get
-            {
-                return new string[] {
-                    "судья",
-                    "судьи",
-                    "судье",
-                    "судью",
-                    "судьей",
-                    "судье",
-                };
-            }
-        }
-
         public override Team Team
         {
             get
