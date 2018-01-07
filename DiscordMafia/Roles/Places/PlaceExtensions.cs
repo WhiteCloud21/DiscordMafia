@@ -12,7 +12,11 @@ namespace DiscordMafia.Roles.Places
         
         private static PlaceMessages.PlaceMessage GetLangInfo(this Place place, ILanguage language)
         {
-            return language.PlaceMessages[place.Id] ?? null;
+            if (language.PlaceMessages.TryGetValue(place.Id, out var result))
+            {
+                return result;
+            }
+            return null;
         }
     }
 }

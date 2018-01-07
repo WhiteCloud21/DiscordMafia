@@ -9,5 +9,6 @@ namespace DiscordMafia.Services
         RoleMessages RoleMessages { get; }
         ItemMessages ItemMessages { get; }
         PlaceMessages PlaceMessages { get; }
+        AchievementMessages AchievementMessages { get; }
     }
 }

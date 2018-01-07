@@ -7,15 +7,18 @@ using Microsoft.EntityFrameworkCore;
 using DiscordMafia.DB;
 using cloudscribe.Web.Navigation;
 using DiscordMafia.Achievement;
+using DiscordMafia.Services;
 
 namespace MafiaWeb.Controllers
 {
     public class AchievementController : Controller
     {
         private GameContext dbContext;
-        public AchievementController(GameContext context)
+        private ILanguage language;
+        public AchievementController(GameContext context, ILanguage lang)
         {
             dbContext = context;
+            language = lang;
         }
         
         public IActionResult List()
@@ -41,7 +44,7 @@ namespace MafiaWeb.Controllers
             var currentCrumbAdjuster = new NavigationNodeAdjuster(Request.HttpContext)
             {
                 KeyToAdjust = "AchievementView",
-                AdjustedText = achievement.Name.ToString()
+                AdjustedText = achievement.GetName(language)
             };
             currentCrumbAdjuster.AddToContext();
         }

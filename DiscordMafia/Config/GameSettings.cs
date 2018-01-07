@@ -69,24 +69,6 @@ namespace DiscordMafia.Config
 
             Language = new Language();
             Language.Load($"Config/Lang/{mainSettings.Language}");
-
-            /*var im = new PlaceMessages();
-            var items = DiscordMafia.Roles.Places.Place.AvailablePlaces;
-            foreach (var item in items)
-            {
-                im.Add(item.Id, new PlaceMessages.PlaceMessage() { Name = item.Name });
-            }
-            using (System.IO.Stream stream = new System.IO.FileStream(GetFilePath($"Lang/{mainSettings.Language}/placeMessages.xml"), System.IO.FileMode.OpenOrCreate))
-            {
-                var serializer = new XmlSerializer(im.GetType());
-                //Create our own namespaces for the output
-                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-
-                //Add an empty namespace and empty value
-                ns.Add("", "");
-                serializer.Serialize(stream, im, ns);
-            }*/
-
             Console.WriteLine("Messages successfully loaded");
             Points = Points.GetInstance(GetFilePath("points.xml"));
             Console.WriteLine("Points configuration successfully loaded");

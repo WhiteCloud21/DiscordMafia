@@ -23,7 +23,11 @@ namespace DiscordMafia.Roles
 
         private static RoleMessages.RoleMessage GetItemLangInfo(this BaseRole role, ILanguage language)
         {
-            return language.RoleMessages[role.GetType().Name] ?? null;
+            if (language.RoleMessages.TryGetValue(role.GetType().Name, out var result))
+            {
+                return result;
+            }
+            return null;
         }
     }
 }

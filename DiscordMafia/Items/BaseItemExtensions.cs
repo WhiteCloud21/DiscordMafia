@@ -28,7 +28,11 @@ namespace DiscordMafia.Items
 
         private static ItemMessages.ItemMessage GetItemLangInfo(this BaseItem item, ILanguage language)
         {
-            return language.ItemMessages[item.GetType().Name] ?? null;
+            if (language.ItemMessages.TryGetValue(item.GetType().Name, out var result))
+            {
+                return result;
+            }
+            return null;
         }
     }
 }

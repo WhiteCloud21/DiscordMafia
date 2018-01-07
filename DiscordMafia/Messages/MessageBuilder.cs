@@ -13,7 +13,6 @@ namespace DiscordMafia.Config
 {
     public class MessageBuilder
     {
-        protected Language Language;
         protected DiscordSocketClient Client;
         private IList<InGamePlayerInfo> _playersList;
         protected Dictionary<ulong, IDMChannel> PrivateChannels = new Dictionary<ulong, IDMChannel>();
@@ -22,6 +21,8 @@ namespace DiscordMafia.Config
         protected string BuiltMessage = "";
 
         protected static Regex GenderRegex = new Regex(@"\{\s*gender:\s*(.*?)\s*\|\s*(.*?)\s*\}");
+
+        public Language Language { get; protected set; }
 
         public MessageBuilder(GameSettings settings, DiscordSocketClient client, IList<InGamePlayerInfo> playersList)
         {

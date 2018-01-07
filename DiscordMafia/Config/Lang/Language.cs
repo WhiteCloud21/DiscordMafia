@@ -10,14 +10,16 @@ namespace DiscordMafia.Config.Lang
         public RoleMessages RoleMessages { get; private set; }
         public ItemMessages ItemMessages { get; private set; }
         public PlaceMessages PlaceMessages { get; private set; }
+        public AchievementMessages AchievementMessages { get; private set; }
 
         public void Load(string filePath)
         {
             Messages = Messages.GetInstance(Path.Combine(filePath, "messages.xml"));
             SimpleMessages = SimpleMessages.GetInstance(Path.Combine(filePath, "simpleMessages.xml"));
-            RoleMessages = RoleMessages.GetInstance(Path.Combine(filePath, "roleMessages.xml"));
-            ItemMessages = ItemMessages.GetInstance(Path.Combine(filePath, "itemMessages.xml"));
-            PlaceMessages = PlaceMessages.GetInstance(Path.Combine(filePath, "placeMessages.xml"));
+            RoleMessages = RoleMessages.GetInstance(Path.Combine(filePath, "roles.xml"));
+            ItemMessages = ItemMessages.GetInstance(Path.Combine(filePath, "items.xml"));
+            PlaceMessages = PlaceMessages.GetInstance(Path.Combine(filePath, "places.xml"));
+            AchievementMessages = AchievementMessages.GetInstance(Path.Combine(filePath, "achievements.xml"));
         }
     }
 }

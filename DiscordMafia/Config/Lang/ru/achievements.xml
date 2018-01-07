@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Messages>
+  <Item>
+    <string>10k</string>
+    <Info>
+      <Name>Первая зарплата</Name>
+      <Description>Набрать 10000 очков</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>25k</string>
+    <Info>
+      <Name>Толстосум</Name>
+      <Description>Набрать 25000 очков</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>50k</string>
+    <Info>
+      <Name>Мешок золота</Name>
+      <Description>Набрать 50000 очков</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>100k</string>
+    <Info>
+      <Name>Финансовый воротила</Name>
+      <Description>Набрать 100000 очков</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>pointsPerGame</string>
+    <Info>
+      <Name>Нужно больше золота</Name>
+      <Description>Заработать 30 очков за одну игру</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ratingBronze</string>
+    <Info>
+      <Name>Первые шаги</Name>
+      <Description>Набрать 2000 рейтинга</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ratingSilver</string>
+    <Info>
+      <Name>Знаток правил</Name>
+      <Description>Набрать 3500 рейтинга</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ratingGold</string>
+    <Info>
+      <Name>Профи</Name>
+      <Description>Набрать 5000 рейтинга</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ratingChamp</string>
+    <Info>
+      <Name>Безусловный чемпион</Name>
+      <Description>Набрать 10000 рейтинга</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>gamesBronze</string>
+    <Info>
+      <Name>Всё только начинается</Name>
+      <Description>Сыграть игру</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>gamesSilver</string>
+    <Info>
+      <Name>Может ещё партеечку?</Name>
+      <Description>Сыграть 1501 игру</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>gamesGold</string>
+    <Info>
+      <Name>Золотой игрок</Name>
+      <Description>Сыграть 3000 игр</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>gamesChamp</string>
+    <Info>
+      <Name>Что наша жизнь? Игра!</Name>
+      <Description>Сыграть 5000 игр</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>winStreak</string>
+    <Info>
+      <Name>Превзошедший богов</Name>
+      <Description>Выиграть 10 игр подряд, не проиграв ни одной</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>loseStreak</string>
+    <Info>
+      <Name>Забытый призраками</Name>
+      <Description>Проиграть 10 игр подряд, не выиграв ни одной</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>civilkillcom</string>
+    <Info>
+      <Name>Одно убийство — одно разочарование</Name>
+      <Description>Убить комиссара, играя за шерифа или горца</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>demomanMaster</string>
+    <Info>
+      <Name>Запрещен в РФ</Name>
+      <Description>Подорвать половину игроков</Description>
+    </Info>
+  </Item>
+</Messages>
