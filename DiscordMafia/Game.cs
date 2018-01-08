@@ -68,8 +68,8 @@ namespace DiscordMafia
 
         internal void LoadSettings(string gametype = null)
         {
-            Settings = new Config.GameSettings(MainSettings, gametype);
-            MessageBuilder = new Config.MessageBuilder(Settings, client, PlayersList);
+            Settings = new Config.GameSettings(gametype);
+            MessageBuilder = new Config.MessageBuilder(MainSettings, client, PlayersList);
             GameMode = gametype;
             Console.WriteLine("Settings loaded");
         }
@@ -311,10 +311,10 @@ namespace DiscordMafia
                     switch (player.Role.Team)
                     {
                         case Team.Mafia:
-                            mafiaMessage += String.Format("{0} - {1} (`{2}`)", MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.Role.GetName(Settings.Language)), player.GetName()) + Environment.NewLine;
+                            mafiaMessage += String.Format("{0} - {1} (`{2}`)", MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.Role.GetName(MainSettings.Language)), player.GetName()) + Environment.NewLine;
                             break;
                         case Team.Yakuza:
-                            yakuzaMessage += String.Format("{0} - {1} (`{2}`)", MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.Role.GetName(Settings.Language)), player.GetName()) + Environment.NewLine;
+                            yakuzaMessage += String.Format("{0} - {1} (`{2}`)", MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.Role.GetName(MainSettings.Language)), player.GetName()) + Environment.NewLine;
                             break;
                     }
                     if (player.Role is Sergeant)
@@ -1198,7 +1198,7 @@ namespace DiscordMafia
                                 {
                                     player.AddPoints("MaffKillCom");
                                 }
-                                killedPlayersMessage += MessageBuilder.FormatRole(target.Role.GetNameCases(Settings.Language)[3]) + " " + MessageBuilder.FormatName(target) + ", ";
+                                killedPlayersMessage += MessageBuilder.FormatRole(target.Role.GetNameCases(MainSettings.Language)[3]) + " " + MessageBuilder.FormatName(target) + ", ";
                             }
                         }
 
@@ -1207,7 +1207,7 @@ namespace DiscordMafia
                             role.TotalVictims += killedPlayers.Count;
                             MessageBuilder.PrepareText("DemomanExplosionSuccess", new Dictionary<string, object>
                             {
-                                ["place"] = role.PlaceToDestroy.GetName(Settings.Language),
+                                ["place"] = role.PlaceToDestroy.GetName(MainSettings.Language),
                                 ["players"] = killedPlayersMessage,
                             }).SendPublic(GameChannel);
                         }
@@ -1215,7 +1215,7 @@ namespace DiscordMafia
                         {
                             MessageBuilder.PrepareText("DemomanExplosionFail", new Dictionary<string, object>
                             {
-                                ["place"] = role.PlaceToDestroy.GetName(Settings.Language),
+                                ["place"] = role.PlaceToDestroy.GetName(MainSettings.Language),
                             }).SendPublic(GameChannel);
                         }
 
@@ -1494,7 +1494,7 @@ namespace DiscordMafia
                                 killedPlayers.Add(target);
                                 KillManager.Kill(target);
                                 player.AddPoints("NeutralKill");
-                                killedPlayersMessage += MessageBuilder.FormatRole(target.Role.GetNameCases(Settings.Language)[1]) + " " + MessageBuilder.FormatName(target) + ", ";
+                                killedPlayersMessage += MessageBuilder.FormatRole(target.Role.GetNameCases(MainSettings.Language)[1]) + " " + MessageBuilder.FormatName(target) + ", ";
                             }
                         }
 
@@ -1506,7 +1506,7 @@ namespace DiscordMafia
                             killedPlayers.Add(target);
                             KillManager.Kill(target);
                             player.AddPoints("NeutralKill");
-                            killedPlayersMessage += MessageBuilder.FormatRole(target.Role.GetNameCases(Settings.Language)[1]) + " " + MessageBuilder.FormatName(target) + ", ";
+                            killedPlayersMessage += MessageBuilder.FormatRole(target.Role.GetNameCases(MainSettings.Language)[1]) + " " + MessageBuilder.FormatName(target) + ", ";
                         }
 
                         // TODO Переделать, вынести в функцию, хоть что-то сделать :(
@@ -1517,7 +1517,7 @@ namespace DiscordMafia
                             killedPlayers.Add(target);
                             KillManager.Kill(target);
                             player.AddPoints("NeutralKill");
-                            killedPlayersMessage += MessageBuilder.FormatRole(target.Role.GetNameCases(Settings.Language)[1]) + " " + MessageBuilder.FormatName(target) + ", ";
+                            killedPlayersMessage += MessageBuilder.FormatRole(target.Role.GetNameCases(MainSettings.Language)[1]) + " " + MessageBuilder.FormatName(target) + ", ";
                         }
 
                         if (killedPlayers.Count > 0)
@@ -1699,7 +1699,7 @@ namespace DiscordMafia
             var message = "";
             foreach (var player in PlayersList)
             {
-                message += String.Format("{0} {1} {3} ({4}) - {2}", Environment.NewLine, MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.StartRole.GetName(Settings.Language)), player.CurrentGamePoints, player.DbUser.TotalPoints);
+                message += String.Format("{0} {1} {3} ({4}) - {2}", Environment.NewLine, MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.StartRole.GetName(MainSettings.Language)), player.CurrentGamePoints, player.DbUser.TotalPoints);
                 if (!player.IsAlive)
                 {
                     message += " (труп)";

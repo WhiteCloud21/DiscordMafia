@@ -1,0 +1,447 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Modules>
+  <Item>
+    <string>GameActionsModule</string>
+    <Info>
+      <Aliases>
+        <string />
+      </Aliases>
+      <Summary>Игровые команды</Summary>
+      <Commands>
+        <Item>
+          <string>start</string>
+          <Info>
+            <Aliases>
+              <string>старт</string>
+            </Aliases>
+            <Summary>Запускает игру.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>join</string>
+          <Info>
+            <Aliases>
+              <string>я</string>
+              <string>z</string>
+            </Aliases>
+            <Summary>Присоединяет игрока к игре.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>cancel</string>
+          <Info>
+            <Aliases>
+              <string>отмена</string>
+              <string>нея</string>
+              <string>don't</string>
+            </Aliases>
+            <Summary>Отменяет действие.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>skip</string>
+          <Info>
+            <Aliases>
+              <string>пропустить</string>
+            </Aliases>
+            <Summary>Позволяет пропустить текущее действие.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>imprison</string>
+          <Info>
+            <Aliases>
+              <string>посадить</string>
+              <string>повесить</string>
+              <string>gjcflbnm</string>
+              <string>gjdtcbnm</string>
+            </Aliases>
+            <Summary>Осудить указанного игрока.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>yes</string>
+          <Info>
+            <Aliases>
+              <string>да</string>
+            </Aliases>
+            <Summary>Согласиться с решением суда.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>no</string>
+          <Info>
+            <Aliases>
+              <string>нет</string>
+            </Aliases>
+            <Summary>Опротестовать решение суда.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>gamemode</string>
+          <Info>
+            <Aliases>
+              <string>gametype</string>
+              <string>режим</string>
+            </Aliases>
+            <Summary>Изменяет режим игры.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>buy</string>
+          <Info>
+            <Aliases>
+              <string>купить</string>
+            </Aliases>
+            <Summary>Купить предмет.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>kill</string>
+          <Info>
+            <Aliases>
+              <string>убить</string>
+            </Aliases>
+            <Summary>Посодействовать в убийстве игрока.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>curse</string>
+          <Info>
+            <Aliases>
+              <string>проклясть</string>
+            </Aliases>
+            <Summary>Проклясть игрока.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>hack</string>
+          <Info>
+            <Aliases>
+              <string>хакнуть</string>
+            </Aliases>
+            <Summary>Хакнуть компьютер игрока.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>check</string>
+          <Info>
+            <Aliases>
+              <string>пров</string>
+              <string>проверить</string>
+            </Aliases>
+            <Summary>Проверить игрока.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>sleep</string>
+          <Info>
+            <Aliases>
+              <string>спать</string>
+            </Aliases>
+            <Summary>Переспать с игроком.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>block</string>
+          <Info>
+            <Aliases>
+              <string>блок</string>
+            </Aliases>
+            <Summary>Блокировать игрока.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>heal</string>
+          <Info>
+            <Aliases>
+              <string>лечить</string>
+            </Aliases>
+            <Summary>Подлатать игрока.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>justify</string>
+          <Info>
+            <Aliases>
+              <string>оправдать</string>
+            </Aliases>
+            <Summary>Оправдать игрока.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>destroy</string>
+          <Info>
+            <Aliases>
+              <string>подорвать</string>
+              <string>kaboom</string>
+            </Aliases>
+            <Summary>Взорвать локацию.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>go</string>
+          <Info>
+            <Aliases>
+              <string>го</string>
+              <string>погнали</string>
+            </Aliases>
+            <Summary>Форсирует начало игры.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>stop</string>
+          <Info>
+            <Aliases>
+              <string>стоп</string>
+            </Aliases>
+            <Summary>Форсированно отменяет игру.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>recalculate</string>
+          <Info>
+            <Aliases>
+              <string>пересчет</string>
+            </Aliases>
+            <Summary>Пересчет статистики игроков.</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>HelpModule</string>
+    <Info>
+      <Aliases>
+        <string />
+      </Aliases>
+      <Summary>Команды помощи</Summary>
+      <Commands>
+        <Item>
+          <string>help</string>
+          <Info>
+            <Aliases>
+              <string>хелп</string>
+            </Aliases>
+            <Summary>Выводит справку по команде.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>list</string>
+          <Info>
+            <Aliases>
+              <string>список</string>
+            </Aliases>
+            <Summary>Выводит список команд.</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>NotificationSettingsModule</string>
+    <Info>
+      <Aliases>
+        <string />
+      </Aliases>
+      <Summary>Настройки уведомлений</Summary>
+      <Commands>
+        <Item>
+          <string>announceon</string>
+          <Info>
+            <Aliases>
+              <string>предупреждай</string>
+            </Aliases>
+            <Summary>Включает уведомления о начале игры</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>announceoff</string>
+          <Info>
+            <Aliases>
+              <string>отстань</string>
+            </Aliases>
+            <Summary>Отключает уведомления о начале игры</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>SettingsModule</string>
+    <Info>
+      <Aliases>
+        <string>настройки</string>
+      </Aliases>
+      <Summary>Личные настройки</Summary>
+      <Commands>
+        <Item>
+          <string>Default</string>
+          <Info>
+            <Aliases/>
+            <Summary>Выводит настройки.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>update</string>
+          <Info>
+            <Aliases>
+              <string>обновить</string>
+            </Aliases>
+            <Summary>Обновляет настройки.</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>RatingModule</string>
+    <Info>
+      <Aliases>
+        <string>топ</string>
+      </Aliases>
+      <Summary>Команды рейтинга</Summary>
+      <Commands>
+        <Item>
+          <string>Default</string>
+          <Info>
+            <Aliases/>
+            <Summary>Топ по умолчанию (может меняться)</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>Страница топа</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+        <Item>
+          <string>points</string>
+          <Info>
+            <Aliases>
+              <string>очков</string>
+            </Aliases>
+            <Summary>Топ по очкам</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>Страница топа</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+        <Item>
+          <string>rate</string>
+          <Info>
+            <Aliases>
+              <string>rating</string>
+              <string>рейтинга</string>
+              <string>рейтинг</string>
+              <string>рейтинги</string>
+            </Aliases>
+            <Summary>Топ по рейтингу</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>Страница топа</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+        <Item>
+          <string>games</string>
+          <Info>
+            <Aliases>
+              <string>игра</string>
+              <string>игр</string>
+              <string>игры</string>
+            </Aliases>
+            <Summary>Топ по играм</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>Страница топа</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+        <Item>
+          <string>survivals</string>
+          <Info>
+            <Aliases>
+              <string>выживших</string>
+              <string>выживания</string>
+              <string>выживающих</string>
+              <string>живучих</string>
+            </Aliases>
+            <Summary>Топ по выживаемости</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>Страница топа</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+        <Item>
+          <string>wins</string>
+          <Info>
+            <Aliases>
+              <string>побед</string>
+              <string>победителей</string>
+            </Aliases>
+            <Summary>Топ по победам</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>Страница топа</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>StatisticsModule</string>
+    <Info>
+      <Aliases>
+        <string />
+      </Aliases>
+      <Summary>Команды статистики</Summary>
+      <Commands>
+        <Item>
+          <string>mystat</string>
+          <Info>
+            <Aliases>
+              <string>мойстат</string>
+            </Aliases>
+            <Summary>Выводит статистику.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>stats</string>
+          <Info>
+            <Aliases>
+              <string>статы</string>
+            </Aliases>
+            <Summary>Выводит статистику.</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+</Modules>

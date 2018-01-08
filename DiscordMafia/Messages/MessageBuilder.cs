@@ -24,7 +24,7 @@ namespace DiscordMafia.Config
 
         public Language Language { get; protected set; }
 
-        public MessageBuilder(GameSettings settings, DiscordSocketClient client, IList<InGamePlayerInfo> playersList)
+        public MessageBuilder(MainSettings settings, DiscordSocketClient client, IList<InGamePlayerInfo> playersList)
         {
             this.Language = settings.Language;
             this.Client = client;

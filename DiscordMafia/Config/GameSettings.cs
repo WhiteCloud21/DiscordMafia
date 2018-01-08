@@ -31,13 +31,11 @@ namespace DiscordMafia.Config
         public int NightTime { get; protected set; }
         public byte MaxUsersToNotify { get; protected set; }
         public int MinNotificationInterval { get; protected set; }
-
-        public Language Language { get; private set; }
-        public Messages Messages { get; private set; }
+        
         public Points Points { get; private set; }
         public Roles Roles { get; private set; }
 
-        public GameSettings(MainSettings mainSettings, string gametype)
+        public GameSettings(string gametype)
         {
             GameType = gametype;
 
@@ -66,10 +64,7 @@ namespace DiscordMafia.Config
             IsYakuzaEnabled = false;
 
             ReadConfig();
-
-            Language = new Language();
-            Language.Load($"Config/Lang/{mainSettings.Language}");
-            Console.WriteLine("Messages successfully loaded");
+            
             Points = Points.GetInstance(GetFilePath("points.xml"));
             Console.WriteLine("Points configuration successfully loaded");
             Roles = Roles.GetInstance(GetFilePath("roles.xml"));

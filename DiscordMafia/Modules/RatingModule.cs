@@ -35,37 +35,37 @@ namespace DiscordMafia.Modules
         }
 
         [Command, Priority(-100), Summary("Топ по умолчанию (может меняться)")]
-        public async Task Default([Summary("Страница топа")] int page = 1)
+        public async Task Default(int page = 1)
         {
             await DrawTop(PointsField, page);
         }
 
         [Command("points"), Summary("Топ по очкам"), Alias("очков"), Priority(100)]
-        public async Task PointsTop([Summary("Страница топа")] int page = 1)
+        public async Task PointsTop(int page = 1)
         {
             await DrawTop(PointsField, page);
         }
 
         [Command("rate"), Summary("Топ по рейтингу"), Alias("rating", "рейтинга", "рейтинг", "рейтинги"), Priority(100)]
-        public async Task RateTop([Summary("Страница топа")] int page = 1)
+        public async Task RateTop(int page = 1)
         {
             await DrawTop(RateField, page);
         }
 
         [Command("games"), Summary("Топ по играм"), Alias("игра", "игр", "игры"), Priority(100)]
-        public async Task GamesTop([Summary("Страница топа")] int page = 1)
+        public async Task GamesTop(int page = 1)
         {
             await DrawTop(GamesField, page);
         }
 
         [Command("survivals"), Summary("Топ по выживаемости"), Alias("выживших", "выживания", "выживающих", "живучих"), Priority(100)]
-        public async Task SurvivalsTop([Summary("Страница топа")] int page = 1)
+        public async Task SurvivalsTop(int page = 1)
         {
             await DrawTop(SurvivabilityField, page);
         }
 
         [Command("wins"), Summary("Топ по победам"), Alias("побед", "победителей"), Priority(100)]
-        public async Task WinsTop([Summary("Страница топа")] int page = 1)
+        public async Task WinsTop(int page = 1)
         {
             await DrawTop(WinsField, page);
         }

@@ -11,6 +11,7 @@ namespace DiscordMafia.Config.Lang
         public ItemMessages ItemMessages { get; private set; }
         public PlaceMessages PlaceMessages { get; private set; }
         public AchievementMessages AchievementMessages { get; private set; }
+        public ModuleMessages ModuleMessages { get; private set; }
 
         public void Load(string filePath)
         {
@@ -20,6 +21,7 @@ namespace DiscordMafia.Config.Lang
             ItemMessages = ItemMessages.GetInstance(Path.Combine(filePath, "items.xml"));
             PlaceMessages = PlaceMessages.GetInstance(Path.Combine(filePath, "places.xml"));
             AchievementMessages = AchievementMessages.GetInstance(Path.Combine(filePath, "achievements.xml"));
+            ModuleMessages = ModuleMessages.GetInstance(Path.Combine(filePath, "modules.xml"));
         }
     }
 }
