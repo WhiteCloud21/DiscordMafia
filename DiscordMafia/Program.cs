@@ -31,7 +31,7 @@ namespace DiscordMafia
         public async Task Start()
         {
             var settings = new MainSettings("Config/mainSettings.xml", "Config/Local/mainSettings.xml");
-            settings.Validate();
+            settings.LoadLanguage();
 
             var connection = new SqliteConnection($"Data Source={settings.DatabasePath};");
             connection.Open();
@@ -89,7 +89,8 @@ namespace DiscordMafia
             // Hook the MessageReceived Event into our Command Handler
             client.MessageReceived += HandleCommand;
             // Discover all of the commands in this assembly and load them.
-            await commands.AddModulesAsync(Assembly.GetEntryAssembly());
+            var wrapper = new CommandsServiceLocalizer();
+            await wrapper.AddModulesAsync(Settings, commands, Assembly.GetEntryAssembly());
         }
 
         public async Task HandleCommand(SocketMessage messageParam)

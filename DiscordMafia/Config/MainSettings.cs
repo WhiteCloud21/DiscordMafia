@@ -17,7 +17,8 @@ namespace DiscordMafia.Config
         public string DatabasePath { get; protected set; }
         public ulong  GameChannel { get; protected set; }
         public HashSet<ulong> AdminId { get; protected set; }
-        public string Language { get; protected set; }
+        public string LanguageStr { get; protected set; }
+        public Lang.Language Language { get; protected set; }
 
         public MainSettings(params string[] filenames)
         {
@@ -77,7 +78,7 @@ namespace DiscordMafia.Config
                             AdminId.Add(ulong.Parse(reader.ReadElementContentAsString()));
                             break;
                         case "Language":
-                            Language = reader.ReadElementContentAsString();
+                            LanguageStr = reader.ReadElementContentAsString();
                             break;
                         default:
                             reader.Skip();
@@ -101,14 +102,6 @@ namespace DiscordMafia.Config
             return null;
         }
 
-        public void Validate()
-        {
-            if (!IsValidLanguage(Language))
-            {
-                throw new Exception("Language is not valid in mainSettings!");
-            }
-        }
-
         public bool IsValidLanguage(string language)
         {
             if (!Regex.IsMatch(language, @"[a-zA-Z0-9\-]+"))
@@ -116,6 +109,16 @@ namespace DiscordMafia.Config
                 return false;
             }
             return Directory.Exists($"Config/Lang/{language}");
+        }
+
+        public void LoadLanguage()
+        {
+            if (!IsValidLanguage(LanguageStr))
+            {
+                throw new Exception("Language is not valid in mainSettings!");
+            }
+            Language = new Lang.Language();
+            Language.Load($"Config/Lang/{LanguageStr}");
         }
     }
 }
