@@ -32,6 +32,7 @@ namespace DiscordMafia.Achievement
                 new Achievement { Id = Achievement.Id50K, Icon = "\U0001F947" },
                 new Achievement { Id = Achievement.Id100K, Icon = "\U0001F3C6" },
                 new Achievement { Id = Achievement.IdPointsPerGame, Icon = "\U0001F4B0" },
+                new Achievement { Id = Achievement.IdPointsPerGameWasted, Icon = "\U0001F643" },
                 new Achievement { Id = Achievement.IdRatingBronze, Icon = "\U0001F949" },
                 new Achievement { Id = Achievement.IdRatingSilver, Icon = "\U0001F948" },
                 new Achievement { Id = Achievement.IdRatingGold, Icon = "\U0001F947" },
@@ -40,10 +41,15 @@ namespace DiscordMafia.Achievement
                 new Achievement { Id = Achievement.IdGamesSilver, Icon = "\U0001F948" },
                 new Achievement { Id = Achievement.IdGamesGold, Icon = "\U0001F947" },
                 new Achievement { Id = Achievement.IdGamesChampion, Icon = "\U0001F3C6" },
+                new Achievement { Id = Achievement.IdPerfectWin, Icon = "\U0001F386" },
+                new Achievement { Id = Achievement.IdNeutralWin, Icon = "\U0001F43A" },
                 new Achievement { Id = Achievement.IdWinStreak, Icon = "\U0001F638" },
                 new Achievement { Id = Achievement.IdLoseStreak, Icon = "\U0001F62D" },
                 new Achievement { Id = Achievement.IdCivilKillCom, Icon = "\U0000267F" },
+                new Achievement { Id = Achievement.IdDocHealCom, Icon = "\U0001F47C" },
+                new Achievement { Id = Achievement.IdDocHealMaf, Icon = "\U0001F912" },
                 new Achievement { Id = Achievement.IdDemomanMaster, Icon = "\U0001F4A5" },
+                new Achievement { Id = Achievement.IdPlayWithDeveloper, Icon = "\U00002601" },
             };
             foreach (var achievement in achievementsToRegister)
             {

@@ -36,6 +36,13 @@
     </Info>
   </Item>
   <Item>
+    <string>pointsPerGameWasted</string>
+    <Info>
+      <Name>Потрачено</Name>
+      <Description>Потерять 30 очков за одну игру</Description>
+    </Info>
+  </Item>
+  <Item>
     <string>ratingBronze</string>
     <Info>
       <Name>Первые шаги</Name>
@@ -92,6 +99,20 @@
     </Info>
   </Item>
   <Item>
+    <string>perfectWin</string>
+    <Info>
+      <Name>Чистая победа</Name>
+      <Description>Победить в игре на 6 и более игроков, не потеряв никого из команды</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>neutralWin</string>
+    <Info>
+      <Name>Волк-одиночка</Name>
+      <Description>Победить за нейтрального персонажа</Description>
+    </Info>
+  </Item>
+  <Item>
     <string>winStreak</string>
     <Info>
       <Name>Превзошедший богов</Name>
@@ -113,10 +134,31 @@
     </Info>
   </Item>
   <Item>
+    <string>dochealcom</string>
+    <Info>
+      <Name>Клятва Гиппократа</Name>
+      <Description>Спасти комиссара, вылечив его</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>dochealmaf</string>
+    <Info>
+      <Name>Клятва верности</Name>
+      <Description>Вылечить мафа, которого убивал комиссар, шериф или Робин Гуд</Description>
+    </Info>
+  </Item>
+  <Item>
     <string>demomanMaster</string>
     <Info>
       <Name>Запрещен в РФ</Name>
       <Description>Подорвать половину игроков</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>playWithDeveloper</string>
+    <Info>
+      <Name>А кто это?</Name>
+      <Description>Сыграть с разработчиком бота</Description>
     </Info>
   </Item>
 </Messages>

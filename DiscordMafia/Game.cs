@@ -45,6 +45,7 @@ namespace DiscordMafia
         public Achievement.AchievementAssigner AchievementAssigner { get; private set; }
         internal int PlayerCollectingRemainingTime = 0;
         internal DateTime LastNotification = new DateTime(0);
+        private DB.Game _lastGame;
 
         public Game(System.Threading.SynchronizationContext syncContext, DiscordSocketClient client, Config.MainSettings mainSettings)
         {
@@ -240,13 +241,14 @@ namespace DiscordMafia
         {
             timer.Stop();
 
-            AchievementAssigner.AfterGame();
+            AchievementAssigner.AfterGame(_lastGame);
             AchievementManager.Apply();
 
             KillManager.Clear();
             CurrentPlayers.Clear();
             PlayersList.Clear();
             CurrentState = GameState.Stopped;
+            _lastGame = null;
             client.SetGameAsync(null);
         }
 
@@ -1012,6 +1014,7 @@ namespace DiscordMafia
                                 if (role.PlayerToInteract.HealedBy?.Player != null)
                                 {
                                     role.PlayerToInteract.HealedBy.Player.AddPoints("DocHealMaf");
+                                    AchievementManager.Push(role.PlayerToInteract.HealedBy.Player.User, Achievement.Achievement.IdDocHealMaf);
                                     MessageBuilder.PrepareTextReplacePlayer("ComKillMafHelpDoc", role.PlayerToInteract).SendPublic(GameChannel);
                                 }
                                 else
@@ -1073,11 +1076,13 @@ namespace DiscordMafia
                                     if (role.PlayerToInteract.Role is Commissioner)
                                     {
                                         role.PlayerToInteract.HealedBy.Player.AddPoints("DocHealCom");
+                                        AchievementManager.Push(role.PlayerToInteract.HealedBy.Player.User, Achievement.Achievement.IdDocHealCom);
                                     }
                                     break;
                                 case Team.Mafia:
                                 case Team.Yakuza:
                                     role.PlayerToInteract.HealedBy.Player.AddPoints("DocHealMaf");
+                                    AchievementManager.Push(role.PlayerToInteract.HealedBy.Player.User, Achievement.Achievement.IdDocHealMaf);
                                     break;
                             }
                             MessageBuilder.PrepareTextReplacePlayer("SheriffKillHelpDoc", role.PlayerToInteract).SendPublic(GameChannel);
@@ -1139,6 +1144,7 @@ namespace DiscordMafia
                                     if (role.PlayerToInteract.Role is Commissioner)
                                     {
                                         role.PlayerToInteract.HealedBy.Player.AddPoints("DocHealCom");
+                                        AchievementManager.Push(role.PlayerToInteract.HealedBy.Player.User, Achievement.Achievement.IdDocHealCom);
                                     }
                                     break;
                                 case Team.Mafia:
@@ -1244,6 +1250,7 @@ namespace DiscordMafia
                                     if (role.PlayerToInteract.Role is Commissioner)
                                     {
                                         role.PlayerToInteract.HealedBy.Player.AddPoints("DocHealCom");
+                                        AchievementManager.Push(role.PlayerToInteract.HealedBy.Player.User, Achievement.Achievement.IdDocHealCom);
                                     }
                                     break;
                                 case Team.Mafia:
@@ -1288,11 +1295,13 @@ namespace DiscordMafia
                                     if (role.PlayerToInteract.Role is Commissioner)
                                     {
                                         role.PlayerToInteract.HealedBy.Player.AddPoints("DocHealCom");
+                                        AchievementManager.Push(role.PlayerToInteract.HealedBy.Player.User, Achievement.Achievement.IdDocHealCom);
                                     }
                                     break;
                                 case Team.Mafia:
                                 case Team.Yakuza:
                                     role.PlayerToInteract.HealedBy.Player.AddPoints("DocHealMaf");
+                                    AchievementManager.Push(role.PlayerToInteract.HealedBy.Player.User, Achievement.Achievement.IdDocHealMaf);
                                     break;
                             }
                             MessageBuilder.PrepareTextReplacePlayer("RobinHoodKillHelpDoc", role.PlayerToInteract).SendPublic(GameChannel);
@@ -1329,6 +1338,7 @@ namespace DiscordMafia
                             if (leader.Role is Commissioner)
                             {
                                 leader.HealedBy.Player.AddPoints("DocHealCom");
+                                AchievementManager.Push(leader.HealedBy.Player.User, Achievement.Achievement.IdDocHealCom);
                             }
                             MessageBuilder.PrepareTextReplacePlayer("MafKillHelpDoc", leader).SendPublic(GameChannel);
                         }
@@ -1392,6 +1402,7 @@ namespace DiscordMafia
                             if (leader.Role is Commissioner)
                             {
                                 leader.HealedBy.Player.AddPoints("DocHealCom");
+                                AchievementManager.Push(leader.HealedBy.Player.User, Achievement.Achievement.IdDocHealCom);
                             }
                             MessageBuilder.PrepareTextReplacePlayer("YakuzaKillHelpDoc", leader).SendPublic(GameChannel);
                         }
@@ -1625,7 +1636,7 @@ namespace DiscordMafia
 
             using (var gameContext = new GameContext())
             {
-                var game = new DB.Game()
+                _lastGame = new DB.Game()
                 {
                     StartedAt = StartedAt,
                     FinishedAt = DateTime.Now
@@ -1681,15 +1692,15 @@ namespace DiscordMafia
                     gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Win, player.StartRole.Team == team);
                     gameUser.Result = gameUser.Result.SetFlag(GameUser.ResultFlags.Draw, team == Team.None);
 
-                    gameUser.Game = game;
+                    gameUser.Game = _lastGame;
                     gameContext.GameUsers.Add(gameUser);
                 }
 
-                game.PlayersCount = PlayersList.Count;
-                game.Winner = team;
-                game.GameMode = GameMode;
+                _lastGame.PlayersCount = PlayersList.Count;
+                _lastGame.Winner = team;
+                _lastGame.GameMode = GameMode;
 
-                gameContext.Games.Add(game);
+                gameContext.Games.Add(_lastGame);
                 
                 gameContext.SaveChanges();
             }

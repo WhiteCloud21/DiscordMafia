@@ -10,12 +10,13 @@ namespace DiscordMafia.Achievement
 
         public AchievementAssigner(Game game)
         {
-            this._game = game;
+            _game = game;
             _manager = game.AchievementManager;
         }
 
-        public void AfterGame()
+        public void AfterGame(DB.Game gameResult)
         {
+            var state = new GameState(this, gameResult);
             foreach (var player in _game.PlayersList)
             {
                 CheckPoints(player);
@@ -23,6 +24,7 @@ namespace DiscordMafia.Achievement
                 CheckGames(player);
                 CheckStreaks(player);
                 CheckDemoman(player);
+                state.CheckAchievements(player);
             }
         }
 
@@ -68,6 +70,10 @@ namespace DiscordMafia.Achievement
             {
                 _manager.Push(player.User, Achievement.IdPointsPerGame);
             }
+            if (player.CurrentGamePoints <= -30)
+            {
+                _manager.Push(player.User, Achievement.IdPointsPerGameWasted);
+            }
         }
 
         private void CheckGames(InGamePlayerInfo player)
@@ -110,6 +116,51 @@ namespace DiscordMafia.Achievement
                 if (demo.TotalVictims >= playersCountToAchievement)
                 {
                     _manager.Push(player.User, Achievement.IdDemomanMaster);
+                }
+            }
+        }
+
+        private class GameState
+        {
+            public readonly bool IsGameWithAuthor = false;
+            public readonly bool IsClearVictory = false;
+
+            private readonly AchievementManager _manager;
+            private readonly DB.Game _gameResult;
+
+            public GameState(AchievementAssigner assigner, DB.Game gameResult)
+            {
+                _manager = assigner._manager;
+                _gameResult = gameResult;
+                var game = assigner._game;
+                var winner = _gameResult.Winner;
+                IsClearVictory = _gameResult.PlayersCount > 5 && winner != Team.None;
+                foreach (var player in game.PlayersList)
+                {
+                    if (player.User.Id == 137234657623277568)
+                    {
+                        IsGameWithAuthor = true;
+                    }
+                    if (!player.IsAlive && player.Role.Team == winner)
+                    {
+                        IsClearVictory = false;
+                    }
+                }
+            }
+
+            public void CheckAchievements(InGamePlayerInfo player)
+            {
+                if (IsGameWithAuthor)
+                {
+                    _manager.Push(player.User, Achievement.IdPlayWithDeveloper);
+                }
+                if (IsClearVictory && player.Role.Team == _gameResult.Winner)
+                {
+                    _manager.Push(player.User, Achievement.IdPlayWithDeveloper);
+                }
+                if (player.Role.Team == _gameResult.Winner && _gameResult.Winner == Team.Neutral)
+                {
+                    _manager.Push(player.User, Achievement.IdNeutralWin);
                 }
             }
         }
