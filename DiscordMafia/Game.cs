@@ -91,7 +91,7 @@ namespace DiscordMafia
                         {
                             if (player.Role.Team == currentPlayer.Role.Team && !player.IsBot && player.User.Id != message.Author.Id)
                             {
-                                MessageBuilder.Text($"{currentPlayer.GetName()}: {text}").SendPrivate(player);
+                                MessageBuilder.Text($"{currentPlayer.GetName()}: {text}", false).SendPrivate(player);
                             }
                         }
                     }

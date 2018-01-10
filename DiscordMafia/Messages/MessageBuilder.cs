@@ -236,7 +236,7 @@ namespace DiscordMafia.Config
 
         public virtual string FormatRole(string role)
         {
-            return "<b>" + Encode(role) + "</b>";
+            return "<b>" + role + "</b>";
         }
 
         public class ReplaceDictionary: Dictionary<string, object>

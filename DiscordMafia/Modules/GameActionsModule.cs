@@ -292,10 +292,10 @@ namespace DiscordMafia.Modules
                     try
                     {
                         currentPlayer.Buy(itemToBuy);
-                        await ReplyAsync(_game.MessageBuilder.GetTextSimple("ShopItemBought", new Dictionary<string, object>()
+                        await ReplyAsync(MessageBuilder.Markup(_game.MessageBuilder.GetTextSimple("ShopItemBought", new Dictionary<string, object>()
                         {
                             ["name"] = itemToBuy.GetName(_game.MainSettings.Language),
-                        }));
+                        })));
                     }
                     catch (Exception ex)
                     {
