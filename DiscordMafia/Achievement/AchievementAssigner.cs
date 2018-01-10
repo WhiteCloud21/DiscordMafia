@@ -132,6 +132,10 @@ namespace DiscordMafia.Achievement
             {
                 _manager = assigner._manager;
                 _gameResult = gameResult;
+                if (_gameResult == null)
+                {
+                    return;
+                }
                 var game = assigner._game;
                 var winner = _gameResult.Winner;
                 IsClearVictory = _gameResult.PlayersCount > 5 && winner != Team.None;
@@ -150,6 +154,10 @@ namespace DiscordMafia.Achievement
 
             public void CheckAchievements(InGamePlayerInfo player)
             {
+                if (_gameResult == null)
+                {
+                    return;
+                }
                 if (IsGameWithAuthor)
                 {
                     _manager.Push(player.User, Achievement.IdPlayWithDeveloper);

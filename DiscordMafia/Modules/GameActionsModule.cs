@@ -292,7 +292,7 @@ namespace DiscordMafia.Modules
                     try
                     {
                         currentPlayer.Buy(itemToBuy);
-                        await ReplyAsync(_game.MessageBuilder.GetText("ShopItemBought", new Dictionary<string, object>()
+                        await ReplyAsync(_game.MessageBuilder.GetTextSimple("ShopItemBought", new Dictionary<string, object>()
                         {
                             ["name"] = itemToBuy.GetName(_game.MainSettings.Language),
                         }));

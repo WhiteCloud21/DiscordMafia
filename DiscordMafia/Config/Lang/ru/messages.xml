@@ -46,9 +46,9 @@
     <string>MafiaWelcome</string>
     <ArrayOfString>
       <string>
-        Состав мафии:
-        {players}
-        Можете обсуждать свои действия в личных сообщениях или через бота.
+Состав мафии:
+{players}
+Можете обсуждать свои действия в личных сообщениях или через бота.
       </string>
     </ArrayOfString>
   </Item>
@@ -56,9 +56,9 @@
     <string>YakuzaWelcome</string>
     <ArrayOfString>
       <string>
-        Состав японской мафии:
-        {players}
-        Можете обсуждать свои действия в личных сообщениях или через бота.
+Состав японской мафии:
+{players}
+Можете обсуждать свои действия в личных сообщениях или через бота.
       </string>
     </ArrayOfString>
   </Item>
@@ -66,8 +66,8 @@
     <string>RemainingPlayers</string>
     <ArrayOfString>
       <string>
-        Оставшиеся игроки:
-        {players}
+Оставшиеся игроки:
+{players}
       </string>
     </ArrayOfString>
   </Item>
