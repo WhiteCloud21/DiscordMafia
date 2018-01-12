@@ -164,7 +164,7 @@ namespace DiscordMafia.Achievement
                 }
                 if (IsClearVictory && player.Role.Team == _gameResult.Winner)
                 {
-                    _manager.Push(player.User, Achievement.IdPlayWithDeveloper);
+                    _manager.Push(player.User, Achievement.IdPerfectWin);
                 }
                 if (player.Role.Team == _gameResult.Winner && _gameResult.Winner == Team.Neutral)
                 {
