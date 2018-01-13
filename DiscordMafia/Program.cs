@@ -106,7 +106,10 @@ namespace DiscordMafia
             {
                 if (message.Author.Id != client.CurrentUser.Id)
                 {
-                    ProcessMessage(message);
+                    SyncContext.Post(state =>
+                    {
+                        ProcessMessage(message);
+                    }, null);
                 }
                 return;
             }
