@@ -24,4 +24,12 @@
     <Folder Include="Messages" />
     <Folder Include="Voting" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Config\*.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\**\*.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

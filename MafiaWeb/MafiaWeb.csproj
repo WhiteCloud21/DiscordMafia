@@ -35,6 +35,12 @@
     <ProjectReference Include="..\DiscordMafia\DiscordMafia.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="navigation.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
