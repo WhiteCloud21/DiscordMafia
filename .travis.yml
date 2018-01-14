@@ -1,7 +1,26 @@
+dist: trusty
 language: csharp
 solution: DiscordMafia.sln
 mono: none
 dotnet: 1.1.5
+
+env:
+ global:
+  - BUILD_ENV=Release
 script:
  - dotnet restore
  - dotnet build
+  
+before_deploy:
+- npm install -g bower
+- dotnet publish -c ${BUILD_ENV} -o "${TRAVIS_BUILD_DIR}/publish"
+- cd "${TRAVIS_BUILD_DIR}/publish" && tar -zcf DiscordMafia-${BUILD_ENV}-${TRAVIS_TAG}-${TRAVIS_BUILD_NUMBER}.tar.gz *
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key: "${GH_TOKEN}"
+  file: "${TRAVIS_BUILD_DIR}/publish/*.tar.gz"
+  skip_cleanup: true
+  on:
+    tags: true
