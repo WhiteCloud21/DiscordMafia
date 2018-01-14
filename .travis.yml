@@ -20,6 +20,7 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key: "${GH_TOKEN}"
+  file_glob: true
   file: "${TRAVIS_BUILD_DIR}/publish/*.tar.gz"
   skip_cleanup: true
   on:
