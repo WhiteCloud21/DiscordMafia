@@ -183,6 +183,15 @@
           <string>go</string>
           <Info>
             <Aliases>
+              <string>пойти</string>
+            </Aliases>
+            <Summary>Посетить локацию.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>forcestart</string>
+          <Info>
+            <Aliases>
               <string>го</string>
               <string>погнали</string>
             </Aliases>

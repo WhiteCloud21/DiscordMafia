@@ -495,7 +495,7 @@ namespace DiscordMafia.Modules
             await Task.CompletedTask;
         }
 
-        [Command("go"), Summary("Форсирует начало игры."), Alias("го", "погнали"), RequireContext(ContextType.Guild), RequireAdmin]
+        [Command("forcestart"), Summary("Форсирует начало игры."), Alias("го", "погнали"), RequireContext(ContextType.Guild), RequireAdmin]
         public async Task ForceStartGame([Remainder] string ignored = null)
         {
             _game.StopPlayerCollecting();
