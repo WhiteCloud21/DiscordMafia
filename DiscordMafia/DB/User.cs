@@ -48,6 +48,9 @@ namespace DiscordMafia.DB
         [Column("is_notification_enabled")]
         public bool IsNotificationEnabled { get; set; } = false;
 
+        [Column("is_mute_enabled")]
+        public bool? IsMuteEnabled { get; set; } = null;
+
         [Column("win_streak")]
         public int WinStreak { get; set; } = 0;
 

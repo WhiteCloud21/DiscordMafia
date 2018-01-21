@@ -453,4 +453,41 @@
       </Commands>
     </Info>
   </Item>
+  <Item>
+    <string>MuteModule</string>
+    <Info>
+      <Aliases/>
+      <Summary>Свобода слова и её ограничения</Summary>
+      <Commands>
+        <Item>
+          <string>status</string>
+          <Info>
+            <Aliases/>
+            <Summary>Показывает статус нахождения игрока в особых списках ограничений.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>blacklist</string>
+          <Info>
+            <Aliases/>
+            <Summary>Добавляет игрока в чёрный список.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>whitelist</string>
+          <Info>
+            <Aliases/>
+            <Summary>Добавляет игрока в белый список.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>remove</string>
+          <Info>
+            <Aliases/>
+            <Summary>Удаляет игрока из чёрнобелых списков.</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
 </Modules>

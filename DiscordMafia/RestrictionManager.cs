@@ -7,19 +7,25 @@ namespace DiscordMafia
 {
     public class RestrictionManager
     {
-        protected ISet<InGamePlayerInfo> KilledPlayers = new HashSet<InGamePlayerInfo>();
+        protected ISet<InGamePlayerInfo> MutedPlayers = new HashSet<InGamePlayerInfo>();
         protected SocketTextChannel Channel;
         protected bool MuteOnDeath;
+        protected bool UseMuteBlacklist;
 
         public RestrictionManager(Game game)
         {
             Channel = game.GameChannel;
             MuteOnDeath = game.Settings.MuteOnDeath;
+            UseMuteBlacklist = game.Settings.UseMuteBlacklist;
         }
 
         public void BanPlayer(InGamePlayerInfo player)
         {
-            if (!MuteOnDeath)
+            if (!MuteOnDeath && !UseMuteBlacklist)
+            {
+                return;
+            }
+            if (UseMuteBlacklist && player.DbUser.IsMuteEnabled != true)
             {
                 return;
             }
@@ -32,12 +38,17 @@ namespace DiscordMafia
             {
                 permissions = new Discord.OverwritePermissions(sendMessages: Discord.PermValue.Deny);
             }
+            MutedPlayers.Add(player);
             Channel.AddPermissionOverwriteAsync(player.User.DiscordUser, permissions.Value).Wait();
         }
 
         public void UnbanPlayer(InGamePlayerInfo player)
         {
-            if (!MuteOnDeath)
+            if (!MuteOnDeath && !UseMuteBlacklist)
+            {
+                return;
+            }
+            if (UseMuteBlacklist && !MutedPlayers.Contains(player))
             {
                 return;
             }
@@ -58,7 +69,11 @@ namespace DiscordMafia
 
         public void UnbanAll()
         {
-            if (!MuteOnDeath)
+            if (!MuteOnDeath && !UseMuteBlacklist)
+            {
+                return;
+            }
+            if (UseMuteBlacklist && MutedPlayers.Count == 0)
             {
                 return;
             }
@@ -81,6 +96,7 @@ namespace DiscordMafia
                     }
                 }
             }
+            MutedPlayers.Clear();
         }
     }
 }

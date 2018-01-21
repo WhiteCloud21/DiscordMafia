@@ -20,6 +20,7 @@ namespace DiscordMafia.Config
         public short InfectionChancePercent { get; protected set; }
 
         public bool MuteOnDeath { get; protected set; }
+        public bool UseMuteBlacklist { get; protected set; }
         public bool StartFromNight { get; protected set; }
         public bool ShowNightActions { get; protected set; }
         public bool IsYakuzaEnabled { get; protected set; }
@@ -48,6 +49,7 @@ namespace DiscordMafia.Config
                 { Team.Yakuza, 1 },
             };
             MuteOnDeath = false;
+            UseMuteBlacklist = true;
             MinPlayers = 3;
             MafPercent = 34;
             StartFromNight = true;
