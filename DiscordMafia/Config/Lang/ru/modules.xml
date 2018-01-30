@@ -43,6 +43,8 @@
           <Info>
             <Aliases>
               <string>пропустить</string>
+              <string>пропуск</string>
+              <string>скип</string>
             </Aliases>
             <Summary>Позволяет пропустить текущее действие.</Summary>
           </Info>
