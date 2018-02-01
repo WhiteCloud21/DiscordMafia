@@ -6,6 +6,7 @@ using System.Xml.Serialization;
 using System.Xml;
 using System.Xml.Schema;
 using DiscordMafia.Config.Lang;
+using System.IO;
 
 namespace DiscordMafia.Config
 {
@@ -23,6 +24,7 @@ namespace DiscordMafia.Config
         public bool UseMuteBlacklist { get; protected set; }
         public bool StartFromNight { get; protected set; }
         public bool ShowNightActions { get; protected set; }
+        public bool IsMafiaEnabled { get; protected set; }
         public bool IsYakuzaEnabled { get; protected set; }
         public int PlayerCollectingTime { get; protected set; }
         public int PauseTime { get; protected set; }
@@ -36,8 +38,11 @@ namespace DiscordMafia.Config
         public Points Points { get; private set; }
         public Roles Roles { get; private set; }
 
-        public GameSettings(string gametype)
+        protected string ConfigPath { get; private set; }
+
+        public GameSettings(MainSettings mainSettings, string gametype)
         {
+            ConfigPath = mainSettings.ConfigPath;
             GameType = gametype;
 
             // Значения по умолчанию
@@ -63,14 +68,25 @@ namespace DiscordMafia.Config
             MaxUsersToNotify = 50;
             MinNotificationInterval = 7200;
             ShowNightActions = true;
+            IsMafiaEnabled = true;
             IsYakuzaEnabled = false;
 
             ReadConfig();
+            Validate();
             
             Points = Points.GetInstance(GetFilePath("points.xml"));
             Console.WriteLine("Points configuration successfully loaded");
             Roles = Roles.GetInstance(GetFilePath("roles.xml"));
             Console.WriteLine("Role configuration successfully loaded");
+        }
+
+        private void Validate()
+        {
+            if (!IsMafiaEnabled && !IsYakuzaEnabled)
+            {
+                Console.Error.WriteLine("Mafia or Yakuza must be enabled. Enabling Mafia...");
+                IsMafiaEnabled = true;
+            }
         }
 
         protected void ReadConfig()
@@ -87,16 +103,16 @@ namespace DiscordMafia.Config
 
         protected string GetFilePath(string fileName)
         {
-            if (GameType != null && System.IO.File.Exists($"Config/Gametypes/{GameType}/{fileName}"))
+            if (GameType != null && System.IO.File.Exists(Path.Combine(ConfigPath, $"Gametypes/{GameType}/{fileName}")))
             {
-                return $"Config/Gametypes/{GameType}/{fileName}";
+                return Path.Combine(ConfigPath, $"Gametypes/{GameType}/{fileName}");
             }
-            return $"Config/{fileName}";
+            return Path.Combine(ConfigPath, $"{fileName}");
         }
 
         public bool IsValidGametype(string gameType)
         {
-            return System.IO.Directory.Exists($"Config/Gametypes/{gameType}");
+            return System.IO.Directory.Exists(Path.Combine(ConfigPath, $"Gametypes/{gameType}"));
         }
 
         public XmlSchema GetSchema()
@@ -131,6 +147,9 @@ namespace DiscordMafia.Config
                             break;
                         case "ShowNightActions":
                             ShowNightActions = bool.Parse(reader.ReadElementContentAsString());
+                            break;
+                        case "IsMafiaEnabled":
+                            IsMafiaEnabled = bool.Parse(reader.ReadElementContentAsString());
                             break;
                         case "IsYakuzaEnabled":
                             IsYakuzaEnabled = bool.Parse(reader.ReadElementContentAsString());

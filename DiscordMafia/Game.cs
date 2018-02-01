@@ -69,7 +69,7 @@ namespace DiscordMafia
 
         internal void LoadSettings(string gametype = null)
         {
-            Settings = new Config.GameSettings(gametype);
+            Settings = new Config.GameSettings(MainSettings, gametype);
             MessageBuilder = new Config.MessageBuilder(MainSettings, client, PlayersList);
             GameMode = gametype;
             Console.WriteLine("Settings loaded");

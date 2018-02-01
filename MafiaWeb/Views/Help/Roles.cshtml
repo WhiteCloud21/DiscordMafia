@@ -1,0 +1,45 @@
+﻿@using DiscordMafia.Config;
+@using DiscordMafia.Roles;
+
+@model IEnumerable<IGrouping<Team, MafiaWeb.ViewModels.Role.RoleInfo>>
+
+@foreach (var group in Model)
+{
+    GameSettings gameSettings = ViewBag.ModeSettings;
+    foreach (var role in group)
+    {
+        RoleConfig roleInfo;
+        gameSettings.Roles.TryGetValue(role.Role.GetType().Name, out roleInfo);
+        if (roleInfo != null && !roleInfo.IsEnabled)
+        {
+            roleInfo = null;
+        }
+        if (roleInfo == null)
+        {
+            if (role.Role is Yakuza && !(role.Role is Ninja) && gameSettings.IsYakuzaEnabled || role.Role is Mafioso && gameSettings.IsMafiaEnabled || role.Role is Citizen)
+            {
+                roleInfo = new RoleConfig { IsEnabled = true, IsRandom = false, MinPlayers = 0 };
+            }
+            else
+            {
+                continue;
+            }
+        }
+        <div class="row role-row">
+            <div class="col-sm-4 col-lg-2">
+                <img src="@(Settings.ImageBaseUrl)roles/card@(role.Role.GetType().Name).png" class="role-row__image" />
+            </div>
+            <div class="col-sm-8 col-lg-10">
+                <h2>@role.Role.GetName(Language)</h2>
+                @if (role.Role is UniqueRole)
+                {
+                    <p><i>Уникальная роль</i></p>
+                }
+                <p class="role-row__team">Команда: <b class="role-row__team-name">@(role.Role.Team.GetDescription())</b></p>
+                <p class="role-row__min-players">Минимум игроков: <b class="role-row__min-players-value">@(roleInfo.MinPlayers.ToString() ?? "-")</b></p>
+                <p>В игре: <b>@(roleInfo.IsRandom ? "Одна из случайных" : "Всегда при достаточном количестве игроков")</b></p>
+                @role.Role.GetDescription(Language)
+            </div>
+        </div>
+    }
+}

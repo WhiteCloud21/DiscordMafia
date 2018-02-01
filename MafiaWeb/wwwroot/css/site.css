@@ -14,3 +14,11 @@
     font-size: 32px;
     line-height: 36px;
 }
+
+.role-row {
+    margin-top: 10px;
+}
+
+.role-row__image {
+    max-height: 300px;
+}

@@ -20,12 +20,18 @@ namespace DiscordMafia.Config
         public string LanguageStr { get; protected set; }
         public Lang.Language Language { get; protected set; }
 
+        public string ConfigPath { get; private set; }
+
         public MainSettings(params string[] filenames)
         {
             foreach (var filename in filenames)
             {
                 if (File.Exists(filename))
                 {
+                    if (string.IsNullOrEmpty(ConfigPath))
+                    {
+                        ConfigPath = Path.GetDirectoryName(filename);
+                    }
                     using (Stream stream = new FileStream(filename, FileMode.Open))
                     {
                         using (var reader = XmlReader.Create(stream))
@@ -108,7 +114,7 @@ namespace DiscordMafia.Config
             {
                 return false;
             }
-            return Directory.Exists($"Config/Lang/{language}");
+            return Directory.Exists(Path.Combine(ConfigPath, $"Lang/{LanguageStr}"));
         }
 
         public void LoadLanguage()
@@ -118,7 +124,7 @@ namespace DiscordMafia.Config
                 throw new Exception("Language is not valid in mainSettings!");
             }
             Language = new Lang.Language();
-            Language.Load($"Config/Lang/{LanguageStr}");
+            Language.Load(Path.Combine(ConfigPath, $"Lang/{LanguageStr}"));
         }
     }
 }

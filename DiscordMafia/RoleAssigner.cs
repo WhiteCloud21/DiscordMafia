@@ -18,7 +18,8 @@ namespace DiscordMafia
         {
             this.players = players;
             remainingPlayerCount = players.Count;
-            totalMafCount = remainingMafCount = (int)Math.Truncate(players.Count * (double)settings.MafPercent / 100);
+            totalMafCount = (int)Math.Truncate(players.Count * (double)settings.MafPercent / 100);
+            remainingMafCount = settings.IsMafiaEnabled ? totalMafCount : 0;
             remainingYakuzaCount = settings.IsYakuzaEnabled ? totalMafCount : 0;
             Console.WriteLine("Количество мафиози: {0}", remainingMafCount);
 

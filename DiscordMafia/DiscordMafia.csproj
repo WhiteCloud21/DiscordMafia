@@ -20,7 +20,6 @@
   <ItemGroup>
     <Folder Include="Activity" />
     <Folder Include="Client" />
-    <Folder Include="Config\Gametypes\yakuza" />
     <Folder Include="Messages" />
     <Folder Include="Voting" />
   </ItemGroup>

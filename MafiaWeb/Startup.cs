@@ -41,10 +41,10 @@ namespace MafiaWeb
             services.AddMvcGrid();
 
             var dirSection = Configuration.GetSection("Directories");
-            var lang = new DiscordMafia.Config.Lang.Language();
-            // TODO Make language configurable
-            lang.Load(System.IO.Path.Combine(dirSection["Config"], "Lang/ru"));
-            services.AddSingleton(typeof(DiscordMafia.Services.ILanguage), lang);
+            var settings = new DiscordMafia.Config.MainSettings(System.IO.Path.Combine(dirSection["Config"], "mainSettings.xml"), System.IO.Path.Combine(dirSection["Config"], "Local/mainSettings.xml"));
+            settings.LoadLanguage();
+            services.AddSingleton(typeof(DiscordMafia.Services.ILanguage), settings.Language);
+            services.AddSingleton(typeof(DiscordMafia.Config.MainSettings), settings);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

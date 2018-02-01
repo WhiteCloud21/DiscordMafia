@@ -1,0 +1,13 @@
+﻿@using DiscordMafia.Config;
+@using MafiaWeb.ViewModels.Gamemode;
+@model IEnumerable<Gamemode>
+
+
+<div class="row">
+    @foreach (var mode in Model)
+    {
+    <div class="col-sm-6 col-lg-4">
+        <a asp-controller="Help" asp-action="Roles" asp-route-modeId="@mode.Name" title="Перейти к режиму">@(mode.Name ?? "default")</a>
+    </div>
+    }
+</div>

@@ -21,6 +21,12 @@ namespace DiscordMafia.Roles
             return Enumerable.Repeat($"#ROLE_NAME_{role.GetType().Name}", 6).ToArray();
         }
 
+        public static string GetDescription(this BaseRole role, ILanguage language)
+        {
+            string description = language.Messages.get($"RoleHelp_{role.GetType().Name}");
+            return !string.IsNullOrEmpty(description) ? description : $"#ROLE_DESC_{role.GetType().Name}";
+        }
+
         private static RoleMessages.RoleMessage GetItemLangInfo(this BaseRole role, ILanguage language)
         {
             if (language.RoleMessages.TryGetValue(role.GetType().Name, out var result))

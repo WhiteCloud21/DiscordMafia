@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<Roles>
+  <Role Id="Commissioner">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>0</MinPlayers>
+  </Role>
+  <Role Id="Doctor">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Wench">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Judge">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Elder">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Highlander">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Homeless">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Sheriff">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Prosecutor">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>3</MinPlayers>
+  </Role>
+  <Role Id="Mirror">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>10</MinPlayers>
+  </Role>
+  <Role Id="Sergeant">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>13</MinPlayers>
+  </Role>
+  <Role Id="Spy">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>15</MinPlayers>
+  </Role>
+  <Role Id="Hoodlum">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>10</MinPlayers>
+  </Role>
+  <Role Id="Ninja">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>10</MinPlayers>
+  </Role>
+  <Role Id="Maniac">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>8</MinPlayers>
+  </Role>
+  <Role Id="RobinHood">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>8</MinPlayers>
+  </Role>
+  <Role Id="Warlock">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>8</MinPlayers>
+  </Role>
+  <Role Id="Hacker">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>12</MinPlayers>
+  </Role>
+</Roles>

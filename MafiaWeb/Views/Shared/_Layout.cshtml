@@ -33,7 +33,7 @@
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">DiscordMafia</a>
             </div>
             <div class="navbar-collapse collapse">
-                @await Component.InvokeAsync("Navigation", new { viewName = "BootstrapTopNav", filterName = NamedNavigationFilters.TopNav, startingNodeKey = "" })
+                @await Component.InvokeAsync("Navigation", new { viewName = "_NavigationMenu", filterName = NamedNavigationFilters.TopNav, startingNodeKey = "" })
             </div>
         </div>
     </nav>

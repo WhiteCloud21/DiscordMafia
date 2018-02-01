@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
@@ -96,6 +97,12 @@ namespace DiscordMafia.Config
                 }
             }
             return result;
+        }
+        
+        public static IEnumerable<BaseRole> GetAllRoles()
+        {
+            var types = typeof(BaseRole).GetTypeInfo().Assembly.GetTypes();
+            return from t in types where typeof(BaseRole).IsAssignableFrom(t) && !t.GetTypeInfo().IsAbstract select GetRoleInstance(t.GetTypeInfo().GetConstructor(Type.EmptyTypes));
         }
 
         public static BaseRole GetRoleInstance(string roleName)
