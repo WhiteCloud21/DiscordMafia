@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using DiscordMafia.Services;
 using DiscordMafia.Config.Lang;
+using System;
 
 namespace DiscordMafia.Items
 {
@@ -14,11 +15,13 @@ namespace DiscordMafia.Items
         public static string[] GetNameCases(this BaseItem item, ILanguage language)
         {
             var info = GetItemLangInfo(item, language);
+
+            var result = Enumerable.Repeat($"#ITEM_NAME_{item.GetType().Name}", 6).ToArray();
             if (info?.NameCases != null)
             {
-                return info.NameCases;
+                Array.Copy(info.NameCases, result, info.NameCases.Length);
             }
-            return Enumerable.Repeat($"#ITEM_NAME_{item.GetType().Name}", 6).ToArray();
+            return result;
         }
 
         public static string GetDescription(this BaseItem item, ILanguage language)

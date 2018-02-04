@@ -10,5 +10,6 @@ namespace DiscordMafia.Services
         ItemMessages ItemMessages { get; }
         PlaceMessages PlaceMessages { get; }
         AchievementMessages AchievementMessages { get; }
+        PointMessages PointMessages { get; }
     }
 }

@@ -8,5 +8,13 @@ namespace DiscordMafia.Config.Lang
     [XmlRoot("Messages")]
     public class SimpleMessages : MessageDictionary<SimpleMessages, string, string>
     {
+        public string GetMessage(string key)
+        {
+            if (ContainsKey(key))
+            {
+                return this[key];
+            }
+            return $"#SIMPLE_MESSAGE_{key}";
+        }
     }
 }

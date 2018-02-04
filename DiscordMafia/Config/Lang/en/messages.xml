@@ -1,0 +1,1006 @@
+<?xml version="1.0"?>
+<Messages>
+  <Item>
+    <string>PlayerRegister</string>
+    <ArrayOfString>
+      <string>{nameSimple} joins the game! ({count})</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PlayerUnRegister</string>
+    <ArrayOfString>
+      <string>{nameSimple} leaves the game. ({count})</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PlayerCollectingStart</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who wants to play? You have <b>{seconds}</b> seconds.
+<b>/join</b> - join the game]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PlayerCollectingAdditionalTime</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[<b>{seconds}</b> seconds remaining. Still have a chance to play!
+<b>/join</b> - join the game]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PlayerCollectingSuccess</string>
+    <ArrayOfString>
+      <string>Recruiting of players is over. We have {count} players. Good luck!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PlayerCollectingFail</string>
+    <ArrayOfString>
+      <string>Not enough players ({count}/{minCount})</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafiaWelcome</string>
+    <ArrayOfString>
+      <string>
+Mafia members:
+{players}
+You can discuss your actions in private messages or via bot PM.
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaWelcome</string>
+    <ArrayOfString>
+      <string>
+Yakuza members:
+{players}
+You can discuss your actions in private messages or via bot PM.
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RemainingPlayers</string>
+    <ArrayOfString>
+      <string>
+Remaining Players:
+{players}
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>OK</string>
+    <ArrayOfString>
+      <string>OK.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YouCanceledVote</string>
+    <ArrayOfString>
+      <string>Your vote has been canceled.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PlayerCanceledVote</string>
+    <ArrayOfString>
+      <string>{nameSimple} canceled {gender:his|her} vote.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YourTurnSkipped</string>
+    <ArrayOfString>
+      <string>You skipped the turn.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YourTurnAlreadySkipped</string>
+    <ArrayOfString>
+      <string>You already skipped the turn.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PlayerSkippedTurn</string>
+    <ArrayOfString>
+      <string>{nameSimple} skipped the turn.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>VoteForYourself</string>
+    <ArrayOfString>
+      <string>{nameSimple} - you can not vote for yourself!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayVote</string>
+    <ArrayOfString>
+      <string>{nameSimple} votes for {toHang} ({count}).</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>EveningVote_Yes</string>
+    <ArrayOfString>
+      <string>{nameSimple} is sure of {toHang}'s guilt ({count}).</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>EveningVote_No</string>
+    <ArrayOfString>
+      <string>{nameSimple} demands the justification of {toHang} ({count}).</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightVote</string>
+    <ArrayOfString>
+      <string>{nameSimple} votes for the murder of {toKill} ({count})!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>CheckStatus</string>
+    <ArrayOfString>
+      <string>{name}'s status — {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YouKilled</string>
+    <ArrayOfString>
+      <string>You have been killed...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ShopDisabled</string>
+    <ArrayOfString>
+      <string>The shop is disabled in this gamemode.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Citizen</string>
+    <ArrayOfString>
+      <string>You are a typical representative of the peaceful population of the city. Your task is to sleep at night, and in the afternoon try to find the mafia and convict them.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Commissioner</string>
+    <ArrayOfString>
+      <string>
+        It is you who are the main hope of all civilians for a peaceful life.
+        Your task is to shoot all the mafia. Remember: You work undercover. If the mafia find you, they will kill at the first opportunity! Every night you can check the status of any player. If he belongs to mafia, he will be killed.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Wench</string>
+    <ArrayOfString>
+      <string>At night you can seduce anyone (but not 2 times in a row). This player's special ability (if it is) will be blocked for one night. Thanks to this blocking, you can not only not let the mafu shoot, but also prevent the commissioner from checking on suspect. So before you sleep with someone - think :)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Judge</string>
+    <ArrayOfString>
+      <string>You are a fair, incorruptible judge. Only you can justify any player during the day (but not 2 times in a row and not justify yourself).</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Prosecutor</string>
+    <ArrayOfString>
+      <string>You are a strict accuser. Probably even fair accuser. At night, you can choose a player who will be executed the next day.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Doctor</string>
+    <ArrayOfString>
+      <string>You have a unique ability — every night you can save the life of one of the players. Be careful, if you heal the mafia, the commissioner will not be able to kill him!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Elder</string>
+    <ArrayOfString>
+      <string>Your honesty is not questioned, so you can not be hanged in the day. You can choose who will be hanged in return. But, unfortunately, the bullets of the mafia do not care who you are...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Highlander</string>
+    <ArrayOfString>
+      <string>You have an invaluable gift — a night immortality. Therefore, you will not be killed under the cover of darkness. But in the daytime players will be able to imprison you.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Sheriff</string>
+    <ArrayOfString>
+      <string>You are almost a commissioner. The main difference is that at first you shoot, then you think. Your shot is fatal, so it's better to think before you shoot. You can kill an innocent in blink of the eye :(</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Homeless</string>
+    <ArrayOfString>
+      <string>Unfortunately, your apartment burned down, and the state decided not to give you a new one. But the commissioner helped you find a roof over your head, and as a gratitude you work with him now, watching the residents.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Sergeant</string>
+    <ArrayOfString>
+      <string>You are an commissioner assistant. You know the statuses of the players he checks, but you can not influence his actions. In case of death of the commissioner, you take his place and start shooting back the mafia.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Spy</string>
+    <ArrayOfString>
+      <string>You are a master of inconspicuous observation. Every night you can check one player, but you do it unnoticed, including for yourself. Only the commissioner will see the result of the check.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Mirror</string>
+    <ArrayOfString>
+      <string>You are a fan of sunbeams, so peaceful that no one dares to raise his hand on you at night and applies his action to himself.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Mafioso</string>
+    <ArrayOfString>
+      <string>Pretense — this is your hobby. During the day you portray an honest resident, and at night, together with other mafiosies, shoot citizens one by one. If you find a commissioner — kill him, he is your most dangerous enemy!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Killer</string>
+    <ArrayOfString>
+      <string>You were an excellent mafioso, so the boss promoted you. Now you do not raid with a whole gang, but kill the victim yourself. Being a pro in the Mafia is so easy!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Lawyer</string>
+    <ArrayOfString>
+      <string>Your task is to protect the mafia. Every night you can find out the status of any resident. Find a commissioner and tell the mafia who he is!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Demoman</string>
+    <ArrayOfString>
+      <string>On New Year's Eve you loved to blow firecrackers. Over time, this hobby turned into work.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Yakuza</string>
+    <ArrayOfString>
+      <string>Pretense — this is your hobby. In the daytime you put on the mask of an honest citizen, and at night, along with other yakuza, shoot citizens and mafia one at a time. If you find a commissioner — kill him, he is your most dangerous enemy!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Hoodlum</string>
+    <ArrayOfString>
+      <string>At night, you can smash any player and force him to open his role (but not 2 times in a row). This player's special ability (if it is) will be blocked for one night. You, in turn, can not be blocked.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Ninja</string>
+    <ArrayOfString>
+      <string>You are a horror, creeping on tiptoe of the night. Against you nothing can be done at night. And in the rest you are the same participant in the Japanese mafia, shoot citizens and mafia one by one.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Maniac</string>
+    <ArrayOfString>
+      <string>"Make a salad" - every night your inner voice commands you and you listen to it. Mafia, civilians, commissar ... All of them are equal before the chainsaw and ax!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Warlock</string>
+    <ArrayOfString>
+      <string>You swore allegiance to demons and can use their power! Curse any player and take to the otherworldly world anyone who touches him.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_RobinHood</string>
+    <ArrayOfString>
+      <string>You can not calm down — social inequality does not give rest to your noble heart. All players with special abilities are your enemies. Destroy them every night one by one and do not touch citizens without abilities!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Hacker</string>
+    <ArrayOfString>
+      <string>You are a master of keyboard and mouse. Hack into the computers of players and tell everyone their statuses.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>GameStart_Role_Default</string>
+    <ArrayOfString>
+      <string>Your status is {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>GameStart_Role_Doctor</string>
+    <ArrayOfString>
+      <string>Your task is to save lives. You are the {role}.</string>
+      <string>Ваш статус {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Commissioner</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[You can check one player. If he belongs to mafia, he will be killed.
+        		To check the player, type <b>/check X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Mafioso</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Choose with the other Mafiosi (if any) the victim and kill her.
+        		To kill the player, type <b>/kill X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Wench</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[To sleep and check the player, type <b>/sleep X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Doctor</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will be healed tonight? (<b>/heal X</b>, where <b>X</b> — number of the player)]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Highlander</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[In case you will be tried to kill, you can choose a player who will be shot instead of you.
+        To kill the player, type <b>/kill X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Homeless</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will be ckecked tonight? (<b>/check X</b>, where <b>X</b> — number of the player).]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Sheriff</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will be shot tonight? (<b>/kill X</b>, where <b>X</b> — number of the player). Just do not shoot at civilians, you play for them.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Prosecutor</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will be executed tomorrow? (<b>/kill X</b>, where <b>X</b> — number of the player).]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Spy</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will be checked tonight? (<b>/check X</b>, where <b>X</b> — number of the player).]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Killer</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Choose the victim and kill her. You are independent sniper and shoot with other mafiosi separately.
+        To kill the player, type </b>/kill X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Lawyer</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[You can check a status of the player.
+        To check the player's status, type <b>/check X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Demoman</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[What will be exploded tonight?
+        Type <b>/destroy X</b>, where <b>X</b> — a number from 0 to 2.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Demoman_ForPlayers</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Where will you go tonight?
+        Type <b>/go X</b>, where <b>X</b> — a number from 0 to 2.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Yakuza</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Choose with the other Yakuza (if any) the victim and kill her.
+        To kill the player, type <b>/kill X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Hoodlum</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[To block the player, type <b>/block X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Ninja</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Choose with the other Yakuza (if any) the victim and kill her.
+        To kill the player, type <b>/kill X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Maniac</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will turn into a salad tonight? :)
+        To kill the player, type <b>/kill X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_RobinHood</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will be saved from injustice tonight?
+        To kill the player, type <b>/убить X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Warlock</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will be cursed tonight?
+        To curse the player, type <b>/curse X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_Hacker</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will be hacked tonight? (<b>/hack X</b>, where <b>X</b> — number of the player).]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayInfo_Elder</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[In case you will be tried to imprison, you can choose a player to be imprisoned instead of you.
+        To convict the player, type <b>/imprison X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayInfo_Judge</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[You can justify one player. The main thing — do not justify the mafioso.
+       To justify the player, type <b>/justify X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>EndNight</string>
+    <ArrayOfString>
+      <string>🏙 After the night, it is morning again, who would be found in the ditch?</string>
+      <string>🏙 The night has passed, the morning has come clear, the soul is not well... The sun has risen above the horizon. But was it for all?</string>
+      <string>🏙 The morning began with a shrill scream — someone found a dead man on his lawn or is it yelling therapy?</string>
+      <string>🏙 The morning has come, joy and happiness in the house brought, but, unfortunately, not for all...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>StartMorning</string>
+    <ArrayOfString>
+      <string>Citizens is discussing who will be imprisoned today.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>StartDay</string>
+    <ArrayOfString>
+      <string><![CDATA[Vote, do not miss your chance to imprison a mafioso! To vote, type <b>/imprison X</b>, where <b>X</b> — number of the player.]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>StartEvening</string>
+    <ArrayOfString>
+      <string>🌉 It's evening...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>EveningVoteInfo</string>
+    <ArrayOfString>
+      <string><![CDATA[To imprison or justify {name}, that's the question! To vote, type <b>/yes</b> — imprison and <b>/no</b> — justify.]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>StartNight</string>
+    <ArrayOfString>
+      <string>🌛 And again the darkness covers the streets of this sinful city...</string>
+      <string>🌛 It's Night...</string>
+      <string>🌛 Citizens in a panic runs through the city. After all, it's already dusk and it's not safe outside.</string>
+      <string>🌛 At night, everything is not as it is during the day... Lack of light makes people do strange things.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayKillNoChoice</string>
+    <ArrayOfString>
+      <string>⚖ The votes were divided, the people today did not imprison anyone :(</string>
+      <string>⚖ Citizens once again had no time to imprison anyone, having missed their happiness.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayKillNoActive</string>
+    <ArrayOfString>
+      <string>🕛 Citizens, apparently, did not get enough sleep at night and decided to sleep in the afternoon...</string>
+      <string>🕛 Citizens once again had no time to imprison anyone, having missed their happiness.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayKill</string>
+    <ArrayOfString>
+      <string>👈🏻 After a short trial, {name} ({role}) was imprisoned.</string>
+      <string>👈🏻 "Imprison {name}!" — this was the verdict of the most humane court in the world. After the {name} died, the citizens found out that {gender:he|she} was {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayKillElder</string>
+    <ArrayOfString>
+      <string>🙅 Citizens wanted to imprison {name}, but changed their minds in time: {name} is a {role}. </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ProsecutorKillElder</string>
+    <ArrayOfString>
+      <string>🙅 The Prosecutor sentenced {name}, but {gender:he|she} showed the certificate of the {role}. </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ElderKill</string>
+    <ArrayOfString>
+      <string>👈🏻 {name} ({role}) has sentenced by the Elder to dead.</string>
+      <string>👈🏻 "Ah, young people..." — the voice of the Elder sounded clear discontent. Citizens acknowledged their mistake, instructed the elder to find the mafia and on his orders hung {name}, who turned out to be the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>JudgeJustify</string>
+    <ArrayOfString>
+      <string>⚖ Citizens wanted to imprison {name}, but {gender:he|she} was justified by the Judge.</string>
+      </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ProsecutorKillJudgeJustify</string>
+    <ArrayOfString>
+      <string>⚖ The Prosecutor sentenced {name}, but {gender:he|she} was justified by the Judge.</string>
+      </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ProsecutorKill</string>
+    <ArrayOfString>
+      <string>👮🏻‍ The Prosecutor sentenced {role} to dead, citizens immediately twisted {gender:him|her} and a rope. Or maybe the rope from {role0}. But it does not matter, {name} is out of the game.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafKillNoChoice</string>
+    <ArrayOfString>
+      <string>⚖ Mafia did not make a general decision and did not kill anyone.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafKillNoActive</string>
+    <ArrayOfString>
+      <string>🌆 Mafia discussed all the night, who will be robbed and killed. It was morning, but they did not decide anything and stayed at home...</string>
+      <string>🌆 Mafia almost came up with a plan that night! But suddenly the grandmother of the leader came and took him home by the ear.</string>
+      <string>🌆 Mafia in the car waited all night for the victim in the car, but she has never appeared...</string>
+      <string>🌆 There were no already familiar sirens and the rumbling of shots with the creak of brakes and the deafening ringing of broken glass, only deafening snoring came from the lair of the mafia!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafKill</string>
+    <ArrayOfString>
+      <string>🔫 Mafia today brutally dealt with {name}, who was the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafKillHelpDoc</string>
+    <ArrayOfString>
+      <string>🏥 Mafia was almost kill {name}, but the Doctor performed a successful operation.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>MafKillHighlander</string>
+    <ArrayOfString>
+      <string>🛡 Mafia wanted to make a sieve from a citizen, but he was the {role} and survived.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaKillNoChoice</string>
+    <ArrayOfString>
+      <string>⚖ Yakuza did not make a general decision and did not kill anyone.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaKillNoActive</string>
+    <ArrayOfString>
+      <string>🏯 Yakuza discussed all the night, who will be robbed and killed. It was morning, but they did not decide anything and stayed at home...</string>
+      <string>🏯 The Japanese mafia decided to sleep at night. But it's OK, the night is existing for this!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaKill</string>
+    <ArrayOfString>
+      <string>:japanese_ogre: Yakuza today brutally dealt with {name}, who was the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaKillHelpDoc</string>
+    <ArrayOfString>
+      <string>🏥 Yakuza was almost kill {name}, but the Doctor performed a successful operation.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>YakuzaKillHighlander</string>
+    <ArrayOfString>
+      <string>🛡 Yakuza wanted to make a sieve from a citizen, but he was the {role} and survived.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComNoActive</string>
+    <ArrayOfString>
+      <string>🏡 Apparently, the Commissioner decided to take a nap today...</string>
+      <string>🏡 Wife threw the Commissioner and took the children... In the morning, the dirty and unshaven he was found near the bar.</string>
+      <string>🏡 The Commissioner could not deny himself the pleasure of sleeping that night. Moreover, he had not vacation for 20 years.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComCheckCivil</string>
+    <ArrayOfString>
+      <string>👮🏻 The Commissioner peered through the window to the civilian...</string>
+      <string>👮🏻 The Commissioner peered into the window of a civilian, who was just throwing garbage from the window... </string>
+      <string>👮🏻 The Commissioner made a mistake and nearly killed a civilian :)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>HomelessCheck</string>
+    <ArrayOfString>
+      <string>👴🏻 Homeless, collecting bottles, noticed a strangely behaving citizen. Having tracked {role}, the Homeless found out who the citizen really is.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>SheriffKillHighlander</string>
+    <ArrayOfString>
+      <string>🛡 Sheriff, without asking anyone, shot down the mountaineer, but he was in a good mood and did not take revenge, but simply took out a bullet :)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>SheriffKillHelpDoc</string>
+    <ArrayOfString>
+      <string>🏥 Sheriff shot {name}, but the Doctor found himself disagreeing with the sheriff's decision... He extract a bullet and stopped the blood.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>SheriffKill</string>
+    <ArrayOfString>
+      <string>🤠 Sheriff, not asking anyone, shot {name}, who was the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>KillerKillHighlander</string>
+    <ArrayOfString>
+      <string>🛡 The Killer is a pro, but he was not lucky, as his "victim" was the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>KillerKillHelpDoc</string>
+    <ArrayOfString>
+      <string>🏥 The Killer nearly killed {name}, but the doctor performed a successful operation.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>KillerKill</string>
+    <ArrayOfString>
+      <string>🔫 The Killer shot to the head and killed {name}, who was the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DemomanExplosionSuccess</string>
+    <ArrayOfString>
+      <string>💣 Tonight {place} was destroyed. {players}unfortunately, were killed by an explosion :(</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DemomanExplosionFail</string>
+    <ArrayOfString>
+      <string>💣 Tonight {place} was destroyed. Fortunately, no one died.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKillMaf</string>
+    <ArrayOfString>
+      <string>🕵 The Commissioner spent the night not in vain, he found out and killed {name}, who was the {role}.</string>
+      <string>🕵 The Commissioner ran around the lair of the mafia and was pounding down the drainpipes until one of them came out to see what was going on.Cattani shot {name} and with wild laughter escaped back home. Oh yeah, the status of the dead man — {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKillManiac</string>
+    <ArrayOfString>
+      <string>🕵 {role} in the dark gateway met a lady of advanced years with a stubble on his face, he did not even know that this is the disguised Commissioner Cattani... "Don `t move!" wheezed Cattani and shot scoundrel {name}!</string>
+      <string>🕵 Cattani knew that {role0} could not be taken with his bare hands! So he put on gloves, and strangled {role} {name}...</string>
+      <string>🕵 The Commissioner found out who was the {role} and decided to knock {gender:him|her} with a pipe on the head and to detain {gender:him|her}... But, unfortunately, overdid it and brought to the police station already corpse {name}...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKillMafHelpDoc</string>
+    <ArrayOfString>
+      <string>🏥 The Commissioner shot the mafioso, but the doctor cured him. I wonder why...</string>
+      <string>🏥 The Commissioner shot the mafioso. "He seems to have died," he thought, and left to find the rest. But the doctor was passing by... You know the end of that story :(</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKillManiacHelpDoc</string>
+    <ArrayOfString>
+      <string>🏥 The {role} was shot by The Commissioner, but the doctor cured him – mercy knows no bounds, sometimes in vain.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKillMafPrivate</string>
+    <ArrayOfString>
+      <string>You killed the bad guy. Congratulations :)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ManiacKillHighlander</string>
+    <ArrayOfString>
+      <string>🛡 The Maniac cut, sawed, and then shot a citizen. But, unfortunately for the maniac, this citizen is the {role}…</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ManiacKillHelpDoc</string>
+    <ArrayOfString>
+      <string>🏥 The Maniac cut the {name}, but the Doctor gathered the pieces back and breathed life into them.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ManiacKill</string>
+    <ArrayOfString>
+      <string>🔪 The Maniac made a salad from {name}, who was the {role}.</string>
+      <string>🔪 {name} ({role0}) was killed by the Maniac tonight. This is indicated by an ax found in a severed head…</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RobinHoodKillHighlander</string>
+    <ArrayOfString>
+      <string>🛡 Robin Hoodtried to kill the {role}. But he somehow did not die...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RobinHoodKillHelpDoc</string>
+    <ArrayOfString>
+      <string>🏥 Robin Hood wounded {name}. The first idea of the Doctor: "The warm up" :) {name} alive and well, can play further.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RobinHoodKill</string>
+    <ArrayOfString>
+      <string>🏹 Robin Hood shot {name}, who was the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RobinHoodKillCitizen</string>
+    <ArrayOfString>
+      <string>👨‍ Robin Hood was about to shoot, but saw that was {role0} in front of him, and changed his mind.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>WarlockCurseSuccess</string>
+    <ArrayOfString>
+      <string>㊙ Unsuccessfully tonight ended for {players}. It was not necessary to touch the cursed player by the Warlock...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>WenchBlock</string>
+    <ArrayOfString>
+      <string>🔞 {role} stayed all night with the Wench :)</string>
+      <string>🔞 There are rumors that the Wench spent the night with the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>HoodlumBlock</string>
+    <ArrayOfString>
+      <string>👊 The Hoodlum under the cover of darkness beat {role}, and he could not do anything at night.</string>
+      <string>👊 In the morning, {role} was found next to the hospital. He was beaten by the Hoodlum.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>HighlanderKill</string>
+    <ArrayOfString>
+      <string>⛰ The Highlander pulled a bullet from himself, took out the prepared weapon and shot {name}, who was the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>HackerCheck</string>
+    <ArrayOfString>
+      <string>💻 {name}'s computer was hacked today. Anyone now knows that {gender:he|she} is the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>AIDSKill</string>
+    <ArrayOfString>
+      <string>👠 {name} ({role}) was dead from a deadly infection. Greetings from the Wench :)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ComKilled_ToSergeant</string>
+    <ArrayOfString>
+      <string>{role} {name} was killed. Now it's your time. You are the hope of civilians!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>Win_None</string>
+    <ArrayOfString>
+      <string><![CDATA[⚖ <b>Forces are equal. Draw.</b>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>Win_Civil</string>
+    <ArrayOfString>
+      <string><![CDATA[👨 <b>Peaceful citizens won! Hooray!</b>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>Win_Neutral</string>
+    <ArrayOfString>
+      <string><![CDATA[💪 <b>The neutral character won!</b>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>Win_Mafia</string>
+    <ArrayOfString>
+      <string><![CDATA[🔫 <b>The mafia won!</b>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>Win_Yakuza</string>
+    <ArrayOfString>
+      <string><![CDATA[:japanese_ogre: <b>The Japanese mafia won!</b>]]></string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Commissioner</string>
+    <ArrayOfString>
+      <string>👮 The Commissioner planned a complex operation to capture the mafia. We'll see in the morning how good it is.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Wench</string>
+    <ArrayOfString>
+      <string>👠 The Wench left the house, someone today will not be able to sleep...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Doctor</string>
+    <ArrayOfString>
+      <string>👼 The Doctor did not sit still, he knew that someone needed his help...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Homeless</string>
+    <ArrayOfString>
+      <string>👴 Homeless has looked in one of the apartments...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Spy</string>
+    <ArrayOfString>
+      <string>🕵 The Spy placed a tipster...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Sheriff</string>
+    <ArrayOfString>
+      <string>🤠 The sheriff went hunting... It remains to be hoped that he will not miss...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Mafioso</string>
+    <ArrayOfString>
+      <string>🌆 Mafia has chosen another victim...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Killer</string>
+    <ArrayOfString>
+      <string>🔫 The Killer went to fulfill the order for the murder...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Killer_ToTeam</string>
+    <ArrayOfString>
+      <string>The Killer {nameSimple} choses {toKill} as a victim!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Lawyer</string>
+    <ArrayOfString>
+      <string>💼 The Lawyer won another court. In the morning, he will have a dossier on one of the citizens.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Lawyer_ToTeam</string>
+    <ArrayOfString>
+      <string>The Lawyer {nameSimple} choses {toCheck} to checking.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Yakuza</string>
+    <ArrayOfString>
+      <string>:japanese_ogre: The Japanese mafia arranged an ambush in one of the apartments. It will be such a surprise!</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Hoodlum</string>
+    <ArrayOfString>
+      <string>👊 The Hoodlum went out into the street, the citizens tried to escape...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Hoodlum_ToTeam</string>
+    <ArrayOfString>
+      <string>The Hoodlum {nameSimple} choses {toBlock} for blocking.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Maniac</string>
+    <ArrayOfString>
+      <string>🔪 The Maniac prepared everything you need: scissors, chainsaw and, of course, an ax. Someone is waiting for a cruel death...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_RobinHood</string>
+    <ArrayOfString>
+      <string>🏹 Robin Hood went to kill and take money from the rich...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Warlock</string>
+    <ArrayOfString>
+      <string>📃 The Warlock used his knowledge of black magic...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightAction_Hacker</string>
+    <ArrayOfString>
+      <string>💻 A worm crawled into someone's computer...</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>AchievementUnlocked</string>
+    <ArrayOfString>
+      <string>{name} has earned an achievement: {achievement}!</string>
+    </ArrayOfString>
+  </Item>
+</Messages>

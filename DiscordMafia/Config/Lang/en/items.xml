@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Messages>
+  <Item>
+    <string>Mask</string>
+    <Info>
+      <Name>Mask</Name>
+      <NameCases>
+        <string>mask</string>
+      </NameCases>
+      <Description>Buying a mask, the player in the nearest night avoids meeting with the characters. That is, mafia does not kill, the commissioner does not check, wench does not block. You can buy this item only once per game.</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>AntiMask</string>
+    <Info>
+      <Name>Night-vision device</Name>
+      <NameCases>
+        <string>night-vision device</string>
+      </NameCases>
+      <Description>Buying a night-vision device, the player in the nearest night gets the ability to see and act through masks. Thus, the night-vision device is a counter-item of the mask. You can buy this item only once per game.</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>Antidote</string>
+    <Info>
+      <Name>Antidote</Name>
+      <NameCases>
+        <string>antidote</string>
+      </NameCases>
+      <Description>Buying a antidote, the player in the nearest night removes all the effects leading to deferred death (for example, infection of the wench or poisoning of the poisoner). You can buy this item only once per game.</Description>
+    </Info>
+  </Item>
+</Messages>

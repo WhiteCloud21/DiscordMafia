@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Messages>
+  <Item>
+    <string>House</string>
+    <Info>
+      <Name>House</Name>
+    </Info>
+  </Item>
+  <Item>
+    <string>Supermarket</string>
+    <Info>
+      <Name>Supermarket</Name>
+    </Info>
+  </Item>
+  <Item>
+    <string>Stadium</string>
+    <Info>
+      <Name>Stadium</Name>
+    </Info>
+  </Item>
+</Messages>

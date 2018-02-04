@@ -146,7 +146,7 @@ namespace DiscordMafia.Config
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("Ошибка при кешировании конфига ролей: " + ex.Message);
+                            Console.WriteLine("Error while caching role config: " + ex.Message);
                         }
                     }
                 }
@@ -164,9 +164,11 @@ namespace DiscordMafia.Config
                     var constructor = _typeCache[kvp.Key];
                     var role = GetRoleInstance(constructor);
                     result.Append($"<b>{role.GetName(language)}</b> - ");
-                    result.Append(kvp.Value.IsEnabled ? "доступна, " : "недоступна, ");
-                    result.Append(kvp.Value.IsRandom ? "одна из случайных, " : "в игре при достаточном количестве игроков, ");
-                    result.AppendLine($"минимум игроков для появления - {kvp.Value.MinPlayers}");
+                    result.Append(kvp.Value.IsEnabled ? language.SimpleMessages.GetMessage("RoleStatus_IsAvailable") : language.SimpleMessages.GetMessage("RoleStatus_NotAvailable"));
+                    result.Append(", ");
+                    result.Append(kvp.Value.IsRandom ? language.SimpleMessages.GetMessage("RoleStatus_IsRandom") : language.SimpleMessages.GetMessage("RoleStatus_NotRandom"));
+                    result.Append(", ");
+                    result.AppendLine($"{language.SimpleMessages.GetMessage("RoleStatus_MinPlayers")} - {kvp.Value.MinPlayers}");
                 }
             }
             return result.ToString();

@@ -1,0 +1,388 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Modules>
+  <Item>
+    <string>GameActionsModule</string>
+    <Info>
+      <Aliases>
+        <string />
+      </Aliases>
+      <Summary>Game commands</Summary>
+      <Commands>
+        <Item>
+          <string>start</string>
+          <Info>
+            <Summary>Start the game.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>join</string>
+          <Info>
+            <Summary>Join the game.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>cancel</string>
+          <Info>
+            <Aliases>
+              <string>don't</string>
+            </Aliases>
+            <Summary>Cancel current action.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>skip</string>
+          <Info>
+            <Summary>Skip current action.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>imprison</string>
+          <Info>
+            <Summary>Condemn the specified player.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>yes</string>
+          <Info>
+            <Summary>Agree with the decision of the court.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>no</string>
+          <Info>
+            <Summary>Appeal the decision of the court.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>gamemode</string>
+          <Info>
+            <Aliases>
+              <string>gametype</string>
+            </Aliases>
+            <Summary>Change gamemode.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>buy</string>
+          <Info>
+            <Summary>Buy an item.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>kill</string>
+          <Info>
+            <Summary>Assist in killing a player.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>curse</string>
+          <Info>
+            <Summary>Curse a player.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>hack</string>
+          <Info>
+            <Summary>Hack a player's computer.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>check</string>
+          <Info>
+            <Summary>Check a player.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>sleep</string>
+          <Info>
+            <Summary>Sleep with a player.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>block</string>
+          <Info>
+            <Summary>Block a player.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>heal</string>
+          <Info>
+            <Summary>Heal a player.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>justify</string>
+          <Info>
+            <Summary>Justify a player.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>destroy</string>
+          <Info>
+            <Aliases>
+              <string>kaboom</string>
+            </Aliases>
+            <Summary>Explode a location.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>go</string>
+          <Info>
+            <Summary>Go to location.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>forcestart</string>
+          <Info>
+            <Summary>Force the start of the game.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>stop</string>
+          <Info>
+            <Summary>Force stop of the game.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>recalculate</string>
+          <Info>
+            <Summary>Recalculate all players stats.</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>HelpModule</string>
+    <Info>
+      <Aliases>
+        <string />
+      </Aliases>
+      <Summary>Help</Summary>
+      <Commands>
+        <Item>
+          <string>help</string>
+          <Info>
+            <Summary>Display help on command.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>list</string>
+          <Info>
+            <Summary>Display commands list.</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>NotificationSettingsModule</string>
+    <Info>
+      <Aliases>
+        <string />
+      </Aliases>
+      <Summary>Notification settings</Summary>
+      <Commands>
+        <Item>
+          <string>announceon</string>
+          <Info>
+            <Summary>Turn on notifications about game start</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>announceoff</string>
+          <Info>
+            <Summary>Turn off notifications about game start</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>SettingsModule</string>
+    <Info>
+      <Summary>Personal settings</Summary>
+      <Commands>
+        <Item>
+          <string>Default</string>
+          <Info>
+            <Aliases/>
+            <Summary>Display settings.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>update</string>
+          <Info>
+            <Summary>Update settings.</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>RatingModule</string>
+    <Info>
+      <Summary>Rating</Summary>
+      <Commands>
+        <Item>
+          <string>Default</string>
+          <Info>
+            <Aliases/>
+            <Summary>Top players (default)</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>page</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+        <Item>
+          <string>points</string>
+          <Info>
+            <Summary>Top by points.</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>page</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+        <Item>
+          <string>rate</string>
+          <Info>
+            <Aliases>
+              <string>rating</string>
+            </Aliases>
+            <Summary>Top by rating.</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>page</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+        <Item>
+          <string>games</string>
+          <Info>
+            <Aliases>
+              <string>game</string>
+            </Aliases>
+            <Summary>Top by games</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>page</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+        <Item>
+          <string>survivals</string>
+          <Info>
+            <Aliases>
+              <string>survive</string>
+              <string>survives</string>
+            </Aliases>
+            <Summary>Top by survivability</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>page</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+        <Item>
+          <string>wins</string>
+          <Info>
+            <Aliases>
+              <string>win</string>
+            </Aliases>
+            <Summary>Top by wins</Summary>
+            <Parameters>
+              <Item>
+                <string>page</string>
+                <Info>
+                  <Summary>page</Summary>
+                </Info>
+              </Item>
+            </Parameters>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>StatisticsModule</string>
+    <Info>
+      <Aliases>
+        <string />
+      </Aliases>
+      <Summary>Statistics</Summary>
+      <Commands>
+        <Item>
+          <string>mystat</string>
+          <Info>
+            <Summary>Display current player's stats.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>stats</string>
+          <Info>
+            <Summary>Display player's stats</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+  <Item>
+    <string>MuteModule</string>
+    <Info>
+      <Aliases/>
+      <Summary>Freedom of speech and its limitations</Summary>
+      <Commands>
+        <Item>
+          <string>status</string>
+          <Info>
+            <Aliases/>
+            <Summary>Display the status of the player's presence in the special constraint lists.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>blacklist</string>
+          <Info>
+            <Aliases/>
+            <Summary>Add the player to the black list.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>whitelist</string>
+          <Info>
+            <Aliases/>
+            <Summary>Add the player to the white list.</Summary>
+          </Info>
+        </Item>
+        <Item>
+          <string>remove</string>
+          <Info>
+            <Aliases/>
+            <Summary>Remove the player from black/white lists.</Summary>
+          </Info>
+        </Item>
+      </Commands>
+    </Info>
+  </Item>
+</Modules>

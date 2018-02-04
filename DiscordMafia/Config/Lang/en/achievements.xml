@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Messages>
+  <Item>
+    <string>10k</string>
+    <Info>
+      <Name>First salary</Name>
+      <Description>Collect 10000 points</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>25k</string>
+    <Info>
+      <Name>Rich man</Name>
+      <Description>Collect 25000 points</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>50k</string>
+    <Info>
+      <Name>Moneybags</Name>
+      <Description>Collect 50000 points</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>100k</string>
+    <Info>
+      <Name>Financial tycoon</Name>
+      <Description>Collect 100000 points</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>pointsPerGame</string>
+    <Info>
+      <Name>Need more gold</Name>
+      <Description>Earn 30 points for one game</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>pointsPerGameWasted</string>
+    <Info>
+      <Name>Wasted</Name>
+      <Description>Waste 30 points for one game</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ratingBronze</string>
+    <Info>
+      <Name>First steps</Name>
+      <Description>Collect 2000 rating</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ratingSilver</string>
+    <Info>
+      <Name>Rule Expert</Name>
+      <Description>Collect 3500 rating</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ratingGold</string>
+    <Info>
+      <Name>Pro</Name>
+      <Description>Collect 5000 rating</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ratingChamp</string>
+    <Info>
+      <Name>Unconditional champion</Name>
+      <Description>Collect 10000 rating</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>gamesBronze</string>
+    <Info>
+      <Name>It's only begining</Name>
+      <Description>Play a game</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>gamesSilver</string>
+    <Info>
+      <Name>One more game, maybe?</Name>
+      <Description>Play 1501 games</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>gamesGold</string>
+    <Info>
+      <Name>Золотой игрок</Name>
+      <Description>Play 3000 games</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>gamesChamp</string>
+    <Info>
+      <Name>Что наша жизнь? Игра!</Name>
+      <Description>Play 5000 games</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>perfectWin</string>
+    <Info>
+      <Name>Perfect victory</Name>
+      <Description>Win in the game for 6 or more players without losing any member of the team</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>neutralWin</string>
+    <Info>
+      <Name>Lone wolf</Name>
+      <Description>Win by playing for a neutral character</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>winStreak</string>
+    <Info>
+      <Name>BEYOND GODLIKE</Name>
+      <Description>Win 10 games in a row without losing a single one</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>loseStreak</string>
+    <Info>
+      <Name>Ghostlike</Name>
+      <Description>Lose 10 games in a row without winning a single one</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>civilkillcom</string>
+    <Info>
+      <Name>One murder - one disappointment</Name>
+      <Description>Kill the commissioner, playing for the sheriff or the highlander</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>dochealcom</string>
+    <Info>
+      <Name>Oath of Hippocrates</Name>
+      <Description>Save the commissioner life by healing him</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>dochealmaf</string>
+    <Info>
+      <Name>Vow of fidelity</Name>
+      <Description>Heal a mafioso that being attacked by commissioner, sheriff or Robin Hood</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>demomanMaster</string>
+    <Info>
+      <Name>Big BOOM</Name>
+      <Description>Explode half of the players</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>playWithDeveloper</string>
+    <Info>
+      <Name>And who is it?</Name>
+      <Description>Play with the developer of this bot</Description>
+    </Info>
+  </Item>
+</Messages>
