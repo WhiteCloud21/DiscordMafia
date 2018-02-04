@@ -87,14 +87,14 @@
   <Item>
     <string>gamesGold</string>
     <Info>
-      <Name>Золотой игрок</Name>
+      <Name>Golden player</Name>
       <Description>Play 3000 games</Description>
     </Info>
   </Item>
   <Item>
     <string>gamesChamp</string>
     <Info>
-      <Name>Что наша жизнь? Игра!</Name>
+      <Name>The most attractive thing about life is, it's a gamble.</Name>
       <Description>Play 5000 games</Description>
     </Info>
   </Item>
