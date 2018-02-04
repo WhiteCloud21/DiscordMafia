@@ -91,7 +91,7 @@ namespace DiscordMafia.Config
 
         protected void ReadConfig()
         {
-            using (var stream = new System.IO.FileStream(GetFilePath("gameSettings.xml"), System.IO.FileMode.Open))
+            using (var stream = new FileStream(GetFilePath("gameSettings.xml"), System.IO.FileMode.Open))
             {
                 using (var reader = XmlReader.Create(stream))
                 {
@@ -103,7 +103,7 @@ namespace DiscordMafia.Config
 
         protected string GetFilePath(string fileName)
         {
-            if (GameType != null && System.IO.File.Exists(Path.Combine(ConfigPath, $"Gametypes/{GameType}/{fileName}")))
+            if (GameType != null && File.Exists(Path.Combine(ConfigPath, $"Gametypes/{GameType}/{fileName}")))
             {
                 return Path.Combine(ConfigPath, $"Gametypes/{GameType}/{fileName}");
             }
@@ -112,7 +112,7 @@ namespace DiscordMafia.Config
 
         public bool IsValidGametype(string gameType)
         {
-            return System.IO.Directory.Exists(Path.Combine(ConfigPath, $"Gametypes/{gameType}"));
+            return Directory.Exists(Path.Combine(ConfigPath, $"Gametypes/{gameType}"));
         }
 
         public XmlSchema GetSchema()

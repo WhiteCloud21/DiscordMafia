@@ -34,7 +34,10 @@ namespace DiscordMafia
                     var sergeant = Game.PlayersList.Find(p => { return p.IsAlive && p.Role is Sergeant && !KilledPlayers.Contains(p); });
                     if (sergeant != null)
                     {
-                        sergeant.Role = new Commissioner();
+                        sergeant.Role = new Commissioner
+                        {
+                            Player = sergeant
+                        };
                         Game.MessageBuilder.PrepareTextReplacePlayer("ComKilled_ToSergeant", player).SendPrivate(sergeant);
                     }
                 }
