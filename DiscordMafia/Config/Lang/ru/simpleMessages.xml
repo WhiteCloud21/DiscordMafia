@@ -174,4 +174,30 @@
 ]]>
     </string>
   </Item>
+  <Item>
+    <string>StatusHelpTemplate</string>
+    <string><![CDATA[
+<b>=========== Помощь по статусу===========</b>
+Ваш статус - {role}
+{team}
+{currentRoleHelp}
+]]>
+    </string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Civil</string>
+    <string>Вы играете за команду мирных жителей</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Neutral</string>
+    <string>Вы играете сами за себя</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Mafia</string>
+    <string>Вы играете за команду мафов</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Yakuza</string>
+    <string>Вы играете за команду якудз</string>
+  </Item>
 </Messages>

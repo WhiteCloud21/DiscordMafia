@@ -152,7 +152,7 @@ Remaining Players:
   <Item>
     <string>ShopDisabled</string>
     <ArrayOfString>
-      <string>The shop is disabled in this gamemode.</string>
+      <string>The shop is disabled in this game mode.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -172,7 +172,7 @@ Remaining Players:
   <Item>
     <string>RoleHelp_Wench</string>
     <ArrayOfString>
-      <string>At night you can seduce anyone (but not 2 times in a row). This player's special ability (if it is) will be blocked for one night. Thanks to this blocking, you can not only not let the mafu shoot, but also prevent the commissioner from checking on suspect. So before you sleep with someone - think :)</string>
+      <string>At night you can seduce anyone (but not 2 times in a row). This player's special ability (if it is) will be blocked for one night. Thanks to this blocking, you can not only not let the mafioso to shoot, but also prevent the commissioner from checking on suspect. So before you sleep with someone - think :)</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -220,7 +220,7 @@ Remaining Players:
   <Item>
     <string>RoleHelp_Sergeant</string>
     <ArrayOfString>
-      <string>You are an commissioner assistant. You know the statuses of the players he checks, but you can not influence his actions. In case of death of the commissioner, you take his place and start shooting back the mafia.</string>
+      <string>You are the commissioner assistant. You know the statuses of the players he checks, but you can not influence his actions. In case of death of the commissioner, you take his place and start shooting back the mafia.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -238,7 +238,7 @@ Remaining Players:
   <Item>
     <string>RoleHelp_Mafioso</string>
     <ArrayOfString>
-      <string>Pretense — this is your hobby. During the day you portray an honest resident, and at night, together with other mafiosies, shoot citizens one by one. If you find a commissioner — kill him, he is your most dangerous enemy!</string>
+      <string>Pretense — this is your hobby. During the day you portray an honest resident, and at night, together with other mafiosi, shoot citizens one by one. If you find a commissioner — kill him, he is your most dangerous enemy!</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -311,7 +311,7 @@ Remaining Players:
     <string>GameStart_Role_Doctor</string>
     <ArrayOfString>
       <string>Your task is to save lives. You are the {role}.</string>
-      <string>Ваш статус {role}.</string>
+      <string>Your status is {role}.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -361,7 +361,7 @@ Remaining Players:
     <string>NightInfo_Homeless</string>
     <ArrayOfString>
       <string>
-        <![CDATA[Who will be ckecked tonight? (<b>/check X</b>, where <b>X</b> — number of the player).]]>
+        <![CDATA[Who will be checked tonight? (<b>/check X</b>, where <b>X</b> — number of the player).]]>
       </string>
     </ArrayOfString>
   </Item>
@@ -465,7 +465,7 @@ Remaining Players:
     <ArrayOfString>
       <string>
         <![CDATA[Who will be saved from injustice tonight?
-        To kill the player, type <b>/убить X</b>, where <b>X</b> — number of the player.]]>
+        To kill the player, type <b>/kill X</b>, where <b>X</b> — number of the player.]]>
       </string>
     </ArrayOfString>
   </Item>

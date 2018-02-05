@@ -63,15 +63,15 @@
   </Item>
   <Item>
     <string>GamemodeChangeSuccess</string>
-    <string>Gamemode changed.</string>
+    <string>Game mode changed.</string>
   </Item>
   <Item>
     <string>GamemodeChangeFail</string>
-    <string>Unknown gamemode.</string>
+    <string>Unknown game mode.</string>
   </Item>
   <Item>
     <string>GamemodeChangeFailInProgress</string>
-    <string>Cannot change gamemode while game in progress.</string>
+    <string>Cannot change game mode while game in progress.</string>
   </Item>
   <Item>
     <string>RatingHeader</string>
@@ -162,7 +162,7 @@ Rating: {rate}
 /list - display command list;
 /help COMMAND - help for command;
 {statusHelp}
-<b>========Gamemode help========</b>
+<b>========Game mode help========</b>
 Current mode: {gameType}
 Mafia: {isMafiaEnabled}
 Yakuza: {isYakuzaEnabled}
@@ -173,5 +173,31 @@ Members of mafia and yakuza: {mafPercent}%
 {pointsHelp}
 ]]>
     </string>
+  </Item>
+  <Item>
+    <string>StatusHelpTemplate</string>
+    <string><![CDATA[
+<b>=========== Status help===========</b>
+Your status is {role}
+{team}
+{currentRoleHelp}
+]]>
+    </string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Civil</string>
+    <string>You are playing for the civilians</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Neutral</string>
+    <string>You are playing the neutral character</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Mafia</string>
+    <string>You are playing for the mafia</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Yakuza</string>
+    <string>You are playing for the yakuza</string>
   </Item>
 </Messages>

@@ -59,7 +59,7 @@
             <Aliases>
               <string>gametype</string>
             </Aliases>
-            <Summary>Change gamemode.</Summary>
+            <Summary>Change game mode.</Summary>
           </Info>
         </Item>
         <Item>
@@ -140,7 +140,7 @@
         <Item>
           <string>stop</string>
           <Info>
-            <Summary>Force stop of the game.</Summary>
+            <Summary>Force the stop of the game.</Summary>
           </Info>
         </Item>
         <Item>
@@ -228,7 +228,7 @@
           <string>Default</string>
           <Info>
             <Aliases/>
-            <Summary>Top players (default)</Summary>
+            <Summary>Top players (default).</Summary>
             <Parameters>
               <Item>
                 <string>page</string>
@@ -276,7 +276,7 @@
             <Aliases>
               <string>game</string>
             </Aliases>
-            <Summary>Top by games</Summary>
+            <Summary>Top by games.</Summary>
             <Parameters>
               <Item>
                 <string>page</string>
@@ -294,7 +294,7 @@
               <string>survive</string>
               <string>survives</string>
             </Aliases>
-            <Summary>Top by survivability</Summary>
+            <Summary>Top by survivability.</Summary>
             <Parameters>
               <Item>
                 <string>page</string>
@@ -311,7 +311,7 @@
             <Aliases>
               <string>win</string>
             </Aliases>
-            <Summary>Top by wins</Summary>
+            <Summary>Top by wins.</Summary>
             <Parameters>
               <Item>
                 <string>page</string>
@@ -342,7 +342,7 @@
         <Item>
           <string>stats</string>
           <Info>
-            <Summary>Display player's stats</Summary>
+            <Summary>Display player's stats.</Summary>
           </Info>
         </Item>
       </Commands>

@@ -30,26 +30,12 @@ namespace DiscordMafia.Modules
             string statusHelp = "";
             if (currentPlayer != null && currentPlayer.IsAlive && currentPlayer.Role != null)
             {
-                statusHelp += " " + Environment.NewLine;
-                statusHelp += "<b>=========== Помощь по статусу===========</b>" + Environment.NewLine;
-                statusHelp += "Ваш статус - " + _game.MessageBuilder.FormatRole(currentPlayer.Role.GetName(_game.MainSettings.Language)) + Environment.NewLine;
-                switch (currentPlayer.Role.Team)
+                statusHelp = _game.MessageBuilder.GetTextSimple("StatusHelpTemplate", new Dictionary<string, object>
                 {
-                    case Team.Civil:
-                        statusHelp += "Вы играете за команду мирных жителей" + Environment.NewLine;
-                        break;
-                    case Team.Neutral:
-                        statusHelp += "Вы играете сами за себя" + Environment.NewLine;
-                        break;
-                    case Team.Mafia:
-                        statusHelp += "Вы играете за команду мафов" + Environment.NewLine;
-                        break;
-                    case Team.Yakuza:
-                        statusHelp += "Вы играете за команду якудз" + Environment.NewLine;
-                        break;
-                }
-
-                statusHelp += _game.MessageBuilder.GetText(string.Format("RoleHelp_{0}", currentPlayer.Role.GetType().Name)) + Environment.NewLine;
+                    ["role"] = _game.MessageBuilder.FormatRole(currentPlayer.Role.GetName(_game.MainSettings.Language)),
+                    ["team"] = _game.MessageBuilder.GetText(string.Format("StatusHelpTeam_{0}", currentPlayer.Role.Team)),
+                    ["currentRoleHelp"] = _game.MessageBuilder.GetText(string.Format("RoleHelp_{0}", currentPlayer.Role.GetType().Name)),
+                });
             }
 
             string pointsHelp = "";

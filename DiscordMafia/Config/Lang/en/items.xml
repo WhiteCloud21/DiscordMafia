@@ -27,7 +27,7 @@
       <NameCases>
         <string>antidote</string>
       </NameCases>
-      <Description>Buying a antidote, the player in the nearest night removes all the effects leading to deferred death (for example, infection of the wench or poisoning of the poisoner). You can buy this item only once per game.</Description>
+      <Description>Buying an antidote, the player in the nearest night removes all the effects leading to deferred death (such as infection of the wench or poisoning of the poisoner). You can buy this item only once per game.</Description>
     </Info>
   </Item>
 </Messages>

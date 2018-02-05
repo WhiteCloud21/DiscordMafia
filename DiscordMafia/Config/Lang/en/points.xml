@@ -57,7 +57,7 @@
   <Item>
     <string>SheriffKillCom</string>
     <Info>
-      <Description>To The Sheriff/Highlande for killing the Commisioner (in addition to the points for killing an honest)</Description>
+      <Description>To The Sheriff/Highlander for killing the Commisioner (in addition to the points for killing an honest)</Description>
     </Info>
   </Item>
   <Item>
@@ -159,7 +159,7 @@
   <Item>
     <string>HackerHackUnique</string>
     <Info>
-      <Description>To the Hacker for each check of an unique role (not citizen, mafioso or yakuza) (in addition to points for each check)</Description>
+      <Description>To the Hacker for each check of a unique role (not citizen, mafioso or yakuza) (in addition to points for each check)</Description>
     </Info>
   </Item>
 </Messages>
