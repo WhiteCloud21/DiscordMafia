@@ -1713,7 +1713,7 @@ namespace DiscordMafia
                 message += String.Format("{0} {1} {3} ({4}) - {2}", Environment.NewLine, MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.StartRole.GetName(MainSettings.Language)), player.CurrentGamePoints, player.DbUser.TotalPoints);
                 if (!player.IsAlive)
                 {
-                    message += " (труп)";
+                    message += " (💀)";
                 }
             }
             MessageBuilder.Text(message, false).SendPublic(GameChannel);
