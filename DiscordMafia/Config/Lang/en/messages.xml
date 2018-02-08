@@ -158,14 +158,14 @@ Remaining Players:
   <Item>
     <string>RoleHelp_Citizen</string>
     <ArrayOfString>
-      <string>You are a typical representative of the peaceful population of the city. Your task is to sleep at night, and in the afternoon try to find the mafia and convict them.</string>
+      <string>You are a typical representative of the innocent population of the city. Your task is to sleep at night, and in the afternoon try to find the mafia and convict them.</string>
     </ArrayOfString>
   </Item>
   <Item>
     <string>RoleHelp_Commissioner</string>
     <ArrayOfString>
       <string>
-        It is you who are the main hope of all civilians for a peaceful life.
+        It is you who are the main hope of all innocent civilians for a peaceful life.
         Your task is to shoot all the mafia. Remember: You work undercover. If the mafia find you, they will kill at the first opportunity! Every night you can check the status of any player. If he belongs to mafia, he will be killed.</string>
     </ArrayOfString>
   </Item>
@@ -238,7 +238,7 @@ Remaining Players:
   <Item>
     <string>RoleHelp_Mafioso</string>
     <ArrayOfString>
-      <string>Pretense — this is your hobby. During the day you portray an honest resident, and at night, together with other mafiosi, shoot citizens one by one. If you find a commissioner — kill him, he is your most dangerous enemy!</string>
+      <string>Pretense — this is your hobby. During the day you portray an innocent citizen, and at night, together with other mafiosi, shoot innocents one by one. If you find a commissioner — kill him, he is your most dangerous enemy!</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -262,7 +262,7 @@ Remaining Players:
   <Item>
     <string>RoleHelp_Yakuza</string>
     <ArrayOfString>
-      <string>Pretense — this is your hobby. In the daytime you put on the mask of an honest citizen, and at night, along with other yakuza, shoot citizens and mafia one at a time. If you find a commissioner — kill him, he is your most dangerous enemy!</string>
+      <string>Pretense — this is your hobby. In the daytime you put on the mask of an innocent citizen, and at night, along with other yakuza, shoot innocents and mafia one at a time. If you find a commissioner — kill him, he is your most dangerous enemy!</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -274,7 +274,7 @@ Remaining Players:
   <Item>
     <string>RoleHelp_Ninja</string>
     <ArrayOfString>
-      <string>You are a horror, creeping on tiptoe of the night. Against you nothing can be done at night. And in the rest you are the same participant in the Japanese mafia, shoot citizens and mafia one by one.</string>
+      <string>You are a horror, creeping on tiptoe of the night. Against you nothing can be done at night. And in the rest you are the same participant in the Japanese mafia, shoot innocents and mafia one by one.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -699,7 +699,7 @@ Remaining Players:
   <Item>
     <string>SheriffKillHelpDoc</string>
     <ArrayOfString>
-      <string>🏥 Sheriff shot {name}, but the Doctor found himself disagreeing with the sheriff's decision... He extract a bullet and stopped the blood.</string>
+      <string>🏥 Sheriff shot {name}, but the Doctor found himself disagreeing with the Sheriff's decision... He extract a bullet and stopped the blood.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -868,7 +868,7 @@ Remaining Players:
   <Item>
     <string>Win_Civil</string>
     <ArrayOfString>
-      <string><![CDATA[👨 <b>Peaceful citizens won! Hooray!</b>]]></string>
+      <string><![CDATA[👨 <b>Innocents won! Hooray!</b>]]></string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -922,7 +922,7 @@ Remaining Players:
   <Item>
     <string>NightAction_Sheriff</string>
     <ArrayOfString>
-      <string>🤠 The sheriff went hunting... It remains to be hoped that he will not miss...</string>
+      <string>🤠 The Sheriff went hunting... It remains to be hoped that he will not miss...</string>
     </ArrayOfString>
   </Item>
   <Item>

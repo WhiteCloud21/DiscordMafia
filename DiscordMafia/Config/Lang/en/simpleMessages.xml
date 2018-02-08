@@ -186,7 +186,7 @@ Your status is {role}
   </Item>
   <Item>
     <string>StatusHelpTeam_Civil</string>
-    <string>You are playing for the civilians</string>
+    <string>You are playing for the innocents</string>
   </Item>
   <Item>
     <string>StatusHelpTeam_Neutral</string>

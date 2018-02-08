@@ -186,25 +186,25 @@
         <Item>
           <string>announceon</string>
           <Info>
-            <Summary>Turn on notifications about game start</Summary>
+            <Summary>Turn on notifications about game start.</Summary>
           </Info>
         </Item>
         <Item>
           <string>announceoff</string>
           <Info>
-            <Summary>Turn off notifications about game start</Summary>
+            <Summary>Turn off notifications about game start.</Summary>
           </Info>
         </Item>
       </Commands>
     </Info>
   </Item>
   <Item>
-    <string>SettingsModule</string>
+    <string>PersonalSettingsModule</string>
     <Info>
       <Summary>Personal settings</Summary>
       <Commands>
         <Item>
-          <string>Default</string>
+          <string>SettingsList</string>
           <Info>
             <Aliases/>
             <Summary>Display settings.</Summary>

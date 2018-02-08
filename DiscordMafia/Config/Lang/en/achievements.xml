@@ -73,7 +73,7 @@
   <Item>
     <string>gamesBronze</string>
     <Info>
-      <Name>It's only begining</Name>
+      <Name>This is just the beginning</Name>
       <Description>Play a game</Description>
     </Info>
   </Item>
@@ -137,13 +137,13 @@
     <string>dochealcom</string>
     <Info>
       <Name>Oath of Hippocrates</Name>
-      <Description>Save the commissioner life by healing him</Description>
+      <Description>Save the commissioner's life by healing him</Description>
     </Info>
   </Item>
   <Item>
     <string>dochealmaf</string>
     <Info>
-      <Name>Vow of fidelity</Name>
+      <Name>A Vow of Fidelity</Name>
       <Description>Heal a mafioso who was attacked by the commissioner, the sheriff or Robin Hood</Description>
     </Info>
   </Item>
@@ -157,7 +157,7 @@
   <Item>
     <string>playWithDeveloper</string>
     <Info>
-      <Name>And who is it?</Name>
+      <Name>And who's that man?</Name>
       <Description>Play with the developer of this bot</Description>
     </Info>
   </Item>

@@ -280,7 +280,7 @@
     </Info>
   </Item>
   <Item>
-    <string>SettingsModule</string>
+    <string>PersonalSettingsModule</string>
     <Info>
       <Aliases>
         <string>настройки</string>
@@ -288,7 +288,7 @@
       <Summary>Личные настройки</Summary>
       <Commands>
         <Item>
-          <string>Default</string>
+          <string>SettingsList</string>
           <Info>
             <Aliases/>
             <Summary>Выводит настройки.</Summary>

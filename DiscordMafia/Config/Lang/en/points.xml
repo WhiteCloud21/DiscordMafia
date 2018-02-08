@@ -27,37 +27,37 @@
   <Item>
     <string>CivilKillCivil</string>
     <Info>
-      <Description>To honest citizens for imprison an honest (only those who voted against him)</Description>
+      <Description>To innocents for imprison an innocent (only those who voted against him)</Description>
     </Info>
   </Item>
   <Item>
     <string>CivilKillCom</string>
     <Info>
-      <Description>To honest citizens for imprison the Commissioner (only those who voted against him) (in addition to the points for imprison an honest)</Description>
+      <Description>To innocents for imprison the Commissioner (only those who voted against him) (in addition to the points for imprison an innocent)</Description>
     </Info>
   </Item>
   <Item>
     <string>CivilKillMaf</string>
     <Info>
-      <Description>To citizens and mafia for imprison an yakuza, to citizens and mafia for imprison a mafioso (only those who voted against him)</Description>
+      <Description>To innocents and mafia for imprison an yakuza, to citizens and mafia for imprison a mafioso (only those who voted against him)</Description>
     </Info>
   </Item>
   <Item>
     <string>ComKillMaf</string>
     <Info>
-      <Description>To The Commissioner/Homeless/Sheriff/Highlander for killing/locating mafioso/yakuza</Description>
+      <Description>To the Commissioner/Homeless/Sheriff/Highlander for killing/locating mafioso/yakuza</Description>
     </Info>
   </Item>
   <Item>
     <string>ComKillCivil</string>
     <Info>
-      <Description>To The Commissioner/Homeless/Sheriff for killing honest citizen</Description>
+      <Description>To the Commissioner/Homeless/Sheriff for killing innocent</Description>
     </Info>
   </Item>
   <Item>
     <string>SheriffKillCom</string>
     <Info>
-      <Description>To The Sheriff/Highlander for killing the Commisioner (in addition to the points for killing an honest)</Description>
+      <Description>To the Sheriff/Highlander for killing the Commisioner (in addition to the points for killing an innocent)</Description>
     </Info>
   </Item>
   <Item>
@@ -111,13 +111,13 @@
   <Item>
     <string>DocHealCivil</string>
     <Info>
-      <Description>To the Doctor for saving an honest citizen</Description>
+      <Description>To the Doctor for saving an innocent</Description>
     </Info>
   </Item>
   <Item>
     <string>DocHealCom</string>
     <Info>
-      <Description>To the Doctor for saving the Commissioner (in addition to points for saving citizen)</Description>
+      <Description>To the Doctor for saving the Commissioner (in addition to points for saving an innocent)</Description>
     </Info>
   </Item>
   <Item>
@@ -129,13 +129,13 @@
   <Item>
     <string>JudgeJustifyCivil</string>
     <Info>
-      <Description>To the Judge for justify an honest citizen</Description>
+      <Description>To the Judge for justify an innocent</Description>
     </Info>
   </Item>
   <Item>
     <string>JudgeJustifyCom</string>
     <Info>
-      <Description>To the Judge for justify the Commissioner (in addition to points for justify a citizen)</Description>
+      <Description>To the Judge for justify the Commissioner (in addition to points for justify an innocent)</Description>
     </Info>
   </Item>
   <Item>
