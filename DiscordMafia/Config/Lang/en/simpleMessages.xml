@@ -63,7 +63,7 @@
   </Item>
   <Item>
     <string>GamemodeChangeSuccess</string>
-    <string>Game mode changed.</string>
+    <string>Game mode was changed successfully.</string>
   </Item>
   <Item>
     <string>GamemodeChangeFail</string>
@@ -71,7 +71,7 @@
   </Item>
   <Item>
     <string>GamemodeChangeFailInProgress</string>
-    <string>Cannot change game mode while game in progress.</string>
+    <string>Cannot change game mode while game is in progress.</string>
   </Item>
   <Item>
     <string>RatingHeader</string>
@@ -186,18 +186,18 @@ Your status is {role}
   </Item>
   <Item>
     <string>StatusHelpTeam_Civil</string>
-    <string>You are playing for the innocents</string>
+    <string>You are playing as an innocent</string>
   </Item>
   <Item>
     <string>StatusHelpTeam_Neutral</string>
-    <string>You are playing the neutral character</string>
+    <string>You are playing as the neutral character</string>
   </Item>
   <Item>
     <string>StatusHelpTeam_Mafia</string>
-    <string>You are playing for the mafia</string>
+    <string>You are playing as a member of mafia</string>
   </Item>
   <Item>
     <string>StatusHelpTeam_Yakuza</string>
-    <string>You are playing for the yakuza</string>
+    <string>You are playing as a member of yakuza</string>
   </Item>
 </Messages>
