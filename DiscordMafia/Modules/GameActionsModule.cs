@@ -526,7 +526,7 @@ namespace DiscordMafia.Modules
             }
             else
             {
-                await ReplyAsync(_game.MessageBuilder.GetTextSimple("GamemodeChangeInProgress"));
+                await ReplyAsync(_game.MessageBuilder.GetTextSimple("GamemodeChangeFailInProgress"));
             }
             await Task.CompletedTask;
         }

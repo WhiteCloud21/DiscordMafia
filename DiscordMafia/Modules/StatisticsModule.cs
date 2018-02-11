@@ -35,7 +35,7 @@ namespace DiscordMafia.Modules
         public async Task Statistics()
         {
             var user = new UserWrapper(Context.User);
-            await ReplyAsync(MessageBuilder.Markup(MessageBuilder.Encode(Stat.GetStatAsString(_game.MessageBuilder, user))));
+            await ReplyAsync(MessageBuilder.Markup(Stat.GetStatAsString(_game.MessageBuilder, user)));
             await ReplyAsync(MessageBuilder.Markup(_game.AchievementManager.GetAchievementsAsString(user)));
 
             var rolesInfo = new Dictionary<string, int>();
@@ -75,7 +75,7 @@ namespace DiscordMafia.Modules
         public async Task Statistics([Summary("Пользователь, по которому отобразить статистику")] IUser queryUser = null)
         {
             var user = new UserWrapper(queryUser ?? Context.User);
-            await ReplyAsync(MessageBuilder.Markup(MessageBuilder.Encode(Stat.GetStatAsString(_game.MessageBuilder, user))));
+            await ReplyAsync(MessageBuilder.Markup(Stat.GetStatAsString(_game.MessageBuilder, user)));
             await ReplyAsync(MessageBuilder.Markup(_game.AchievementManager.GetAchievementsAsString(user)));
         }
     }

@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<Messages>
+  <Item>
+    <string>N/A</string>
+    <string>N/A</string>
+  </Item>
+  <Item>
+    <string>ShopItemInfo</string>
+    <string>
+      <![CDATA[{idx}. <b>{name}</b> - item {status}. Price: {cost}
+      <i>{description}</i>]]>
+    </string>
+  </Item>
+  <Item>
+    <string>ShopItemStatus_IsActive</string>
+    <string>will be used this night</string>
+  </Item>
+  <Item>
+    <string>ShopItemStatus_IsAvailable</string>
+    <string>is available for purchasing</string>
+  </Item>
+  <Item>
+    <string>ShopItemStatus_NotAvailable</string>
+    <string>unavailable</string>
+  </Item>
+  <Item>
+    <string>ShopItemBought</string>
+    <string>
+      <![CDATA[You bought <b>{name}</b>.]]>
+    </string>
+  </Item>
+  <Item>
+    <string>RoleStatus_IsAvailable</string>
+    <string>available</string>
+  </Item>
+  <Item>
+    <string>RoleStatus_NotAvailable</string>
+    <string>unavailable</string>
+  </Item>
+  <Item>
+    <string>RoleStatus_IsRandom</string>
+    <string>one of the random</string>
+  </Item>
+  <Item>
+    <string>RoleStatus_NotRandom</string>
+    <string>always in game when enough players</string>
+  </Item>
+  <Item>
+    <string>RoleStatus_MinPlayers</string>
+    <string>minimum players</string>
+  </Item>
+  <Item>
+    <string>PersonalSettingsChangeSuccess</string>
+    <string>Settings was updated successfully.</string>
+  </Item>
+  <Item>
+    <string>PersonalSettingsChangeFail</string>
+    <string>Settings update failed: {message}.</string>
+  </Item>
+  <Item>
+    <string>PersonalSettingsChangeFailUnkParameter</string>
+    <string>Unknown parameter {name}.</string>
+  </Item>
+  <Item>
+    <string>GamemodeChangeSuccess</string>
+    <string>Game mode was changed successfully.</string>
+  </Item>
+  <Item>
+    <string>GamemodeChangeFail</string>
+    <string>Unknown game mode.</string>
+  </Item>
+  <Item>
+    <string>GamemodeChangeFailInProgress</string>
+    <string>Cannot change game mode while game is in progress.</string>
+  </Item>
+  <Item>
+    <string>RatingHeader</string>
+    <string>Best players by {name} (page {page}/{maxPage})</string>
+  </Item>
+  <Item>
+    <string>RatingHeaderFormat</string>
+    <string>{idx}. Player - {ratingColumn}</string>
+  </Item>
+  <Item>
+    <string>RatingFieldName_Points</string>
+    <string>points</string>
+  </Item>
+  <Item>
+    <string>RatingFieldColumn_Points</string>
+    <string>Points</string>
+  </Item>
+  <Item>
+    <string>RatingFieldName_Survivability</string>
+    <string>survivability</string>
+  </Item>
+  <Item>
+    <string>RatingFieldColumn_Survivability</string>
+    <string>Survivability, %</string>
+  </Item>
+  <Item>
+    <string>RatingFieldName_Wins</string>
+    <string>wins</string>
+  </Item>
+  <Item>
+    <string>RatingFieldColumn_Wins</string>
+    <string>Wins, %</string>
+  </Item>
+  <Item>
+    <string>RatingFieldName_Rate</string>
+    <string>rating</string>
+  </Item>
+  <Item>
+    <string>RatingFieldColumn_Rate</string>
+    <string>Rating</string>
+  </Item>
+  <Item>
+    <string>RatingFieldName_Games</string>
+    <string>games</string>
+  </Item>
+  <Item>
+    <string>RatingFieldColumn_Games</string>
+    <string>Games</string>
+  </Item>
+  <Item>
+    <string>UserStatTemplate</string>
+    <string>
+{name}'s stats:
+Total games played: {gamesPlayed}
+Survived in: {survivabilityTotal} ({survivabilityPercent}%)
+Wins: {wins} ({winsPercent}%)
+Current win / lose streak: {winStreak} / {loseStreak}
+Points: {totalPoints} ({averagePoints} game average)
+Rating: {rate}
+    </string>
+  </Item>
+  <Item>
+    <string>UserAchievementsStatTemplate</string>
+    <string>
+      <![CDATA[<b><u>Achievements:</u></b>
+{rows}
+      ]]>
+    </string>
+  </Item>
+  <Item>
+    <string>UserAchievementsStatRowTemplate</string>
+    <string>
+      <![CDATA[<b>{icon} {name}</b> ({description}) - achieved {achievedAt}]]>
+    </string>
+  </Item>
+  <Item>
+    <string>UserRolesStatTemplate</string>
+    <string>
+      <![CDATA[<b><u>Games by role:</u></b>
+{rows}
+      ]]>
+    </string>
+  </Item>
+  <Item>
+    <string>HelpTemplate</string>
+    <string><![CDATA[<b>=========Commands==========</b>
+/help - display this help (in bot's PM);
+/list - display command list;
+/help COMMAND - help for command;
+{statusHelp}
+<b>========Game mode help========</b>
+Current mode: {gameType}
+Mafia: {isMafiaEnabled}
+Yakuza: {isYakuzaEnabled}
+Members of mafia and yakuza: {mafPercent}%
+<u><b>AvailableRoles</b></u>
+{rolesHelp}
+<b>=========Points help=========</b>
+{pointsHelp}
+]]>
+    </string>
+  </Item>
+  <Item>
+    <string>StatusHelpTemplate</string>
+    <string><![CDATA[
+<b>=========== Status help===========</b>
+Your status is {role}
+{team}
+{currentRoleHelp}
+]]>
+    </string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Civil</string>
+    <string>You are playing as an innocent</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Neutral</string>
+    <string>You are playing as the neutral character</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Mafia</string>
+    <string>You are playing as a member of mafia</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Yakuza</string>
+    <string>You are playing as a member of yakuza</string>
+  </Item>
+</Messages>

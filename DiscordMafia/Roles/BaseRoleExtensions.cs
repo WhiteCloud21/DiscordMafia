@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using DiscordMafia.Services;
 using DiscordMafia.Config.Lang;
+using System;
 
 namespace DiscordMafia.Roles
 {
@@ -14,11 +15,12 @@ namespace DiscordMafia.Roles
         public static string[] GetNameCases(this BaseRole role, ILanguage language)
         {
             var info = GetItemLangInfo(role, language);
+            var result = Enumerable.Repeat($"#ROLE_NAME_{role.GetType().Name}", 6).ToArray();
             if (info?.NameCases != null)
             {
-                return info.NameCases;
+                Array.Copy(info.NameCases, result, info.NameCases.Length);
             }
-            return Enumerable.Repeat($"#ROLE_NAME_{role.GetType().Name}", 6).ToArray();
+            return result;
         }
 
         public static string GetDescription(this BaseRole role, ILanguage language)

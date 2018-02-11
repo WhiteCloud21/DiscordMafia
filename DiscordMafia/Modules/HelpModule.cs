@@ -26,53 +26,37 @@ namespace DiscordMafia.Modules
         public async Task Help()
         {
             var currentPlayer = _game.CurrentPlayers.ContainsKey(Context.User.Id) ? _game.CurrentPlayers[Context.User.Id] : null;
-            var message = "<b>==========Игровые команды==========</b>" + Environment.NewLine;
-            message += "/help - вывод этой справки (в приват боту);" + Environment.NewLine;
-            message += "/list - список команд;" + Environment.NewLine;
-            message += "/help КОМАНДА - помощь по команде;" + Environment.NewLine;
 
+            string statusHelp = "";
             if (currentPlayer != null && currentPlayer.IsAlive && currentPlayer.Role != null)
             {
-                message += " " + Environment.NewLine;
-                message += "<b>=========== Помощь по статусу===========</b>" + Environment.NewLine;
-                message += "Ваш статус - " + _game.MessageBuilder.FormatRole(currentPlayer.Role.GetName(_game.MainSettings.Language)) + Environment.NewLine;
-                switch (currentPlayer.Role.Team)
+                statusHelp = _game.MessageBuilder.GetTextSimple("StatusHelpTemplate", new Dictionary<string, object>
                 {
-                    case Team.Civil:
-                        message += "Вы играете за команду мирных жителей" + Environment.NewLine;
-                        break;
-                    case Team.Neutral:
-                        message += "Вы играете сами за себя" + Environment.NewLine;
-                        break;
-                    case Team.Mafia:
-                        message += "Вы играете за команду мафов" + Environment.NewLine;
-                        break;
-                    case Team.Yakuza:
-                        message += "Вы играете за команду якудз" + Environment.NewLine;
-                        break;
-                }
-
-                message += _game.MessageBuilder.GetText(string.Format("RoleHelp_{0}", currentPlayer.Role.GetType().Name)) + Environment.NewLine;
+                    ["role"] = _game.MessageBuilder.FormatRole(currentPlayer.Role.GetName(_game.MainSettings.Language)),
+                    ["team"] = _game.MessageBuilder.GetText(string.Format("StatusHelpTeam_{0}", currentPlayer.Role.Team)),
+                    ["currentRoleHelp"] = _game.MessageBuilder.GetText(string.Format("RoleHelp_{0}", currentPlayer.Role.GetType().Name)),
+                });
             }
 
-            message += " " + Environment.NewLine;
-            message += "<b>========Помощь по режиму игры========</b>" + Environment.NewLine;
-            message += $"Текущий режим игры: {_game.Settings.GameType}" + Environment.NewLine;
-            message += $"Якудза: {_game.Settings.IsYakuzaEnabled}" + Environment.NewLine;
-            message += $"Мафов из каждой группировки: {_game.Settings.MafPercent}%" + Environment.NewLine;
-            message += "<u><b>Доступные роли</b></u>" + Environment.NewLine;
-            message += _game.Settings.Roles.RolesHelp(_game.MainSettings.Language);
-
-            message += " " + Environment.NewLine;
-            message += "<b>======Помощь по начислению очков======</b>" + Environment.NewLine;
+            string pointsHelp = "";
             foreach (var pointConfig in _game.Settings.Points.Values)
             {
-                message += $"{pointConfig.Description}: {pointConfig.Points}" + Environment.NewLine;
+                pointsHelp += $"{pointConfig.GetDescription(_settings.Language)}: {pointConfig.Points}" + Environment.NewLine;
             }
 
+            string message = _game.MessageBuilder.GetTextSimple("HelpTemplate", new Dictionary<string, object>
+            {
+                ["statusHelp"] = statusHelp,
+                ["gameType"] = _game.Settings.GameType,
+                ["isMafiaEnabled"] = _game.Settings.IsMafiaEnabled,
+                ["isYakuzaEnabled"] = _game.Settings.IsYakuzaEnabled,
+                ["mafPercent"] = _game.Settings.MafPercent,
+                ["rolesHelp"] = _game.Settings.Roles.RolesHelp(_game.MainSettings.Language),
+                ["pointsHelp"] = pointsHelp,
+            });
+
+
             _game.MessageBuilder.Text(message, false).SendPrivate(Context.User);
-            // ReplyAsync is a method on ModuleBase
-            // await ReplyAsync(message);
             await Task.CompletedTask;
         }
 
@@ -92,7 +76,7 @@ namespace DiscordMafia.Modules
             }
             else
             {
-                _game.MessageBuilder.Text("Команда не найдена", false).SendPrivate(Context.User);
+                _game.MessageBuilder.Text("Command not found", false).SendPrivate(Context.User);
                 await Task.CompletedTask;
                 // await ReplyAsync(message);
             }
@@ -158,11 +142,11 @@ namespace DiscordMafia.Modules
             {
                 if (precondition is RequireAdminAttribute)
                 {
-                    preconditionsInfo.Add("для администратора");
+                    preconditionsInfo.Add("admin only");
                 }
                 else if (precondition is RequirePlayerAttribute)
                 {
-                    preconditionsInfo.Add("во время игры");
+                    preconditionsInfo.Add("only in game");
                 }
             }
             foreach (var paramInfo in commandInfo.Parameters)
@@ -189,15 +173,15 @@ namespace DiscordMafia.Modules
                 paramsInfo += $"  **{paramInfo.Name}** - {paramInfo.Summary}";
                 if (paramInfo.IsRemainder)
                 {
-                    paramsInfo += $"(до конца строки) ";
+                    paramsInfo += $"(until the end of line) ";
                 }
                 paramsInfo += Environment.NewLine;
             }
             info += $"{Environment.NewLine}";
-            info += "Варианты: " + string.Join(", ", from a in commandInfo.Aliases select $"*{a}*") + Environment.NewLine;
+            info += "Aliases: " + string.Join(", ", from a in commandInfo.Aliases select $"*{a}*") + Environment.NewLine;
             if (preconditionsInfo.Count > 0)
             {
-                info += "Условия: " + string.Join(", ", preconditionsInfo) + Environment.NewLine;
+                info += "Conditions: " + string.Join(", ", preconditionsInfo) + Environment.NewLine;
             }
             info += $"{commandInfo.Summary}{Environment.NewLine}{paramsInfo}{Environment.NewLine}";
             return info;

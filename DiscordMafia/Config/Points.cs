@@ -4,7 +4,9 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using DiscordMafia.Config.Lang;
 using DiscordMafia.Lib;
+using DiscordMafia.Services;
 
 namespace DiscordMafia.Config
 {
@@ -56,6 +58,11 @@ namespace DiscordMafia.Config
                 {
                     var serializer = new XmlSerializer(typeof(Points));
                     instance = (Points)serializer.Deserialize(stream);
+
+                    foreach (var item in instance)
+                    {
+                        item.Value.Id = item.Key;
+                    }
                 }
 
                 instances.Add(filename, instance);
@@ -69,7 +76,7 @@ namespace DiscordMafia.Config
     {
 #pragma warning disable CA2235 // Mark all non-serializable fields.
         public int Points;
-        public string Description;
+        public string Id;
         private static readonly XmlSerializer IntSerializer =
                                         new XmlSerializer(typeof(int));
 
@@ -96,7 +103,6 @@ namespace DiscordMafia.Config
             try
             {
                 Points = (int)IntSerializer.Deserialize(reader);
-                Description = (string)StringSerializer.Deserialize(reader);
             }
             finally
             {
@@ -107,7 +113,23 @@ namespace DiscordMafia.Config
         public void WriteXml(XmlWriter writer)
         {
             IntSerializer.Serialize(writer, Points);
-            StringSerializer.Serialize(writer, Description);
+        }
+    }
+    
+    public static class PointsInfoExtensions
+    {
+        public static string GetDescription(this PointsInfo item, ILanguage language)
+        {
+            return GetItemLangInfo(item, language)?.Description ?? $"#POINTS_DESC_{item.Id}";
+        }
+
+        private static PointMessages.PointMessage GetItemLangInfo(this PointsInfo item, ILanguage language)
+        {
+            if (language.PointMessages.TryGetValue(item.Id, out var result))
+            {
+                return result;
+            }
+            return null;
         }
     }
 }

@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<Messages>
+  <Item>
+    <string>Win</string>
+    <Info>
+      <Description>За победу всем в победившей команде</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>WinAndSurvive</string>
+    <Info>
+      <Description>За победу всем выжившим в победившей команде (дополнительно к очкам за победу)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>Survive</string>
+    <Info>
+      <Description>За выживание всем выжившим в конце игры</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>Draw</string>
+    <Info>
+      <Description>За ничью всем выжившим (дополнительно к очкам за выживание)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>CivilKillCivil</string>
+    <Info>
+      <Description>Честным за повешение честного (только тем, кто против него голосовал)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>CivilKillCom</string>
+    <Info>
+      <Description>Честным за повешение комиссара (только тем, кто против него голосовал) (прибавляется к очкам за повешение честного)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>CivilKillMaf</string>
+    <Info>
+      <Description>Честным и мафам за повешение якудзы, честным и якудзе за повешение мафа (только тем, кто против него голосовал)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ComKillMaf</string>
+    <Info>
+      <Description>Комиссару/бомжу/шерифу/горцу за убийство/вычисление мафа</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ComKillCivil</string>
+    <Info>
+      <Description>Комиссару/шерифу/горцу за убийство честного</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>SheriffKillCom</string>
+    <Info>
+      <Description>Шерифу/горцу за убийство комиссара (прибавляется к очкам за убийство честного)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>MafKill</string>
+    <Info>
+      <Description>Мафам и якудзе за любое убийство</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>MafKillOpposite</string>
+    <Info>
+      <Description>Мафам за убийство якудзы и наоборот (складывается с очками за любое убийство)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>MafKillCom</string>
+    <Info>
+      <Description>Мафам, киллеру и якудзе за убийство комиссара (складывается с очками за любое убийство)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>LawyerCheckCom</string>
+    <Info>
+      <Description>Адвокату за вычисление комиссара</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>WenchBlockCom</string>
+    <Info>
+      <Description>Путане за блокировку комиссара</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>WenchBlockMaf</string>
+    <Info>
+      <Description>Путане за блокировку мафа</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>HoodlumBlockCom</string>
+    <Info>
+      <Description>Громиле за блокировку комиссара</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>HoodlumBlockMaf</string>
+    <Info>
+      <Description>Громиле за блокировку мафа</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>DocHealCivil</string>
+    <Info>
+      <Description>Доктору за спасение честного</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>DocHealCom</string>
+    <Info>
+      <Description>Доктору за спасение комиссара (прибавляется к очкам за спасение честного)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>DocHealMaf</string>
+    <Info>
+      <Description>Доктору за спасение мафа</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>JudgeJustifyCivil</string>
+    <Info>
+      <Description>Судье за оправдание честного</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>JudgeJustifyCom</string>
+    <Info>
+      <Description>Судье за оправдание комиссара (прибавляется к очкам за оправдание честного)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>JudgeJustifyMaf</string>
+    <Info>
+      <Description>Судье за оправдание мафа</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>NeutralKill</string>
+    <Info>
+      <Description>Нейтральному персонажу за каждое убийство</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>HackerHack</string>
+    <Info>
+      <Description>Хакеру за каждую проверку</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>HackerHackUnique</string>
+    <Info>
+      <Description>Хакеру за проверку уникальной роли (не чижа, мафа или якудзы) (прибавляется к очкам за проверку)</Description>
+    </Info>
+  </Item>
+</Messages>

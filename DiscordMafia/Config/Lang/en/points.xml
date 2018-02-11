@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<Messages>
+  <Item>
+    <string>Win</string>
+    <Info>
+      <Description>Victory to all members of the winning team</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>WinAndSurvive</string>
+    <Info>
+      <Description>Victory to all survivors of the winning team (in addition to the points for victory)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>Survive</string>
+    <Info>
+      <Description>To all survivors for the survival</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>Draw</string>
+    <Info>
+      <Description>To all survivors for the draw (in addition to the points for survive)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>CivilKillCivil</string>
+    <Info>
+      <Description>To innocents for imprison an innocent (only those who voted against him)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>CivilKillCom</string>
+    <Info>
+      <Description>To innocents for imprison the Commissioner (only those who voted against him) (in addition to the points for imprison an innocent)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>CivilKillMaf</string>
+    <Info>
+      <Description>To innocents and mafia for imprison an yakuza, to citizens and mafia for imprison a mafioso (only those who voted against him)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ComKillMaf</string>
+    <Info>
+      <Description>To the Commissioner/Homeless/Sheriff/Highlander for killing/locating mafioso/yakuza</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>ComKillCivil</string>
+    <Info>
+      <Description>To the Commissioner/Homeless/Sheriff for killing innocent</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>SheriffKillCom</string>
+    <Info>
+      <Description>To the Sheriff/Highlander for killing the Commisioner (in addition to the points for killing an innocent)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>MafKill</string>
+    <Info>
+      <Description>To mafia and yakuza for any murder</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>MafKillOpposite</string>
+    <Info>
+      <Description>To mafia for killing yakuza and vice versa (in addition to the points for any murder)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>MafKillCom</string>
+    <Info>
+      <Description>To mafia and yakuza for killing the Commissioner (in addition to the points for any murder)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>LawyerCheckCom</string>
+    <Info>
+      <Description>To the Layer for locating the Commissioner</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>WenchBlockCom</string>
+    <Info>
+      <Description>To the Wench for blocking the Commissioner</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>WenchBlockMaf</string>
+    <Info>
+      <Description>To the Wench for blocking a mafioso/yakuza</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>HoodlumBlockCom</string>
+    <Info>
+      <Description>To the Hoodlum for blocking the Commissioner</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>HoodlumBlockMaf</string>
+    <Info>
+      <Description>To the Hoodlum for blocking a mafioso</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>DocHealCivil</string>
+    <Info>
+      <Description>To the Doctor for saving an innocent</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>DocHealCom</string>
+    <Info>
+      <Description>To the Doctor for saving the Commissioner (in addition to points for saving an innocent)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>DocHealMaf</string>
+    <Info>
+      <Description>To the Doctor for saving a mafiozo</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>JudgeJustifyCivil</string>
+    <Info>
+      <Description>To the Judge for justify an innocent</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>JudgeJustifyCom</string>
+    <Info>
+      <Description>To the Judge for justify the Commissioner (in addition to points for justify an innocent)</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>JudgeJustifyMaf</string>
+    <Info>
+      <Description>To the Judge for justify a mafioso/yakuza</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>NeutralKill</string>
+    <Info>
+      <Description>To a neutral Character for any murder</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>HackerHack</string>
+    <Info>
+      <Description>To the Hacker for each check</Description>
+    </Info>
+  </Item>
+  <Item>
+    <string>HackerHackUnique</string>
+    <Info>
+      <Description>To the Hacker for each check of a unique role (not citizen, mafioso or yakuza) (in addition to points for each check)</Description>
+    </Info>
+  </Item>
+</Messages>

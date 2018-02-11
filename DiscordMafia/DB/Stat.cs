@@ -4,6 +4,7 @@ using Microsoft.Data.Sqlite;
 using System.Linq;
 using DiscordMafia.Client;
 using Microsoft.EntityFrameworkCore;
+using DiscordMafia.Config;
 
 namespace DiscordMafia.DB
 {
@@ -59,14 +60,14 @@ namespace DiscordMafia.DB
             }
         }
 
-        public static string GetStatAsString(Config.MessageBuilder messageBuilder, UserWrapper user)
+        public static string GetStatAsString(MessageBuilder messageBuilder, UserWrapper user)
         {
             var dbUser = User.FindById(user.Id);
             var winsPercent = dbUser.GamesPlayed > 0 ? 100.0 * dbUser.Wins / dbUser.GamesPlayed : 0.0;
             var survivalsPercent = dbUser.GamesPlayed > 0 ? 100.0 * dbUser.Survivals / dbUser.GamesPlayed : 0.0;
             var pointsAverage = dbUser.GamesPlayed > 0 ? 1.0 * dbUser.TotalPoints / dbUser.GamesPlayed : 0.0;
             return messageBuilder.GetTextSimple("UserStatTemplate", new Dictionary<string, object> {
-                ["name"] = user.Username,
+                ["name"] = MessageBuilder.Encode(user.Username),
                 ["gamesPlayed"] = dbUser.GamesPlayed,
                 ["survivabilityTotal"] = dbUser.Survivals,
                 ["survivabilityPercent"] = survivalsPercent.ToString("0.00"),

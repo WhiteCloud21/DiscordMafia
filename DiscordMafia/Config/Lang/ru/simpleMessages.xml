@@ -30,6 +30,26 @@
     </string>
   </Item>
   <Item>
+    <string>RoleStatus_IsAvailable</string>
+    <string>доступна</string>
+  </Item>
+  <Item>
+    <string>RoleStatus_NotAvailable</string>
+    <string>недоступна</string>
+  </Item>
+  <Item>
+    <string>RoleStatus_IsRandom</string>
+    <string>одна из случайных</string>
+  </Item>
+  <Item>
+    <string>RoleStatus_NotRandom</string>
+    <string>в игре при достаточном количестве игроков</string>
+  </Item>
+  <Item>
+    <string>RoleStatus_MinPlayers</string>
+    <string>минимум игроков для появления</string>
+  </Item>
+  <Item>
     <string>PersonalSettingsChangeSuccess</string>
     <string>Настройки успешно обновлены.</string>
   </Item>
@@ -134,5 +154,50 @@
 {rows}
       ]]>
     </string>
+  </Item>
+  <Item>
+    <string>HelpTemplate</string>
+    <string><![CDATA[<b>==========Игровые команды==========</b>
+/help - вывод этой справки (в приват боту);
+/list - список команд;
+/help КОМАНДА - помощь по команде;
+{statusHelp}
+<b>========Помощь по режиму игры========</b>
+Текущий режим игры: {gameType}
+Мафия: {isMafiaEnabled}
+Якудза: {isYakuzaEnabled}
+Мафов из каждой группировки: {mafPercent}%
+<u><b>Доступные роли</b></u>
+{rolesHelp}
+<b>======Помощь по начислению очков======</b>
+{pointsHelp}
+]]>
+    </string>
+  </Item>
+  <Item>
+    <string>StatusHelpTemplate</string>
+    <string><![CDATA[
+<b>=========== Помощь по статусу===========</b>
+Ваш статус - {role}
+{team}
+{currentRoleHelp}
+]]>
+    </string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Civil</string>
+    <string>Вы играете за команду мирных жителей</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Neutral</string>
+    <string>Вы играете сами за себя</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Mafia</string>
+    <string>Вы играете за команду мафов</string>
+  </Item>
+  <Item>
+    <string>StatusHelpTeam_Yakuza</string>
+    <string>Вы играете за команду якудз</string>
   </Item>
 </Messages>
