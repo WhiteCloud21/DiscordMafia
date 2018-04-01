@@ -14,7 +14,14 @@ namespace DiscordMafia.Messages
             var result = new List<IMessage>();
             if (text.Length <= MaxLength)
             {
-                result.Add(channel.SendMessageAsync(text, tts).Result);
+                try
+                {
+                    result.Add(channel.SendMessageAsync(text, tts).Result);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine($"Cannot deliver message to channel {channel.Name}: {ex.Message}");
+                }
             }
             else
             {
@@ -25,7 +32,14 @@ namespace DiscordMafia.Messages
                 {
                     if (textPart.Length + totalLength > MaxLength)
                     {
-                        result.Add(channel.SendMessageAsync(message, tts).Result);
+                        try
+                        {
+                            result.Add(channel.SendMessageAsync(message, tts).Result);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.Error.WriteLine($"Cannot deliver message to channel {channel.Name}: {ex.Message}");
+                        }
                         totalLength = 0;
                         message = "";
                     }
@@ -34,7 +48,14 @@ namespace DiscordMafia.Messages
                 }
                 if (message != "")
                 {
-                    result.Add(channel.SendMessageAsync(message, tts).Result);
+                    try
+                    {
+                        result.Add(channel.SendMessageAsync(message, tts).Result);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.WriteLine($"Cannot deliver message to channel {channel.Name}: {ex.Message}");
+                    }
                 }
             }
             return result.ToArray();
