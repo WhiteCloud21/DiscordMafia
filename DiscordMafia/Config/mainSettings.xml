@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <Settings>
   <Token/>
+  <AnnouncerToken/>
   <ImageBaseUrl/>
   <DatabasePath>data/mafia-discord.sqlite</DatabasePath>
   <GameChannel>248174400019496962</GameChannel>

@@ -5,6 +5,10 @@
     <string>Н/Д</string>
   </Item>
   <Item>
+    <string>timeRemaining</string>
+    <string>Осталось **{seconds}** секунд.</string>
+  </Item>
+  <Item>
     <string>ShopItemInfo</string>
     <string>
       <![CDATA[{idx}. <b>{name}</b> - предмет {status}. Цена: {cost}

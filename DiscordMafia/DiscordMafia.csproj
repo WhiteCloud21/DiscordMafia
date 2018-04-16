@@ -19,7 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Activity" />
-    <Folder Include="Client" />
     <Folder Include="Messages" />
     <Folder Include="Voting" />
   </ItemGroup>

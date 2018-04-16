@@ -5,6 +5,10 @@
     <string>N/A</string>
   </Item>
   <Item>
+    <string>timeRemaining</string>
+    <string>**{seconds}** seconds remaining.</string>
+  </Item>
+  <Item>
     <string>ShopItemInfo</string>
     <string>
       <![CDATA[{idx}. <b>{name}</b> - item {status}. Price: {cost}

@@ -13,6 +13,7 @@ namespace DiscordMafia.Config
     public class MainSettings : IXmlSerializable
     {
         public string Token { get; protected set; }
+        public string AnnouncerToken { get; protected set; }
         public string ImageBaseUrl { get; protected set; }
         public string DatabasePath { get; protected set; }
         public ulong  GameChannel { get; protected set; }
@@ -70,6 +71,9 @@ namespace DiscordMafia.Config
                     {
                         case "Token":
                             Token = reader.ReadElementContentAsString();
+                            break;
+                        case "AnnouncerToken":
+                            AnnouncerToken = reader.ReadElementContentAsString();
                             break;
                         case "ImageBaseUrl":
                             ImageBaseUrl = reader.ReadElementContentAsString();

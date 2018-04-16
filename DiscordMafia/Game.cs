@@ -46,8 +46,9 @@ namespace DiscordMafia
         internal int PlayerCollectingRemainingTime = 0;
         internal DateTime LastNotification = new DateTime(0);
         private DB.Game _lastGame;
+        private Services.Notifier _notifier;
 
-        public Game(System.Threading.SynchronizationContext syncContext, DiscordSocketClient client, Config.MainSettings mainSettings)
+        public Game(System.Threading.SynchronizationContext syncContext, DiscordSocketClient client, Services.Notifier notifier, Config.MainSettings mainSettings)
         {
             MainSettings = mainSettings;
             GameChannel = client.GetChannel(mainSettings.GameChannel) as SocketTextChannel;
@@ -65,6 +66,8 @@ namespace DiscordMafia
             PlayersList = new List<InGamePlayerInfo>();
             LoadSettings();
             KillManager = new KillManager(this);
+            _notifier = notifier;
+            _notifier.SetGame(this);
         }
 
         internal void LoadSettings(string gametype = null)
@@ -507,6 +510,7 @@ namespace DiscordMafia
                 player.ClearActivity();
             }
             timer.Interval = Settings.MorningTime;
+            _notifier.SetTimeOfDay(Settings.MorningTime);
             MessageBuilder.PrepareText("StartMorning").SendPublic(GameChannel);
             CurrentState = GameState.Morning;
             timer.Start();
@@ -526,6 +530,7 @@ namespace DiscordMafia
             }
 
             timer.Interval = Settings.DayTime;
+            _notifier.SetTimeOfDay(Settings.DayTime);
             CurrentState = GameState.Day;
             CurrentDayVote = new Vote();
             timer.Start();
@@ -540,6 +545,7 @@ namespace DiscordMafia
             {
                 MessageBuilder.PrepareTextReplacePlayer("EveningVoteInfo", CurrentPlayers[dayVoteResult.Leader.Value]).SendPublic(GameChannel);
                 timer.Interval = Settings.EveningTime;
+                _notifier.SetTimeOfDay(Settings.EveningTime);
                 foreach (var player in PlayersList)
                 {
                     player.SkipTurn(false);
@@ -567,6 +573,7 @@ namespace DiscordMafia
             }
 
             timer.Interval = Settings.NightTime;
+            _notifier.SetTimeOfDay(Settings.NightTime);
             CurrentState = GameState.Night;
             CurrentMafiaVote = new Vote();
             CurrentYakuzaVote = new Vote();
@@ -576,6 +583,7 @@ namespace DiscordMafia
         private void EndEvening()
         {
             Console.WriteLine("EndEvening");
+            _notifier.ResetTimeOfDay();
             var result = CurrentDayVote?.GetResult();
             var eveningResult = CurrentEveningVote?.GetResult();
 
@@ -774,6 +782,7 @@ namespace DiscordMafia
         private void EndDay()
         {
             Console.WriteLine("EndDay");
+            _notifier.ResetTimeOfDay();
             CurrentDayVoteMessage = null;
             Pause();
             StartEvening();
@@ -782,12 +791,14 @@ namespace DiscordMafia
         private void EndMorning()
         {
             Console.WriteLine("EndMorning");
+            _notifier.ResetTimeOfDay();
             StartDay();
         }
 
         private void EndNight()
         {
             Console.WriteLine("EndNight");
+            _notifier.ResetTimeOfDay();
             MessageBuilder.PrepareText("EndNight").SendPublic(GameChannel);
             Pause(2);
 

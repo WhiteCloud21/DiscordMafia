@@ -22,12 +22,14 @@ namespace DiscordMafia.Modules
         private DiscordSocketClient _client;
         private Game _game;
         private MainSettings _settings;
+        private DiscordClientWrapper _clientWrapper;
 
-        public GameActionsModule(Game game, DiscordSocketClient client, MainSettings settings)
+        public GameActionsModule(Game game, DiscordSocketClient client, DiscordClientWrapper clientWrapper, MainSettings settings)
         {
             _game = game;
             _settings = settings;
             _client = client;
+            _clientWrapper = clientWrapper;
         }
 
         [Command("start"), Summary("Запускает игру."), Alias("старт"), RequireContext(ContextType.Guild), RequireGameState(GameState.Stopped)]
@@ -44,6 +46,7 @@ namespace DiscordMafia.Modules
             _game.StartedAt = DateTime.Now;
             NotifyAboutNewGame();
             await _client.SetGameAsync("Мафия (ожидание игроков)");
+            await Register();
         }
 
         private void NotifyAboutNewGame()
@@ -72,7 +75,7 @@ namespace DiscordMafia.Modules
                 if (usersToNotify.Count > 0)
                 {
                     string notificationMessage = usersToNotify.Aggregate("", (s, u) => s += u.Mention + " ");
-                    _game.MessageBuilder.Text(notificationMessage, false).SendPublic(_game.GameChannel);
+                    _game.MessageBuilder.Text(notificationMessage, false).SendPublic(_clientWrapper.AnnouncerGameChannel);
                     _game.LastNotification = DateTime.Now;
                 }
             }

@@ -8,6 +8,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleMigrations.DatabaseProvider;
+using DiscordMafia.Client;
 
 namespace DiscordMafia
 {
@@ -20,7 +21,7 @@ namespace DiscordMafia
         public static MainSettings Settings { get; private set; }
 
         private CommandService commands;
-        private DiscordSocketClient client;
+        private DiscordClientWrapper clientWrapper;
         private IServiceProvider services;
 
         static void Main(string[] args)
@@ -40,33 +41,37 @@ namespace DiscordMafia
             Connection = connection;
             Settings = settings;
 
-            client = new DiscordSocketClient();
-            client.Log += Log;
-
-            Func<Task> clientReadyHandler = null;
-            client.Ready += clientReadyHandler = async () =>
+            async Task clientReadyHandler()
             {
-                _game = new Game(SyncContext, client, settings);
-
                 commands = new CommandService();
 
                 var serviceCollection = new ServiceCollection();
-                serviceCollection.AddSingleton(client);
+                serviceCollection.AddSingleton(clientWrapper.MainClient);
+                serviceCollection.AddSingleton(clientWrapper);
                 serviceCollection.AddSingleton(connection);
                 serviceCollection.AddSingleton(settings);
                 serviceCollection.AddSingleton(commands);
-                serviceCollection.AddSingleton(_game);
+                serviceCollection.AddSingleton<Services.Notifier>();
+                serviceCollection.AddSingleton<System.Threading.SynchronizationContext>(SyncContext);
+                serviceCollection.AddSingleton<Game>();
 
                 services = serviceCollection.BuildServiceProvider();
+                _game = services.GetRequiredService<Game>();
 
                 await InstallCommands();
 
-                await client.SetGameAsync(null);
-                client.Ready -= clientReadyHandler;
-            };
+                await clientWrapper.MainClient.SetGameAsync(null);
+                clientWrapper.MainClient.Ready -= clientReadyHandler;
+            }
 
-            await client.LoginAsync(TokenType.Bot, Settings.Token);
-            await client.StartAsync();
+            clientWrapper = new DiscordClientWrapper(settings, clientReadyHandler);
+
+            clientWrapper.MainClient.Log += Log;
+
+            if (clientWrapper.MainClient != clientWrapper.AnnouncerClient)
+            {
+                clientWrapper.AnnouncerClient.Log += AnnouncerLog;
+            }
 
             try
             {
@@ -87,7 +92,7 @@ namespace DiscordMafia
             commands.AddTypeReader<InGamePlayerInfo>(new TypeReaders.InGamePlayerInfoTypeReader());
 
             // Hook the MessageReceived Event into our Command Handler
-            client.MessageReceived += HandleCommand;
+            clientWrapper.MainClient.MessageReceived += HandleCommand;
             // Discover all of the commands in this assembly and load them.
             var wrapper = new CommandsServiceLocalizer();
             await wrapper.AddModulesAsync(Settings, commands, Assembly.GetEntryAssembly());
@@ -102,9 +107,9 @@ namespace DiscordMafia
             int argPos = 0;
             // Determine if the message is a command, based on if it starts with '/' or a mention prefix
             if (!(message.HasCharPrefix('/', ref argPos) ||
-                  message.HasMentionPrefix(client.CurrentUser, ref argPos)))
+                  message.HasMentionPrefix(clientWrapper.MainClient.CurrentUser, ref argPos)))
             {
-                if (message.Author.Id != client.CurrentUser.Id)
+                if (message.Author.Id != clientWrapper.MainClient.CurrentUser.Id && message.Author.Id != clientWrapper.AnnouncerClient.CurrentUser.Id)
                 {
                     SyncContext.Post(state =>
                     {
@@ -119,7 +124,7 @@ namespace DiscordMafia
                 SyncContext.Post(state =>
                 {
                     // Create a Command Context
-                    var context = new CommandContext(client, message);
+                    var context = new CommandContext(clientWrapper.MainClient, message);
                     // Execute the command. (result does not indicate a return value, 
                     // rather an object stating if the command executed successfully)
                     var result = commands.ExecuteAsync(context, argPos, services, MultiMatchHandling.Best);
@@ -139,6 +144,12 @@ namespace DiscordMafia
         private static Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
+            return Task.CompletedTask;
+        }
+
+        private static Task AnnouncerLog(LogMessage msg)
+        {
+            Console.WriteLine($"{msg} [Announcer]");
             return Task.CompletedTask;
         }
 
