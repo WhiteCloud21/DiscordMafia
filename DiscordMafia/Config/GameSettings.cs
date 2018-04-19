@@ -55,7 +55,7 @@ namespace DiscordMafia.Config
             };
             MuteOnDeath = false;
             UseMuteBlacklist = true;
-            MinPlayers = 3;
+            MinPlayers = 6;
             MafPercent = 34;
             StartFromNight = true;
             PlayerCollectingTime = 60000;
