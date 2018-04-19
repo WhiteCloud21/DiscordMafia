@@ -81,7 +81,7 @@ namespace DiscordMafia.TypeReaders
 
         private void AddResult(Dictionary<ulong, TypeReaderValue> results, InGamePlayerInfo player, float score, Game game)
         {
-            if (player != null && !results.ContainsKey(player.User.Id))
+            if (player != null && !results.ContainsKey(player.User.Id) && player.IsAlive)
                 results.Add(player.User.Id, new TypeReaderValue(player, score));
         }
     }
