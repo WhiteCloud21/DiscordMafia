@@ -43,6 +43,18 @@
     </ArrayOfString>
   </Item>
   <Item>
+    <string>ChargesRemainingInfo</string>
+    <ArrayOfString>
+      <string>Charges: {count}</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>CooldownInfo</string>
+    <ArrayOfString>
+      <string>Cooldown: {current}/{total}</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>MafiaWelcome</string>
     <ArrayOfString>
       <string>
@@ -138,9 +150,23 @@ Remaining Players:
     </ArrayOfString>
   </Item>
   <Item>
+    <string>DayRepeated</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[❔ It's Nig... Where are you? <b>Rabble-rouser</b> talks, you listen? OK, let's skip this night.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>InactivePlayersKilled</string>
+    <ArrayOfString>
+      <string>Some players were inactive more than {limit} days and removed from game: {players}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>CheckStatus</string>
     <ArrayOfString>
-      <string>{name}'s status — {role}.</string>
+      <string>{name}'s (`{nameSimple}'s`) status — {role}.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -236,6 +262,12 @@ Remaining Players:
     </ArrayOfString>
   </Item>
   <Item>
+    <string>RoleHelp_RabbleRouser</string>
+    <ArrayOfString>
+      <string>You are a Rabble Rouser. Citizens can send victims to jail twice a day.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>RoleHelp_Mafioso</string>
     <ArrayOfString>
       <string>Pretense — this is your hobby. During the day you portray an innocent citizen, and at night, together with other mafiosi, shoot innocents one by one. If you find a commissioner — kill him, he is your most dangerous enemy!</string>
@@ -260,6 +292,12 @@ Remaining Players:
     </ArrayOfString>
   </Item>
   <Item>
+    <string>RoleHelp_Hammerer</string>
+    <ArrayOfString>
+      <string>Your vote have double weight on **evening** **positive** (yes) voting.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>RoleHelp_Yakuza</string>
     <ArrayOfString>
       <string>Pretense — this is your hobby. In the daytime you put on the mask of an innocent citizen, and at night, along with other yakuza, shoot innocents and mafia one at a time. If you find a commissioner — kill him, he is your most dangerous enemy!</string>
@@ -275,6 +313,12 @@ Remaining Players:
     <string>RoleHelp_Ninja</string>
     <ArrayOfString>
       <string>You are a horror, creeping on tiptoe of the night. Against you nothing can be done at night. And in the rest you are the same participant in the Japanese mafia, shoot innocents and mafia one by one.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Kamikaze</string>
+    <ArrayOfString>
+      <string>You are so loyal to the yakuza that you are ready to sacrifice your life for its sake. Life is one, so once per game, of course.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -299,6 +343,12 @@ Remaining Players:
     <string>RoleHelp_Hacker</string>
     <ArrayOfString>
       <string>You are a master of keyboard and mouse. Hack into the computers of players and tell everyone their statuses.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_Poisoner</string>
+    <ArrayOfString>
+      <string>You are a maniac chemist. Every day you can poison the water in the well of one of the citizens. Next day he will die.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -452,6 +502,15 @@ Remaining Players:
     </ArrayOfString>
   </Item>
   <Item>
+    <string>NightInfo_Kamikaze</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[What will be exploded tomorrow (with you)?
+       To kill the player, type <b>/kill X</b>, where <b>X</b> — number of the player. You can skip by <b>/skip</b>.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>NightInfo_Maniac</string>
     <ArrayOfString>
       <string>
@@ -501,6 +560,23 @@ Remaining Players:
       <string>
         <![CDATA[You can justify one player. The main thing — do not justify the mafioso.
        To justify the player, type <b>/justify X</b>, where <b>X</b> — number of the player.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayInfo_RabbleRouser</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[You can start second day voting. To do this, type <b>/talk</b>.]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>DayInfo_Poisoner</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will be poisoned today?
+        To kill the player, type <b>/kill X</b>, where <b>X</b> — number of the player.]]>
       </string>
     </ArrayOfString>
   </Item>
@@ -666,6 +742,18 @@ Remaining Players:
     <string>YakuzaKillHighlander</string>
     <ArrayOfString>
       <string>🛡 Yakuza wanted to make a sieve from a citizen, but he was the {role} and survived.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>KamikazeKill</string>
+    <ArrayOfString>
+      <string>☠ Kamikaze killed {name}, who was the {role}.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>KamikazeKillHimself</string>
+    <ArrayOfString>
+      <string>☠ {name} ({role}) has killed {gender:himself|herself}.</string>
     </ArrayOfString>
   </Item>
   <Item>
@@ -851,6 +939,18 @@ Remaining Players:
     <string>AIDSKill</string>
     <ArrayOfString>
       <string>👠 {name} ({role}) was dead from a deadly infection. Greetings from the Wench :)</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PoisonerPoison</string>
+    <ArrayOfString>
+      <string>🤢 {role} was poisoned by the Poisoner.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>PoisonerKill</string>
+    <ArrayOfString>
+      <string>🤢 {name} ({role}) died of poison.</string>
     </ArrayOfString>
   </Item>
   <Item>

@@ -18,9 +18,9 @@ namespace DiscordMafia.Voting
             HasVotes = false;
         }
 
-        public BooleanVoteResult GetResult()
+        public BooleanVoteResult GetResult(bool useWeght = false)
         {
-            return new BooleanVoteResult(Votes);
+            return new BooleanVoteResult(Votes, useWeght);
         }
 
         /// <summary>
@@ -28,11 +28,13 @@ namespace DiscordMafia.Voting
         /// </summary>
         /// <param name="voter"></param>
         /// <param name="forWho"></param>
+        /// <param name="weight"></param>
+        /// <param name="weightType"></param>
         /// <exception cref="ArgumentException">Если голосовавший уже голосовал</exception>
-        public void Add(InGamePlayerInfo voter, bool value)
+        public void Add(InGamePlayerInfo voter, bool value, int weight, EWeightType weightType)
         {
             HasVotes = true;
-            var activity = new BooleanVoteActivity(voter, this, value);
+            var activity = new BooleanVoteActivity(voter, this, value, weight, weightType);
             Votes.Add(voter.User.Id, activity);
             voter.AddActivity(activity);
         }

@@ -75,6 +75,12 @@
           </Info>
         </Item>
         <Item>
+          <string>talk</string>
+          <Info>
+            <Summary>Talk with players.</Summary>
+          </Info>
+        </Item>
+        <Item>
           <string>curse</string>
           <Info>
             <Summary>Curse a player.</Summary>

@@ -36,6 +36,9 @@ namespace DiscordMafia
                 typeof(Judge).Name,
                 typeof(Elder).Name,
                 typeof(Prosecutor).Name,
+                typeof(Kamikaze).Name,
+                typeof(Poisoner).Name,
+                typeof(RabbleRouser).Name,
             };
         }
 

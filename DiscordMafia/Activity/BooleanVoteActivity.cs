@@ -7,12 +7,16 @@ namespace DiscordMafia.Activity
     {
         public BooleanVote Vote { get; protected set; }
         public bool Value { get; protected set; }
+        public int Weight { get; protected set; }
+        public EWeightType WeightType { get; protected set; }
 
-        public BooleanVoteActivity(InGamePlayerInfo player, BooleanVote vote, bool value)
+        public BooleanVoteActivity(InGamePlayerInfo player, BooleanVote vote, bool value, int weight, EWeightType weightType)
             : base(player)
         {
             Vote = vote;
             Value = value;
+            Weight = weight;
+            WeightType = weightType;
             Player.EveningVoteActivity = this;
         }
 
@@ -28,5 +32,14 @@ namespace DiscordMafia.Activity
                 base.OnCancel(onlyAgainstTarget);
             }
         }
+    }
+
+    [Flags]
+    public enum EWeightType
+    {
+        None = 0,
+        Positive = 1,
+        Negative = 2,
+        Both = 3
     }
 }

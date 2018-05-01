@@ -18,6 +18,7 @@ namespace DiscordMafia
         public bool IsBot { get; set; }
         public long CurrentGamePoints { get; set; }
         public int? DelayedDeath { get; set; }
+        public BaseRole DelayedDeathReason { get; set; }
         public Game Game { get; protected set; }
         protected List<BaseActivity> ActivityList { get; set; }
         public VoteActivity VoteFor { get; set; }
@@ -27,18 +28,20 @@ namespace DiscordMafia
         public Place PlaceToGo { get; set; }
         public List<BaseItem> OwnedItems { get; set; }
         protected bool IsTurnSkipped { get; set; }
+        public int InactiveDays { get; set; }
 
         public InGamePlayerInfo(UserWrapper user, Game game)
         {
-            this.User = user;
-            this.IsBot = false;
-            this.IsAlive = true;
-            this.CurrentGamePoints = 0;
-            this.Game = game;
-            this.ActivityList = new List<BaseActivity>();
+            User = user;
+            IsBot = false;
+            IsAlive = true;
+            CurrentGamePoints = 0;
+            Game = game;
+            ActivityList = new List<BaseActivity>();
             DbUser = DB.User.FindById(user.Id);
             PlaceToGo = Place.AvailablePlaces[0];
             OwnedItems = new List<BaseItem>();
+            InactiveDays = 0;
         }
 
         public void AddPoints(string strategy)

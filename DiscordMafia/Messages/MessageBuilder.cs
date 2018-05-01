@@ -63,6 +63,12 @@ namespace DiscordMafia.Config
             return this;
         }
 
+        public MessageBuilder AddText(string message, bool encode = true)
+        {
+            BuiltMessage += encode ? Encode(message) : message;
+            return this;
+        }
+
         public string GetTextReplacePlayer(string key, InGamePlayerInfo player, IDictionary<string, object> additionalReplaceDictionary = null)
         {
             return FormatTextReplacePlayer(GetText(key), player, additionalReplaceDictionary);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiscordMafia.Activity;
+using System;
 using System.ComponentModel;
 
 namespace DiscordMafia.Roles
@@ -9,6 +10,10 @@ namespace DiscordMafia.Roles
 
         public InGamePlayerInfo Player { get; internal set; }
 
+        public virtual int EveningVoteWeight { get; } = 1;
+
+        public virtual EWeightType EveningVoteWeightType { get; } = EWeightType.None;
+
         public BaseRole()
         {
         }
@@ -18,12 +23,12 @@ namespace DiscordMafia.Roles
 
         }
 
-        public virtual void NightInfo(Game game, InGamePlayerInfo currentPlayer)
+        public virtual void OnNightStart(Game game, InGamePlayerInfo currentPlayer)
         {
             game.MessageBuilder.PrepareText("NightInfo_" + this.GetType().Name).SendPrivate(currentPlayer);
         }
 
-        public virtual void DayInfo(Game game, InGamePlayerInfo currentPlayer)
+        public virtual void OnDayStart(Game game, InGamePlayerInfo currentPlayer)
         {
             game.MessageBuilder.PrepareText("DayInfo_" + this.GetType().Name).SendPrivate(currentPlayer);
         }

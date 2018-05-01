@@ -1,43 +1,29 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Highlander : UniqueRole, ITargetedRole
+    public class Poisoner : UniqueRole, ITargetedRole
     {
         public override Team Team
         {
             get
             {
-                return Team.Civil;
+                return Team.Neutral;
             }
         }
 
-        private InGamePlayerInfo playerToKill;
-        public InGamePlayerInfo PlayerToInteract
-        {
-            get { return playerToKill; }
-            set {
-                if (value == Player)
-                {
-                    throw new System.ArgumentException("Нельзя подстрелить себя.");
-                }
-                playerToKill = value;
-            }
-        }
-
-        public bool WasAttacked { get; set; }
-
+        public InGamePlayerInfo PlayerToInteract { get; set; }
+        
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
             if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
             {
                 PlayerToInteract = null;
-                WasAttacked = false;
             }
             base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
-        public override void OnNightStart(Game game, InGamePlayerInfo currentPlayer)
+        public override void OnDayStart(Game game, InGamePlayerInfo currentPlayer)
         {
-            base.OnNightStart(game, currentPlayer);
+            base.OnDayStart(game, currentPlayer);
             game.SendAlivePlayersMesssage(currentPlayer);
         }
 
@@ -45,7 +31,7 @@
         {
             switch (currentState)
             {
-                case GameState.Night:
+                case GameState.Day:
                     if (PlayerToInteract == null)
                     {
                         return false;

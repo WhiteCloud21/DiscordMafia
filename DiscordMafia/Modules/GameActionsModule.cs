@@ -329,6 +329,11 @@ namespace DiscordMafia.Modules
                     (currentPlayer.Role as Prosecutor).PerformNightAction(player);
                     return;
                 }
+                if (currentPlayer.Role is Kamikaze)
+                {
+                    (currentPlayer.Role as Kamikaze).PerformNightAction(player);
+                    return;
+                }
                 if (currentPlayer.Role is Killer)
                 {
                     var killer = (currentPlayer.Role as Killer);
@@ -349,6 +354,17 @@ namespace DiscordMafia.Modules
                     return;
                 }
                 _game.NightVote(currentPlayer, player);
+                _game.CheckNextCheckpoint();
+            }
+            await Task.CompletedTask;
+        }
+
+        [Command("kill"), RequireContext(ContextType.DM), RequirePlayer(typeof(Poisoner)), RequireGameState(GameState.Day)]
+        public async Task KillPoisoner([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
+        {
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
+            {
+                (currentPlayer.Role as Poisoner).PerformNightAction(player);
                 _game.CheckNextCheckpoint();
             }
             await Task.CompletedTask;
@@ -444,6 +460,26 @@ namespace DiscordMafia.Modules
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 (currentPlayer.Role as Judge).PerformNightAction(player);
+            }
+            await Task.CompletedTask;
+        }
+
+        [Command("talk"), RequireContext(ContextType.DM), RequirePlayer(typeof(RabbleRouser)), RequireGameState(GameState.Day, GameState.Evening)]
+        public async Task RepeatDay([Remainder] string ignored = null)
+        {
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
+            {
+                var rabbleRouser = (currentPlayer.Role as RabbleRouser);
+                try
+                {
+                    rabbleRouser.IsCharged = true;
+                    _game.CheckNextCheckpoint();
+                    await ReplyAsync("OK");
+                }
+                catch (Exception ex)
+                {
+                    _game.MessageBuilder.Text(ex.Message).SendPrivate(currentPlayer);
+                }
             }
             await Task.CompletedTask;
         }

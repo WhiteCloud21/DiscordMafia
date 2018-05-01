@@ -2,7 +2,7 @@
 
 namespace DiscordMafia.Roles
 {
-    public class Demoman : UniqueRole
+    public class Demoman : UniqueRole, IRoleWithCooldown
     {
         public override Team Team
         {
@@ -31,6 +31,15 @@ namespace DiscordMafia.Roles
 
         public int TotalVictims { get; set; } = 0;
 
+        public int Cooldown => 2;
+
+        public int CurrentCooldown { get; set; }
+
+        public Demoman()
+        {
+            CurrentCooldown = Cooldown;
+        }
+
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
             if (onlyAgainstTarget == null)
@@ -40,12 +49,12 @@ namespace DiscordMafia.Roles
             base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
-        public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
+        public override void OnNightStart(Game game, InGamePlayerInfo currentPlayer)
         {
-            Counter = (Counter + 1) % 2;
-            if (Counter == 0)
+            this.DecreaseCooldown();
+            if (!this.IsOnCooldown())
             {
-                base.NightInfo(game, currentPlayer);
+                base.OnNightStart(game, currentPlayer);
                 foreach (var player in game.PlayersList)
                 {
                     if (player.IsAlive && player.Role.Team != Team.Mafia)
@@ -61,7 +70,7 @@ namespace DiscordMafia.Roles
             switch (currentState)
             {
                 case GameState.Night:
-                    if (PlaceToDestroy == null && Counter == 0)
+                    if (PlaceToDestroy == null && !this.IsOnCooldown())
                     {
                         return false;
                     }

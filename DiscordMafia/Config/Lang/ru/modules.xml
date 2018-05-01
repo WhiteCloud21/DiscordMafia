@@ -108,6 +108,17 @@
           </Info>
         </Item>
         <Item>
+          <string>talk</string>
+          <Info>
+            <Aliases>
+              <string>заболтать</string>
+              <string>уболтать</string>
+              <string>болтать</string>
+            </Aliases>
+            <Summary>Заболтать игроков.</Summary>
+          </Info>
+        </Item>
+        <Item>
           <string>curse</string>
           <Info>
             <Aliases>

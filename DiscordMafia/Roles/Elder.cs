@@ -35,9 +35,9 @@
             base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
-        public override void DayInfo(Game game, InGamePlayerInfo currentPlayer)
+        public override void OnDayStart(Game game, InGamePlayerInfo currentPlayer)
         {
-            base.DayInfo(game, currentPlayer);
+            base.OnDayStart(game, currentPlayer);
             game.SendAlivePlayersMesssage(currentPlayer);
         }
 

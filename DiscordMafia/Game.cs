@@ -15,6 +15,7 @@ using DiscordMafia.Lib;
 using Microsoft.EntityFrameworkCore;
 using static DiscordMafia.Config.MessageBuilder;
 using DiscordMafia.Extensions;
+using DiscordMafia.Activity;
 
 namespace DiscordMafia
 {
@@ -153,7 +154,7 @@ namespace DiscordMafia
                         var leader = CurrentPlayers[result.Leader.Value];
                         if (leader != player)
                         {
-                            CurrentEveningVote.Add(player, voteValue);
+                            CurrentEveningVote.Add(player, voteValue, player.Role.EveningVoteWeight, player.Role.EveningVoteWeightType);
                             MessageBuilder
                                 .PrepareTextReplacePlayer(
                                     voteValue ? "EveningVote_Yes" : "EveningVote_No",
@@ -378,7 +379,7 @@ namespace DiscordMafia
                         isAllReady = player.IsReady(CurrentState);
                         if (player.Role is Demoman && CurrentState == GameState.Night)
                         {
-                            if ((player.Role as Demoman).Counter == 0)
+                            if (!(player.Role as Demoman).IsOnCooldown())
                             {
                                 isAllReady = false;
                             }
@@ -525,7 +526,7 @@ namespace DiscordMafia
             {
                 if (player.IsAlive)
                 {
-                    player.Role.DayInfo(this, player);
+                    player.Role.OnDayStart(this, player);
                 }
             }
 
@@ -568,7 +569,7 @@ namespace DiscordMafia
             {
                 if (player.IsAlive)
                 {
-                    player.Role.NightInfo(this, player);
+                    player.Role.OnNightStart(this, player);
                 }
             }
 
@@ -585,7 +586,8 @@ namespace DiscordMafia
             Console.WriteLine("EndEvening");
             _notifier.ResetTimeOfDay();
             var result = CurrentDayVote?.GetResult();
-            var eveningResult = CurrentEveningVote?.GetResult();
+            var eveningResult = CurrentEveningVote?.GetResult(true);
+            bool willDayBeRepeated = false;
 
             foreach (var player in PlayerSorter.SortForActivityCheck(PlayersList, GameState.Day))
             {
@@ -650,6 +652,61 @@ namespace DiscordMafia
                             KillManager.Kill(role.PlayerToInteract);
                             MessageBuilder.PrepareTextReplacePlayer("ProsecutorKill", role.PlayerToInteract).SendPublic(GameChannel);
                         }
+                        Pause();
+                    }
+                }
+                #endregion
+
+                #region Kamikaze
+                if (player.Role is Kamikaze)
+                {
+                    var role = player.Role as Kamikaze;
+                    if (role.PlayerToInteract != null)
+                    {
+                        if (role.PlayerToInteract.IsAlive)
+                        {
+                            string pointsStrategy = null;
+                            if (role.PlayerToInteract.Role is Commissioner)
+                            {
+                                pointsStrategy = "MafKillCom";
+                            }
+                            else if (role.PlayerToInteract.Role.Team == Team.Mafia)
+                            {
+                                pointsStrategy = "MafKillOpposite";
+                            }
+
+                            // Double points
+                            if (pointsStrategy != null)
+                            {
+                                player.AddPoints(pointsStrategy);
+                                player.AddPoints(pointsStrategy);
+                            }
+                            player.AddPoints("MafKill");
+                            player.AddPoints("MafKill");
+
+                            KillManager.Kill(role.PlayerToInteract);
+                            MessageBuilder.PrepareTextReplacePlayer("KamikazeKill", role.PlayerToInteract).SendPublic(GameChannel);
+                            Pause();
+                        }
+                        KillManager.Kill(player);
+                        MessageBuilder.PrepareTextReplacePlayer("KamikazeKillHimself", player).SendPublic(GameChannel);
+                        Pause();
+                    }
+                }
+                #endregion
+                
+                #region Poisoner
+                if (player.Role is Poisoner)
+                {
+                    var role = player.Role as Poisoner;
+                    if (role.PlayerToInteract != null)
+                    {
+                        if (role.PlayerToInteract.DelayedDeath == null)
+                        {
+                            role.PlayerToInteract.DelayedDeath = 1;
+                            role.PlayerToInteract.DelayedDeathReason = role;
+                        }
+                        MessageBuilder.PrepareTextReplacePlayer("PoisonerPoison", role.PlayerToInteract).SendPublic(GameChannel);
                         Pause();
                     }
                 }
@@ -740,6 +797,7 @@ namespace DiscordMafia
                 MessageBuilder.PrepareText("DayKillNoActive").SendPublic(GameChannel);
             }
 
+            var inactivePlayers = new List<InGamePlayerInfo>();
 
             foreach (var player in PlayerSorter.SortForActivityCheck(PlayersList, GameState.Day))
             {
@@ -768,6 +826,54 @@ namespace DiscordMafia
                     }
                 }
                 #endregion
+                
+                if (player.IsAlive && player.DelayedDeath != null && player.DelayedDeathReason is Poisoner)
+                {
+                    if (player.DelayedDeath-- == 0)
+                    {
+                        player.DelayedDeath = null;
+                        MessageBuilder.PrepareTextReplacePlayer("PoisonerKill", player).SendPublic(GameChannel);
+                        player.DelayedDeathReason.Player.AddPoints("NeutralKill");
+                        KillManager.Kill(player);
+                    }
+                }
+
+                #region RabbleRouser
+                if (player.Role is RabbleRouser)
+                {
+                    var role = player.Role as RabbleRouser;
+                    if (role.IsCharged)
+                    {
+                        role.PutOnCooldown();
+                        willDayBeRepeated = true;
+                    }
+                }
+                #endregion
+
+                #region Inactive Players
+                if (result.GetTarget(player) == null && !eveningResult.IsVoted(player))
+                {
+                    player.InactiveDays++;
+                    if (player.InactiveDays > Settings.MaxInactiveDays)
+                    {
+                        inactivePlayers.Add(player);
+                        KillManager.Kill(player);
+                    }
+                }
+                else
+                {
+                    player.InactiveDays = 0;
+                }
+                #endregion
+            }
+
+            if (inactivePlayers.Count > 0)
+            {
+                MessageBuilder.PrepareText("InactivePlayersKilled", new Dictionary<string, object>
+                {
+                    ["limit"] = Settings.MaxInactiveDays,
+                    ["players"] = string.Join(", ", inactivePlayers.Select(p => $"{MessageBuilder.FormatName(p)} ({MessageBuilder.FormatRole(p.StartRole.GetName(MainSettings.Language))})")),
+                }).SendPublic(GameChannel);
             }
 
             KillManager.Apply();
@@ -775,7 +881,15 @@ namespace DiscordMafia
             if (!CheckWinConditions())
             {
                 Pause();
-                StartNight();
+                if (willDayBeRepeated)
+                {
+                    MessageBuilder.PrepareText("DayRepeated").SendPublic(GameChannel);
+                    StartMorning();
+                }
+                else
+                {
+                    StartNight();
+                }
             }
         }
 
@@ -941,6 +1055,7 @@ namespace DiscordMafia
                         if (randomGenerator.Next(0, 100) < Settings.InfectionChancePercent && role.PlayerToInteract.DelayedDeath == null)
                         {
                             role.PlayerToInteract.DelayedDeath = 1;
+                            role.PlayerToInteract.DelayedDeathReason = role;
                         }
                         MessageBuilder.PrepareTextReplacePlayer("WenchBlock", role.PlayerToInteract).SendPublic(GameChannel);
                         Pause();
@@ -1200,8 +1315,9 @@ namespace DiscordMafia
                 if (player.Role is Demoman)
                 {
                     var role = player.Role as Demoman;
-                    if (role.Counter == 0 && role.PlaceToDestroy != null)
+                    if (!role.IsOnCooldown() && role.PlaceToDestroy != null)
                     {
+                        role.PutOnCooldown();
                         var killedPlayersMessage = "";
                         var killedPlayers = new List<InGamePlayerInfo>();
                         foreach (var target in PlayersList)
@@ -1554,7 +1670,7 @@ namespace DiscordMafia
                 }
                 #endregion
 
-                if (player.IsAlive && player.DelayedDeath != null)
+                if (player.IsAlive && player.DelayedDeath != null && player.DelayedDeathReason is Wench)
                 {
                     if (player.DelayedDeath-- == 0)
                     {

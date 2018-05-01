@@ -61,6 +61,16 @@
     </Info>
   </Item>
   <Item>
+    <string>Hammerer</string>
+    <Info>
+      <Name>Hammerer</Name>
+      <NameCases>
+        <string>hammerer</string>
+        <string>hammerer's</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
     <string>Highlander</string>
     <Info>
       <Name>Highlander</Name>
@@ -97,6 +107,16 @@
       <NameCases>
         <string>judge</string>
         <string>judge's</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
+    <string>Kamikaze</string>
+    <Info>
+      <Name>Kamikaze</Name>
+      <NameCases>
+        <string>kamikaze</string>
+        <string>kamikaze's</string>
       </NameCases>
     </Info>
   </Item>
@@ -161,12 +181,32 @@
     </Info>
   </Item>
   <Item>
+    <string>Poisoner</string>
+    <Info>
+      <Name>Poisoner</Name>
+      <NameCases>
+        <string>poisoner</string>
+        <string>poisoner's</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
     <string>Prosecutor</string>
     <Info>
       <Name>Prosecutor</Name>
       <NameCases>
         <string>prosecutor</string>
         <string>prosecutor's</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
+    <string>RabbleRouser</string>
+    <Info>
+      <Name>Rabble-Rouser</Name>
+      <NameCases>
+        <string>rabble-rouser</string>
+        <string>rabble-rouser's</string>
       </NameCases>
     </Info>
   </Item>

@@ -1,36 +1,24 @@
 ﻿namespace DiscordMafia.Roles
 {
-    public class Highlander : UniqueRole, ITargetedRole
+    public class Kamikaze : UniqueRole, ITargetedRole
     {
         public override Team Team
         {
             get
             {
-                return Team.Civil;
+                return Team.Yakuza;
             }
         }
 
-        private InGamePlayerInfo playerToKill;
-        public InGamePlayerInfo PlayerToInteract
-        {
-            get { return playerToKill; }
-            set {
-                if (value == Player)
-                {
-                    throw new System.ArgumentException("Нельзя подстрелить себя.");
-                }
-                playerToKill = value;
-            }
-        }
-
-        public bool WasAttacked { get; set; }
+        public InGamePlayerInfo PlayerToInteract { get; set; }
 
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
-            if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
+            var nightCancel = cancel && Player.Game.CurrentState == GameState.Night && (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget);
+            var eveningClear = !cancel && Player.Game.CurrentState == GameState.Evening && (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget);
+            if (nightCancel || eveningClear)
             {
                 PlayerToInteract = null;
-                WasAttacked = false;
             }
             base.ClearActivity(cancel, onlyAgainstTarget);
         }

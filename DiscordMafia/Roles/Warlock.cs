@@ -1,4 +1,6 @@
-﻿namespace DiscordMafia.Roles
+﻿using System.Collections.Generic;
+
+namespace DiscordMafia.Roles
 {
     public class Warlock : UniqueRole, ITargetedRole
     {
@@ -38,13 +40,13 @@
             base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
-        public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
+        public override void OnNightStart(Game game, InGamePlayerInfo currentPlayer)
         {
             if (AvailableCursesCount > 0)
             {
-                base.NightInfo(game, currentPlayer);
+                base.OnNightStart(game, currentPlayer);
                 game.SendAlivePlayersMesssage(currentPlayer);
-                game.MessageBuilder.Text($"Осталось проклятий: {AvailableCursesCount}").SendPrivate(currentPlayer);
+                game.MessageBuilder.PrepareText("ChargesRemaining", new Dictionary<string, object> { ["count"] = AvailableCursesCount }).SendPrivate(currentPlayer);
             }
         }
 

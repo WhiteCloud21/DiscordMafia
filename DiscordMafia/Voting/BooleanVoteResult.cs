@@ -40,24 +40,24 @@ namespace DiscordMafia.Voting
             }
         }
 
-        public BooleanVoteResult(IDictionary<ulong, BooleanVoteActivity> detailedInfo)
+        public BooleanVoteResult(IDictionary<ulong, BooleanVoteActivity> detailedInfo, bool useWeght = false)
         {
-            this.DetailedInfo = detailedInfo;
+            DetailedInfo = detailedInfo;
             YesCount = NoCount = 0;
-            fillResult();
+            FillResult(useWeght);
         }
 
-        private void fillResult()
+        private void FillResult(bool useWeght)
         {
             foreach (var vote in DetailedInfo.Values)
             {
                 if (vote.Value)
                 {
-                    YesCount++;
+                    YesCount += vote.WeightType.HasFlag(EWeightType.Positive) && useWeght ? vote.Weight : 1;
                 }
                 else
                 {
-                    NoCount++;
+                    NoCount += vote.WeightType.HasFlag(EWeightType.Negative) && useWeght ? vote.Weight : 1;
                 }
             }
         }
@@ -69,6 +69,11 @@ namespace DiscordMafia.Voting
                 return DetailedInfo[voter.User.Id].Value;
             }
             return false;
+        }
+
+        public bool IsVoted(InGamePlayerInfo voter)
+        {
+            return DetailedInfo.ContainsKey(voter.User.Id);
         }
     }
 }

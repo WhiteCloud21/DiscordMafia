@@ -32,6 +32,7 @@ namespace DiscordMafia.Config
         public int DayTime { get; protected set; }
         public int EveningTime { get; protected set; }
         public int NightTime { get; protected set; }
+        public int MaxInactiveDays { get; protected set; }
         public byte MaxUsersToNotify { get; protected set; }
         public int MinNotificationInterval { get; protected set; }
         
@@ -65,6 +66,7 @@ namespace DiscordMafia.Config
             EveningTime = 30000;
             NightTime = 90000;
             InfectionChancePercent = 33;
+            MaxInactiveDays = 3;
             MaxUsersToNotify = 50;
             MinNotificationInterval = 7200;
             ShowNightActions = true;
@@ -183,6 +185,9 @@ namespace DiscordMafia.Config
                             break;
                         case "MaxUsersToNotify":
                             MaxUsersToNotify = byte.Parse(reader.ReadElementContentAsString());
+                            break;
+                        case "MaxInactiveDays":
+                            MaxInactiveDays = int.Parse(reader.ReadElementContentAsString());
                             break;
                         case "InfectionChancePercent":
                             InfectionChancePercent = short.Parse(reader.ReadElementContentAsString());

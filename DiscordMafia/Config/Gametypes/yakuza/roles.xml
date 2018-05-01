@@ -50,6 +50,11 @@
     <IsRandom>true</IsRandom>
     <MinPlayers>10</MinPlayers>
   </Role>
+  <Role Id="RabbleRouser">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>15</MinPlayers>
+  </Role>
   <Role Id="Sergeant">
     <IsEnabled>true</IsEnabled>
     <IsRandom>false</IsRandom>
@@ -75,6 +80,11 @@
     <IsRandom>true</IsRandom>
     <MinPlayers>10</MinPlayers>
   </Role>
+  <Role Id="Hammerer">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>15</MinPlayers>
+  </Role>
   <Role Id="Hoodlum">
     <IsEnabled>true</IsEnabled>
     <IsRandom>true</IsRandom>
@@ -84,6 +94,11 @@
     <IsEnabled>true</IsEnabled>
     <IsRandom>true</IsRandom>
     <MinPlayers>10</MinPlayers>
+  </Role>
+  <Role Id="Kamikaze">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>15</MinPlayers>
   </Role>
   <Role Id="Maniac">
     <IsEnabled>true</IsEnabled>
@@ -96,6 +111,11 @@
     <MinPlayers>8</MinPlayers>
   </Role>
   <Role Id="Warlock">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>8</MinPlayers>
+  </Role>
+  <Role Id="Poisoner">
     <IsEnabled>true</IsEnabled>
     <IsRandom>true</IsRandom>
     <MinPlayers>8</MinPlayers>

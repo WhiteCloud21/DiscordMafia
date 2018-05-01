@@ -85,6 +85,20 @@
     </Info>
   </Item>
   <Item>
+    <string>Hammerer</string>
+    <Info>
+      <Name>Палач</Name>
+      <NameCases>
+        <string>палач</string>
+        <string>палача</string>
+        <string>палачу</string>
+        <string>палача</string>
+        <string>палачом</string>
+        <string>палаче</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
     <string>Highlander</string>
     <Info>
       <Name>Горец</Name>
@@ -137,6 +151,20 @@
         <string>судью</string>
         <string>судьей</string>
         <string>судье</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
+    <string>Kamikaze</string>
+    <Info>
+      <Name>Камикадзе</Name>
+      <NameCases>
+        <string>камикадзе</string>
+        <string>камикадзе</string>
+        <string>камикадзе</string>
+        <string>камикадзе</string>
+        <string>камикадзе</string>
+        <string>камикадзе</string>
       </NameCases>
     </Info>
   </Item>
@@ -225,6 +253,20 @@
     </Info>
   </Item>
   <Item>
+    <string>Poisoner</string>
+    <Info>
+      <Name>Отравитель</Name>
+      <NameCases>
+        <string>отравитель</string>
+        <string>отравителя</string>
+        <string>отравителю</string>
+        <string>отравителя</string>
+        <string>отравителем</string>
+        <string>отравителе</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
     <string>Prosecutor</string>
     <Info>
       <Name>Прокурор</Name>
@@ -235,6 +277,20 @@
         <string>прокурора</string>
         <string>прокурором</string>
         <string>прокуроре</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
+    <string>RabbleRouser</string>
+    <Info>
+      <Name>Демагог</Name>
+      <NameCases>
+        <string>демагог</string>
+        <string>демагога</string>
+        <string>демагогу</string>
+        <string>демагога</string>
+        <string>демагогом</string>
+        <string>демагоге</string>
       </NameCases>
     </Info>
   </Item>

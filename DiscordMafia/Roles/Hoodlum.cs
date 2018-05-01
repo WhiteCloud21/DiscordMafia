@@ -37,9 +37,9 @@
             base.ClearActivity(cancel, onlyAgainstTarget);
         }
 
-        public override void NightInfo(Game game, InGamePlayerInfo currentPlayer)
+        public override void OnNightStart(Game game, InGamePlayerInfo currentPlayer)
         {
-            base.NightInfo(game, currentPlayer);
+            base.OnNightStart(game, currentPlayer);
             game.SendAlivePlayersMesssage(currentPlayer);
         }
 
