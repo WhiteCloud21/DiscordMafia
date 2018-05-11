@@ -26,11 +26,11 @@
             {
                 if (page == currentPage)
                 {
-                    <li class="active" data-page="@page"><span>@page</span></li>
+                    <li class="active" data-page="@(page)"><span>@(page)</span></li>
                 }
                 else
                 {
-                    <li data-page="@page"><span>@page</span></li>
+                    <li data-page="@(page)"><span>@(page)</span></li>
                 }
             }
             @if (currentPage < totalPages)

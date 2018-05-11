@@ -2,7 +2,7 @@ dist: trusty
 language: csharp
 solution: DiscordMafia.sln
 mono: none
-dotnet: 1.1.5
+dotnet: 2.1.200
 
 env:
  global:

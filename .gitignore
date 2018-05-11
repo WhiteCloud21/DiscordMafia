@@ -243,3 +243,6 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+# IntelliJ IDEA/Rider project settings
+.idea/
