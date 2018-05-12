@@ -155,6 +155,13 @@
     </Info>
   </Item>
   <Item>
+    <string>wenchBlock</string>
+    <Info>
+      <Name>Заблокировано</Name>
+      <Description>Играя за путану, заблокировать трех мафов в одной игре</Description>
+    </Info>
+  </Item>
+  <Item>
     <string>playWithDeveloper</string>
     <Info>
       <Name>А кто это?</Name>

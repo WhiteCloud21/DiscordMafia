@@ -9,14 +9,13 @@ namespace DiscordMafia.Items
         {
             get
             {
-                return 15;
+                return 20;
             }
         }
 
         public override void Use(InGamePlayerInfo currentPlayer, List<InGamePlayerInfo> playersList)
         {
-            // Действия самого предмета нет, его наличие проверяется в маскировочном комплекте
-            IsActive = false;
+            // Действия самого предмета нет, его наличие проверяется при отмене активности
         }
     }
 }

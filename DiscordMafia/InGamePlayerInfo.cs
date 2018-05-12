@@ -86,6 +86,13 @@ namespace DiscordMafia
 
         public void CancelActivity(InGamePlayerInfo onlyAgainstTarget = null)
         {
+            if (onlyAgainstTarget != null && HasActivityAgainst(onlyAgainstTarget))
+            {
+                if (TryUseAntiMask())
+                {
+                    return;
+                }
+            }
             Role?.ClearActivity(true, onlyAgainstTarget);
             if (onlyAgainstTarget != null)
             {
@@ -122,6 +129,17 @@ namespace DiscordMafia
                     ActivityList.Remove(item);
                 }
             }
+        }
+
+        public bool TryUseAntiMask()
+        {
+            var antiMask = GetItem(new AntiMask(), true);
+            if (antiMask != null)
+            {
+                antiMask.IsActive = false;
+                return true;
+            }
+            return false;
         }
 
         public bool CancelVote()

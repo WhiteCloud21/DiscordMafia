@@ -1,4 +1,6 @@
-﻿namespace DiscordMafia.Roles
+﻿using System.Collections.Generic;
+
+namespace DiscordMafia.Roles
 {
     public class Wench : UniqueRole, ITargetedRole
     {
@@ -11,10 +13,13 @@
         }
 
         private InGamePlayerInfo playerToCheck;
+        private InGamePlayerInfo _lastPlayerToCheck;
+
         public InGamePlayerInfo PlayerToInteract
         {
             get { return playerToCheck; }
-            set {
+            set
+            {
                 if (value != null && value == LastPlayerToCheck)
                 {
                     throw new System.ArgumentException("Нельзя ходить к одному игроку 2 раза подряд.");
@@ -26,8 +31,17 @@
                 playerToCheck = value;
             }
         }
-        public InGamePlayerInfo LastPlayerToCheck { get; set; }
-        
+        public InGamePlayerInfo LastPlayerToCheck {
+            get => _lastPlayerToCheck;
+            set
+            {
+                _lastPlayerToCheck = value;
+                BlockedPlayers.Add(_lastPlayerToCheck);
+            }
+        }
+
+        public HashSet<InGamePlayerInfo> BlockedPlayers { get; } = new HashSet<InGamePlayerInfo>();
+
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
             if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)

@@ -24,6 +24,7 @@ namespace DiscordMafia.Achievement
                 CheckGames(player);
                 CheckStreaks(player);
                 CheckDemoman(player);
+                CheckWench(player);
                 state.CheckAchievements(player);
             }
         }
@@ -116,6 +117,17 @@ namespace DiscordMafia.Achievement
                 if (demo.TotalVictims >= playersCountToAchievement)
                 {
                     _manager.Push(player.User, Achievement.IdDemomanMaster);
+                }
+            }
+        }
+
+        private void CheckWench(InGamePlayerInfo player)
+        {
+            if (player.StartRole is Wench wench)
+            {
+                if (wench.BlockedPlayers.Where(p => p.StartRole.Team == Team.Mafia || p.StartRole.Team == Team.Yakuza).Count() >= 3)
+                {
+                    _manager.Push(player.User, Achievement.IdWenchBlock);
                 }
             }
         }

@@ -9,7 +9,7 @@ namespace DiscordMafia.Items
     public abstract class BaseItem
     {
         public abstract int Cost { get; }
-        public virtual bool IsActive { get; protected set; }
+        public virtual bool IsActive { get; set; }
 
         public BaseItem()
         {

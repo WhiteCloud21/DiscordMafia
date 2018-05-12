@@ -937,6 +937,10 @@ namespace DiscordMafia
                     {
                         if (target.IsAlive && target != player && target.HasActivityAgainst(player))
                         {
+                            if (target.TryUseAntiMask())
+                            {
+                                continue;
+                            }
                             if (target.Role is Mafioso)
                             {
                                 mafiosoList.Add(target);

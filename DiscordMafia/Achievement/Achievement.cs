@@ -32,6 +32,7 @@
         public const string IdDocHealCom = "dochealcom";
         public const string IdDocHealMaf = "dochealmaf";
         public const string IdDemomanMaster = "demomanMaster";
+        public const string IdWenchBlock = "wenchBlock";
 
         public string Id
         {
