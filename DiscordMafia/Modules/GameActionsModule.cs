@@ -37,7 +37,8 @@ namespace DiscordMafia.Modules
         {
             _game.MessageBuilder.PrepareText("PlayerCollectingStart", new Dictionary<string, object>
             {
-                ["seconds"] = _game.Settings.PlayerCollectingTime / 1000
+                ["seconds"] = _game.Settings.PlayerCollectingTime / 1000,
+                ["mode"] = _game.GameMode ?? "default",
             }).SendPublic(_game.GameChannel);
             _game.CurrentState = GameState.PlayerCollecting;
             _game.timer.Interval = Math.Min(_game.Settings.PlayerCollectingTime, 60000);

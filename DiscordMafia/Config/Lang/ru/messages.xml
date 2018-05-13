@@ -16,7 +16,7 @@
     <string>PlayerCollectingStart</string>
     <ArrayOfString>
       <string>
-        <![CDATA[Начинаю набор игроков. У вас <b>{seconds}</b> секунд.
+        <![CDATA[Кто хочет поиграть в {mode}? У вас <b>{seconds}</b> секунд.
         		<b>/join</b> (<b>/я</b>) - присоединиться к игре]]>
       </string>
     </ArrayOfString>

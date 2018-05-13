@@ -16,7 +16,7 @@
     <string>PlayerCollectingStart</string>
     <ArrayOfString>
       <string>
-        <![CDATA[Who wants to play? You have <b>{seconds}</b> seconds.
+        <![CDATA[Who wants to play {mode}? You have <b>{seconds}</b> seconds.
 <b>/join</b> - join the game]]>
       </string>
     </ArrayOfString>
