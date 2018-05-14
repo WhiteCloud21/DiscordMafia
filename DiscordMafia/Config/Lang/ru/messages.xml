@@ -163,7 +163,7 @@
   <Item>
     <string>InactivePlayersKilled</string>
     <ArrayOfString>
-      <string>Голосовать надо днем! За отстуствие активности более {limit} дней были удалены из игры: {players}</string>
+      <string>Голосовать надо днем! За отсутствие активности более {limit} дней были удалены из игры: {players}</string>
     </ArrayOfString>
   </Item>
   <Item>
