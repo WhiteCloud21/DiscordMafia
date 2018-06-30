@@ -73,10 +73,26 @@ namespace DiscordMafia
 
         internal void LoadSettings(string gametype = null)
         {
+            gametype = gametype ?? MainSettings.Language.Meta.GameType ?? MainSettings.GameType;
             Settings = new Config.GameSettings(MainSettings, gametype);
             MessageBuilder = new Config.MessageBuilder(MainSettings, client, PlayersList);
             GameMode = gametype;
             Console.WriteLine("Settings loaded");
+            if (Settings.AvatarPath != null)
+            {
+                client.CurrentUser.ModifyAsync(p => {
+                    p.Avatar = new Image(Settings.AvatarPath);
+                });
+                Console.WriteLine("Avatar changed");
+            }
+            if (Settings.Nickname != null)
+            {
+                GameChannel.Guild.CurrentUser.ModifyAsync(p =>
+                {
+                    p.Nickname = Settings.Nickname;
+                });
+                Console.WriteLine("Nickname changed");
+            }
         }
 
         public void OnPrivateMessage(SocketMessage message)
@@ -254,6 +270,7 @@ namespace DiscordMafia
             CurrentState = GameState.Stopped;
             _lastGame = null;
             client.SetGameAsync(null);
+            BaseRoleExtensions.ClearCache(this);
         }
 
         private void OnTimer(object sender)
@@ -312,7 +329,7 @@ namespace DiscordMafia
                 foreach (var player in PlayersList)
                 {
                     var roleWelcomeParam = String.Format("GameStart_Role_{0}", player.Role.GetType().Name);
-                    var photoName = String.Format("roles/card{0}.png", player.Role.GetType().Name);
+                    var photoName = player.Role.GetImage(MainSettings.Language);
                     MessageBuilder.PrepareTextReplacePlayer(roleWelcomeParam, player, "GameStart_Role_Default").AddImage(photoName).SendPrivate(player);
                     switch (player.Role.Team)
                     {

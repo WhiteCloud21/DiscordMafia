@@ -18,13 +18,13 @@ namespace DiscordMafia.Config.Lang
         public ModuleMessages ModuleMessages { get; private set; }
         public PointMessages PointMessages { get; private set; }
 
-        public void Load(string filePath)
+        public void Load(string filePath, bool loadEvent)
         {
-            LoadMeta(Path.Combine(filePath, "meta.xml"));
+            var _meta = LoadMeta(Path.Combine(filePath, "meta.xml"));
             string basedOnFilePath = null;
-            if (Meta.BasedOn != null)
+            if (_meta.BasedOn != null)
             {
-                basedOnFilePath = Path.Combine(Path.GetDirectoryName(filePath), Meta.BasedOn);
+                basedOnFilePath = Path.Combine(Path.GetDirectoryName(filePath), _meta.BasedOn);
                 if (basedOnFilePath == filePath)
                 {
                     throw new ArgumentException("Language cannot be based on itself.");
@@ -32,8 +32,13 @@ namespace DiscordMafia.Config.Lang
             }
             if (basedOnFilePath != null)
             {
-                Load(basedOnFilePath);
+                Load(basedOnFilePath, loadEvent);
             }
+            if (!loadEvent && _meta.IsEvent)
+            {
+                return;
+            }
+            Meta = _meta;
             Messages = Messages.MergeOrLoad(Messages, Path.Combine(filePath, "messages.xml"), MergeStrategy.Recursive);
             SimpleMessages = SimpleMessages.MergeOrLoad(SimpleMessages, Path.Combine(filePath, "simpleMessages.xml"), MergeStrategy.Recursive);
             RoleMessages = RoleMessages.MergeOrLoad(RoleMessages, Path.Combine(filePath, "roles.xml"), MergeStrategy.Recursive);
@@ -44,12 +49,12 @@ namespace DiscordMafia.Config.Lang
             PointMessages = PointMessages.MergeOrLoad(PointMessages, Path.Combine(filePath, "points.xml"), MergeStrategy.Recursive);
         }
 
-        private void LoadMeta(string fileName)
+        private Meta LoadMeta(string fileName)
         {
             using (Stream stream = new FileStream(fileName, FileMode.Open))
             {
                 var serializer = new XmlSerializer(typeof(Meta));
-                Meta = (Meta)serializer.Deserialize(stream);
+                return (Meta)serializer.Deserialize(stream);
             }
         }
     }

@@ -26,11 +26,11 @@
             }
         }
         <div class="row role-row">
-            <div class="col-sm-4 col-lg-2">
+            <div class="col-sm-4">
                 <img src="@(Settings.ImageBaseUrl)roles/card@(role.Role.GetType().Name).png" class="role-row__image" />
             </div>
-            <div class="col-sm-8 col-lg-10">
-                <h2>@role.Role.GetName(Language)</h2>
+            <div class="col-sm-8">
+                <h2 class="role-row__name">@role.Role.GetName(Language)</h2>
                 @if (role.Role is UniqueRole)
                 {
                     <p><i>Уникальная роль</i></p>

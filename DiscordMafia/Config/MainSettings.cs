@@ -20,6 +20,7 @@ namespace DiscordMafia.Config
         public HashSet<ulong> AdminId { get; protected set; }
         public string LanguageStr { get; protected set; }
         public Lang.Language Language { get; protected set; }
+        public string GameType { get; protected set; }
 
         public string ConfigPath { get; private set; }
 
@@ -90,6 +91,9 @@ namespace DiscordMafia.Config
                         case "Language":
                             LanguageStr = reader.ReadElementContentAsString();
                             break;
+                        case "GameType":
+                            GameType = reader.ReadElementContentAsString();
+                            break;
                         default:
                             reader.Skip();
                             break;
@@ -121,14 +125,14 @@ namespace DiscordMafia.Config
             return Directory.Exists(Path.Combine(ConfigPath, $"Lang/{LanguageStr}"));
         }
 
-        public void LoadLanguage()
+        public void LoadLanguage(bool loadEvent = false)
         {
             if (!IsValidLanguage(LanguageStr))
             {
                 throw new Exception("Language is not valid in mainSettings!");
             }
             Language = new Lang.Language();
-            Language.Load(Path.Combine(ConfigPath, $"Lang/{LanguageStr}"));
+            Language.Load(Path.Combine(ConfigPath, $"Lang/{LanguageStr}"), loadEvent);
         }
     }
 }

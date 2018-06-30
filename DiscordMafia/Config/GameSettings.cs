@@ -35,7 +35,9 @@ namespace DiscordMafia.Config
         public int MaxInactiveDays { get; protected set; }
         public byte MaxUsersToNotify { get; protected set; }
         public int MinNotificationInterval { get; protected set; }
-        
+        public string AvatarPath { get; private set; }
+        public string Nickname { get; private set; }
+
         public Points Points { get; private set; }
         public Roles Roles { get; private set; }
 
@@ -75,7 +77,7 @@ namespace DiscordMafia.Config
 
             ReadConfig();
             Validate();
-            
+
             Points = Points.GetInstance(GetFilePath("points.xml"));
             Console.WriteLine("Points configuration successfully loaded");
             Roles = Roles.GetInstance(GetFilePath("roles.xml"));
@@ -105,9 +107,17 @@ namespace DiscordMafia.Config
 
         protected string GetFilePath(string fileName)
         {
+            if (GameType != null && File.Exists(Path.Combine(ConfigPath, $"Local/Gametypes/{GameType}/{fileName}")))
+            {
+                return Path.Combine(ConfigPath, $"Local/Gametypes/{GameType}/{fileName}");
+            }
             if (GameType != null && File.Exists(Path.Combine(ConfigPath, $"Gametypes/{GameType}/{fileName}")))
             {
                 return Path.Combine(ConfigPath, $"Gametypes/{GameType}/{fileName}");
+            }
+            if (File.Exists(Path.Combine(ConfigPath, $"Local/{fileName}")))
+            {
+                return Path.Combine(ConfigPath, $"Local/{fileName}");
             }
             return Path.Combine(ConfigPath, $"{fileName}");
         }
@@ -191,6 +201,12 @@ namespace DiscordMafia.Config
                             break;
                         case "InfectionChancePercent":
                             InfectionChancePercent = short.Parse(reader.ReadElementContentAsString());
+                            break;
+                        case "Nickname":
+                            Nickname = reader.ReadElementContentAsString();
+                            break;
+                        case "AvatarPath":
+                            AvatarPath = reader.ReadElementContentAsString();
                             break;
                         default:
                             reader.Skip();

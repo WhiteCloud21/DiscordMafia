@@ -21,4 +21,9 @@
 
 .role-row__image {
     max-height: 300px;
+    max-width: 100%;
+}
+
+.role-row__name {
+    margin-top: 0;
 }

@@ -21,15 +21,39 @@ namespace DiscordMafia.Modules
     {
         private DiscordSocketClient _client;
         private Game _game;
-        private MainSettings _settings;
         private DiscordClientWrapper _clientWrapper;
 
-        public GameActionsModule(Game game, DiscordSocketClient client, DiscordClientWrapper clientWrapper, MainSettings settings)
+        public GameActionsModule(Game game, DiscordSocketClient client, DiscordClientWrapper clientWrapper)
         {
             _game = game;
-            _settings = settings;
             _client = client;
             _clientWrapper = clientWrapper;
+        }
+
+        [Command("startevent"), RequireContext(ContextType.DM), RequireAdmin, RequireGameState(GameState.Stopped)]
+        public async Task StartEvent([Remainder] string ignored = null)
+        {
+            _game.MainSettings.LoadLanguage(true);
+            _game.LoadSettings();
+            var welcomeMessages = _game.MainSettings.Language.Meta.WelcomeMessages;
+            if (welcomeMessages != null && welcomeMessages.Length > 0)
+            {
+                foreach (var message in welcomeMessages)
+                {
+                    _game.MessageBuilder.Text(message.Content).SendPublic(_clientWrapper.AnnouncerGameChannel);
+                    await _clientWrapper.AnnouncerGameChannel.TriggerTypingAsync();
+                    System.Threading.Thread.Sleep(message.Pause);
+                }
+            }
+            await Start();
+        }
+
+        [Command("endevent"), RequireContext(ContextType.DM), RequireAdmin, RequireGameState(GameState.Stopped)]
+        public async Task EndEvent([Remainder] string ignored = null)
+        {
+            _game.MainSettings.LoadLanguage(false);
+            _game.LoadSettings();
+            await ReplyAsync("OK");
         }
 
         [Command("start"), Summary("Запускает игру."), Alias("старт"), RequireContext(ContextType.Guild), RequireGameState(GameState.Stopped)]
