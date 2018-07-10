@@ -34,6 +34,9 @@
         public const string IdDemomanMaster = "demomanMaster";
         public const string IdWenchBlock = "wenchBlock";
 
+        // Secret achievements
+        public const string IdLostInStars = "lostInStars";
+
         public string Id
         {
             get;

@@ -65,7 +65,7 @@ namespace DiscordMafia
 
         public string GetName()
         {
-            return User.FirstName + " " + User.LastName;
+            return User.FirstName;
         }
 
         public void AddActivity(BaseActivity activity)

@@ -25,6 +25,7 @@ namespace DiscordMafia.Achievement
                 CheckStreaks(player);
                 CheckDemoman(player);
                 CheckWench(player);
+                CheckGameType(player);
                 state.CheckAchievements(player);
             }
         }
@@ -129,6 +130,14 @@ namespace DiscordMafia.Achievement
                 {
                     _manager.Push(player.User, Achievement.IdWenchBlock);
                 }
+            }
+        }
+
+        private void CheckGameType(InGamePlayerInfo player)
+        {
+            if (player.Game.GameMode == "sw")
+            {
+                _manager.Push(player.User, Achievement.IdLostInStars);
             }
         }
 

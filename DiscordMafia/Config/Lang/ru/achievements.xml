@@ -168,4 +168,11 @@
       <Description>Сыграть с разработчиком бота</Description>
     </Info>
   </Item>
+  <Item>
+    <string>lostInStars</string>
+    <Info>
+      <Name>Затерянный в звёздах</Name>
+      <Description>???</Description>
+    </Info>
+  </Item>
 </Messages>

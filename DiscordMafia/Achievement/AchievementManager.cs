@@ -51,6 +51,7 @@ namespace DiscordMafia.Achievement
                 new Achievement { Id = Achievement.IdDemomanMaster, Icon = "\U0001F4A5" },
                 new Achievement { Id = Achievement.IdPlayWithDeveloper, Icon = "\U00002601" },
                 new Achievement { Id = Achievement.IdWenchBlock, Icon = "\U0001F6D1" },
+                new Achievement { Id = Achievement.IdLostInStars, Icon = "\U00002B50" },
             };
             foreach (var achievement in achievementsToRegister)
             {
