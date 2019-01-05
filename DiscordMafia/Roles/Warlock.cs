@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DiscordMafia.Base;
+using System.Collections.Generic;
 
 namespace DiscordMafia.Roles
 {

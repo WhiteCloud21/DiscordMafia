@@ -162,4 +162,10 @@
       <Description>To the Hacker for each check of a unique role (not citizen, mafioso or yakuza) (in addition to points for each check)</Description>
     </Info>
   </Item>
+  <Item>
+    <string>ChuckNorrisAction</string>
+    <Info>
+      <Description>To the Chuck Norris for any action</Description>
+    </Info>
+  </Item>
 </Messages>

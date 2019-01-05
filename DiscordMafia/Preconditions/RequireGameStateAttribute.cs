@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord.Commands;
-using DiscordMafia.Config;
+using DiscordMafia.Base;
 
 namespace DiscordMafia.Preconditions
 {

@@ -1,4 +1,6 @@
-﻿namespace DiscordMafia.Roles
+﻿using DiscordMafia.Base;
+
+namespace DiscordMafia.Roles
 {
     public class Sheriff : UniqueRole, ITargetedRole
     {

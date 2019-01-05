@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DiscordMafia.Activity;
+using DiscordMafia.Base;
 using DiscordMafia.Client;
 using DiscordMafia.Items;
 using DiscordMafia.Roles;

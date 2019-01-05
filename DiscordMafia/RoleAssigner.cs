@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DiscordMafia.Roles;
 
 namespace DiscordMafia
@@ -8,17 +9,16 @@ namespace DiscordMafia
     public class RoleAssigner
     {
         private Random random = new Random();
-        IList<InGamePlayerInfo> players;
         private int remainingPlayerCount = 0;
         private int remainingMafCount = 0;
         private int remainingYakuzaCount = 0;
         private int totalMafCount = 0;
 
-        public void AssignRoles(IList<InGamePlayerInfo> players, Config.GameSettings settings)
+        public void AssignRoles(IEnumerable<InGamePlayerInfo> players, Config.GameSettings settings)
         {
-            this.players = players;
-            remainingPlayerCount = players.Count;
-            totalMafCount = (int)Math.Truncate(players.Count * (double)settings.MafPercent / 100);
+            var totalPlayersCount = players.Count();
+            remainingPlayerCount = totalPlayersCount;
+            totalMafCount = (int)Math.Truncate(totalPlayersCount * (double)settings.MafPercent / 100);
             remainingMafCount = settings.IsMafiaEnabled ? totalMafCount : 0;
             remainingYakuzaCount = settings.IsYakuzaEnabled ? totalMafCount : 0;
             Console.WriteLine("Количество мафиози: {0}", remainingMafCount);
@@ -28,30 +28,67 @@ namespace DiscordMafia
                 player.StartRole = player.Role = new Citizen() { Player = player };
             }
 
-            foreach (var role in settings.Roles.GetTemporaryRoles(players.Count))
+            foreach (var role in settings.Roles.GetTemporaryRoles(totalPlayersCount))
             {
-                AssignRoleToRandomPlayer(role);
+                AssignRoleToRandomPlayer(players, role);
             }
 
-            foreach (var role in settings.Roles.GetRandomRoles(players.Count, settings.MaxRandomPlayers, random))
+            foreach (var role in settings.Roles.GetRandomRoles(totalPlayersCount, settings.MaxRandomPlayers, random))
             {
-                AssignRoleToRandomPlayer(role);
+                AssignRoleToRandomPlayer(players, role);
             }
 
             while ((remainingMafCount > 0 || remainingYakuzaCount > 0) && remainingPlayerCount > 0)
             {
                 if (remainingMafCount > 0)
                 {
-                    AssignRoleToRandomPlayer(new Mafioso());
+                    AssignRoleToRandomPlayer(players, new Mafioso());
                 }
                 if (remainingYakuzaCount > 0)
                 {
-                    AssignRoleToRandomPlayer(new Yakuza());
+                    AssignRoleToRandomPlayer(players, new Yakuza());
                 }
             }
         }
 
-        private void AssignRoleToRandomPlayer(BaseRole role)
+        public void ReassignRoles(IEnumerable<InGamePlayerInfo> players)
+        {
+            remainingPlayerCount = 0;
+            remainingYakuzaCount = 0;
+            remainingMafCount = 0;
+            var rolesToReassign = new List<BaseRole>();
+            var playersToReassign = new List<InGamePlayerInfo>();
+            foreach (var player in players)
+            {
+                if (player.IsAlive)
+                {
+                    if (!(player.Role is Citizen))
+                    {
+                        rolesToReassign.Add(player.Role);
+                    }
+                    playersToReassign.Add(player);
+                    switch (player.Role.Team)
+                    {
+                        case Team.Mafia:
+                            remainingMafCount++;
+                            break;
+                        case Team.Yakuza:
+                            remainingYakuzaCount++;
+                            break;
+                    }
+                    remainingPlayerCount++;
+                    player.Role.Player = null;
+                    player.Role = new Citizen() { Player = player };
+                }
+            }
+
+            foreach (var role in rolesToReassign)
+            {
+                AssignRoleToRandomPlayer(playersToReassign, role);
+            }
+        }
+
+        private void AssignRoleToRandomPlayer(IEnumerable<InGamePlayerInfo> players, BaseRole role)
         {
             if ((remainingPlayerCount <= remainingMafCount || remainingPlayerCount <= remainingYakuzaCount) &&
                 role.Team != Team.Mafia && role.Team != Team.Yakuza || remainingPlayerCount == 0)

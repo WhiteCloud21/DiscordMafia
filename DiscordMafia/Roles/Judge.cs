@@ -1,4 +1,5 @@
 ﻿using DiscordMafia.Activity;
+using DiscordMafia.Base;
 
 namespace DiscordMafia.Roles
 {

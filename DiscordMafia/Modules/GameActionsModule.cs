@@ -13,6 +13,7 @@ using static DiscordMafia.Config.MessageBuilder;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
+using DiscordMafia.Base;
 
 namespace DiscordMafia.Modules
 {
@@ -376,6 +377,11 @@ namespace DiscordMafia.Modules
                 if (currentPlayer.Role is NeutralKiller)
                 {
                     (currentPlayer.Role as NeutralKiller).PerformNightAction(player);
+                    return;
+                }
+                if (currentPlayer.Role is ChuckNorris)
+                {
+                    (currentPlayer.Role as ChuckNorris).PerformNightAction(player);
                     return;
                 }
                 _game.NightVote(currentPlayer, player);

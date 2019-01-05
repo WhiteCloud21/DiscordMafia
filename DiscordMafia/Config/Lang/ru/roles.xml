@@ -15,6 +15,20 @@
     </Info>
   </Item>
   <Item>
+    <string>ChuckNorris</string>
+    <Info>
+      <Name>Чак Норрис</Name>
+      <NameCases>
+        <string>Чак Норрис</string>
+        <string>Чакf Норриса</string>
+        <string>Чакe Норрисe</string>
+        <string>Чака Норриса</string>
+        <string>Чаком Норрисом</string>
+        <string>Чаке Норрисе</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
     <string>Commissioner</string>
     <Info>
       <Name>Комиссар</Name>

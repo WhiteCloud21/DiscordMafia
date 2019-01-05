@@ -162,4 +162,10 @@
       <int>2</int>
     </PointsInfo>
   </Item>
+  <Item>
+    <string>ChuckNorrisAction</string>
+    <PointsInfo>
+      <int>3</int>
+    </PointsInfo>
+  </Item>
 </Points>

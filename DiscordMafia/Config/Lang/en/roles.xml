@@ -11,6 +11,16 @@
     </Info>
   </Item>
   <Item>
+    <string>ChuckNorris</string>
+    <Info>
+      <Name>Chuck Norris</Name>
+      <NameCases>
+        <string>Chuck Norris</string>
+        <string>Chuck Norris's</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
     <string>Commissioner</string>
     <Info>
       <Name>Commissioner</Name>
