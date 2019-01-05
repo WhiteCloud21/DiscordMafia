@@ -79,46 +79,69 @@ namespace DiscordMafia.Services
 
         public void Welcome()
         {
-            var mafiaMessage = "";
-            var yakuzaMessage = "";
             foreach (var player in _game.PlayersList)
             {
                 if (player.IsAlive)
                 {
-                    var roleWelcomeParam = String.Format("GameStart_Role_{0}", player.Role.GetType().Name);
-                    var photoName = player.Role.GetImage(_game.MainSettings.Language);
-                    _game.MessageBuilder.PrepareTextReplacePlayer(roleWelcomeParam, player, "GameStart_Role_Default").AddImage(photoName).SendPrivate(player);
-                    switch (player.Role.Team)
-                    {
-                        case Team.Mafia:
-                            mafiaMessage += String.Format("{0} - {1} (`{2}`)", _game.MessageBuilder.FormatName(player), _game.MessageBuilder.FormatRole(player.Role.GetName(_game.MainSettings.Language)), player.GetName()) + Environment.NewLine;
-                            break;
-                        case Team.Yakuza:
-                            yakuzaMessage += String.Format("{0} - {1} (`{2}`)", _game.MessageBuilder.FormatName(player), _game.MessageBuilder.FormatRole(player.Role.GetName(_game.MainSettings.Language)), player.GetName()) + Environment.NewLine;
-                            break;
-                    }
-                    if (player.Role is Sergeant)
-                    {
-                        var commissioner = (from p in _game.PlayersList where p.Role is Commissioner select p).FirstOrDefault();
-                        if (commissioner != null)
-                        {
-                            _game.MessageBuilder.PrepareTextReplacePlayer("CheckStatus", commissioner).SendPrivate(player);
-                            _game.MessageBuilder.PrepareTextReplacePlayer("CheckStatus", player).SendPrivate(commissioner);
-                        }
-                    }
+                    Welcome(player);
                 }
             }
             _game.Pause();
 
-            // Состав мафий
-            _game.MessageBuilder.PrepareText("MafiaWelcome", new Dictionary<string, object>
+            WelcomeTeam(Team.Mafia);
+            WelcomeTeam(Team.Yakuza);
+        }
+
+        public void Welcome(InGamePlayerInfo player)
+        {
+            if (player.IsAlive)
             {
-                ["players"] = mafiaMessage
-            }).SendToTeam(Team.Mafia);
-            _game.MessageBuilder.PrepareText("YakuzaWelcome", new Dictionary<string, object>
+                var roleWelcomeParam = String.Format("GameStart_Role_{0}", player.Role.GetType().Name);
+                var photoName = player.Role.GetImage(_game.MainSettings.Language);
+                _game.MessageBuilder.PrepareTextReplacePlayer(roleWelcomeParam, player, "GameStart_Role_Default").AddImage(photoName).SendPrivate(player);
+                if (player.Role is Sergeant)
+                {
+                    var commissioner = (from p in _game.PlayersList where p.Role is Commissioner select p).FirstOrDefault();
+                    if (commissioner != null)
+                    {
+                        _game.MessageBuilder.PrepareTextReplacePlayer("CheckStatus", commissioner).SendPrivate(player);
+                        _game.MessageBuilder.PrepareTextReplacePlayer("CheckStatus", player).SendPrivate(commissioner);
+                    }
+                }
+            }
+        }
+
+        public void WelcomeTeam(Team team)
+        {
+            string key = null;
+            switch (team)
             {
-                ["players"] = yakuzaMessage
-            }).SendToTeam(Team.Yakuza);
+                case Team.Mafia:
+                    key = "MafiaWelcome";
+                    break;
+                case Team.Yakuza:
+                    key = "YakuzaWelcome";
+                    break;
+                default:
+                    return;
+            }
+
+            var message = "";
+            foreach (var player in _game.PlayersList)
+            {
+                if (player.IsAlive)
+                {
+                    if (player.Role.Team == team)
+                    {
+                        message += String.Format("{0} - {1} (`{2}`)", _game.MessageBuilder.FormatName(player), _game.MessageBuilder.FormatRole(player.Role.GetName(_game.MainSettings.Language)), player.GetName()) + Environment.NewLine;
+                    }
+                }
+            }
+
+            _game.MessageBuilder.PrepareText(key, new Dictionary<string, object>
+            {
+                ["players"] = message
+            }).SendToTeam(team);
         }
     }
 }

@@ -365,6 +365,20 @@
     </Info>
   </Item>
   <Item>
+    <string>ThiefOfRoles</string>
+    <Info>
+      <Name>Жулик</Name>
+      <NameCases>
+        <string>жулик</string>
+        <string>жулика</string>
+        <string>жулику</string>
+        <string>жулика</string>
+        <string>жуликом</string>
+        <string>жулике</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
     <string>Warlock</string>
     <Info>
       <Name>Чернокнижник</Name>

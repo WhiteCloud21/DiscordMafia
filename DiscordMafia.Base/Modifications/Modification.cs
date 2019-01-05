@@ -1,10 +1,4 @@
-﻿using DiscordMafia.Base.Game;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
+﻿using System;
 
 namespace DiscordMafia.Base.Modifications
 {

@@ -193,6 +193,17 @@
           </Info>
         </Item>
         <Item>
+          <string>steal</string>
+          <Info>
+            <Aliases>
+              <string>украсть</string>
+              <string>своровать</string>
+              <string>воровать</string>
+            </Aliases>
+            <Summary>Украсть у игрока его роль.</Summary>
+          </Info>
+        </Item>
+        <Item>
           <string>go</string>
           <Info>
             <Aliases>

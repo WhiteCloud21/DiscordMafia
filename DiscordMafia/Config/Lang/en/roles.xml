@@ -261,6 +261,16 @@
     </Info>
   </Item>
   <Item>
+    <string>ThiefOfRoles</string>
+    <Info>
+      <Name>Thief Of Roles</Name>
+      <NameCases>
+        <string>Thief Of Roles</string>
+        <string>Thief Of Roles's</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
     <string>Warlock</string>
     <Info>
       <Name>Warlock</Name>

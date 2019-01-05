@@ -105,9 +105,19 @@
     <IsRandom>true</IsRandom>
     <MinPlayers>8</MinPlayers>
   </Role>
+  <Role Id="ThiefOfRoles">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>true</IsRandom>
+    <MinPlayers>10</MinPlayers>
+  </Role>
   <Role Id="Hacker">
     <IsEnabled>true</IsEnabled>
     <IsRandom>true</IsRandom>
     <MinPlayers>12</MinPlayers>
+  </Role>
+  <Role Id="ChuckNorris">
+    <IsEnabled>true</IsEnabled>
+    <IsRandom>false</IsRandom>
+    <MinPlayers>14</MinPlayers>
   </Role>
 </Roles>

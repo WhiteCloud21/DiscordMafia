@@ -17,6 +17,7 @@ namespace DiscordMafia
         {
             _nightSortPositions = new string[]
             {
+                typeof(ThiefOfRoles).Name,
                 typeof(Mirror).Name,
                 typeof(Ninja).Name,
                 typeof(ChuckNorris).Name,

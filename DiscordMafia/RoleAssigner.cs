@@ -108,8 +108,8 @@ namespace DiscordMafia
                 {
                     if (playerIndex-- <= 0)
                     {
-                        player.StartRole = player.Role = role;
-                        role.Player = player;
+                        player.StartRole = role;
+                        AssignRole(player, role);
                         break;
                     }
                 }
@@ -123,6 +123,18 @@ namespace DiscordMafia
             {
                 remainingYakuzaCount--;
             }
+        }
+
+        public void AssignRole(InGamePlayerInfo player, BaseRole role)
+        {
+            player.Role = role;
+            role.Player = player;
+        }
+
+        public void AssignStartRole(InGamePlayerInfo player, BaseRole role)
+        {
+            player.StartRole = role;
+            role.Player = player;
         }
     }
 }

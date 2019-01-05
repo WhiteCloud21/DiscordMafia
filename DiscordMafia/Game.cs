@@ -957,6 +957,39 @@ namespace DiscordMafia
 
             foreach (var player in PlayerSorter.SortForActivityCheck(PlayersList, GameState.Night))
             {
+                #region Жулик
+                if (player.Role is ThiefOfRoles)
+                {
+                    var role = player.Role as ThiefOfRoles;
+                    if (role.PlayerToInteract != null)
+                    {
+                        var roleToSteal = role.PlayerToInteract.Role;
+                        MessageBuilder.PrepareTextReplacePlayer("ThiefOfRolesStealRole", role.PlayerToInteract).SendPublic(GameChannel);
+                        RoleAssigner.AssignRole(player, roleToSteal);
+                        switch (roleToSteal.Team)
+                        {
+                            case Team.Mafia:
+                                RoleAssigner.AssignRole(role.PlayerToInteract, new Mafioso());
+                                break;
+                            case Team.Yakuza:
+                                RoleAssigner.AssignRole(role.PlayerToInteract, new Yakuza());
+                                break;
+                            default:
+                                RoleAssigner.AssignRole(role.PlayerToInteract, new Citizen());
+                                break;
+                        }
+
+                        // Clone start role
+                        RoleAssigner.AssignStartRole(role.PlayerToInteract, Settings.Roles.GetRoleInstance(roleToSteal));
+
+                        _notifier.Welcome(player);
+                        _notifier.Welcome(role.PlayerToInteract);
+                        _notifier.WelcomeTeam(roleToSteal.Team);
+                        Pause();
+                    }
+                }
+                #endregion
+
                 #region Зеркало
                 if (player.Role is Mirror)
                 {

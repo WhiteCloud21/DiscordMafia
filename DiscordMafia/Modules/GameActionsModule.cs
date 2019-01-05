@@ -495,6 +495,16 @@ namespace DiscordMafia.Modules
             await Task.CompletedTask;
         }
 
+        [Command("steal"), RequireContext(ContextType.DM), RequirePlayer(typeof(ThiefOfRoles)), RequireGameState(GameState.Night)]
+        public async Task Steal([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
+        {
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
+            {
+                (currentPlayer.Role as ThiefOfRoles).PerformNightAction(player);
+            }
+            await Task.CompletedTask;
+        }
+
         [Command("talk"), RequireContext(ContextType.DM), RequirePlayer(typeof(RabbleRouser)), RequireGameState(GameState.Day, GameState.Evening)]
         public async Task RepeatDay([Remainder] string ignored = null)
         {

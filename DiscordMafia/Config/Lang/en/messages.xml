@@ -352,6 +352,18 @@ Remaining Players:
     </ArrayOfString>
   </Item>
   <Item>
+    <string>RoleHelp_ChuckNorris</string>
+    <ArrayOfString>
+      <string>You are The Chuck Norris. Chuck can do random action to anyone.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>RoleHelp_ThiefOfRoles</string>
+    <ArrayOfString>
+      <string>You are the Thief Of Roles with ability to steal role from any player.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
     <string>GameStart_Role_Default</string>
     <ArrayOfString>
       <string>Your status is {role}.</string>
@@ -550,6 +562,14 @@ Remaining Players:
     <ArrayOfString>
       <string>
         <![CDATA[Who will be killed (or protected) tonight? (<b>/kill X</b>, where <b>X</b> — number of the player).]]>
+      </string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>NightInfo_ThiefOfRoles</string>
+    <ArrayOfString>
+      <string>
+        <![CDATA[Who will be without a role tonight? (<b>/steal X</b>, where <b>X</b> — number of the player).]]>
       </string>
     </ArrayOfString>
   </Item>
@@ -971,6 +991,12 @@ Remaining Players:
     <string>ChuckNorrisActionHack</string>
     <ArrayOfString>
       <string>🎲💻 {name} told everyone that {gender:he|she} is {role0}. {gender:His|Her} computer connected to Wi-Fi for some reason. And Wi-Fi turned out to be Chuck Norris.</string>
+    </ArrayOfString>
+  </Item>
+  <Item>
+    <string>ThiefOfRolesStealRole</string>
+    <ArrayOfString>
+      <string>👋 Thief stole {role1} everything. Thief is no longer thief. He is {role} now.</string>
     </ArrayOfString>
   </Item>
   <Item>
