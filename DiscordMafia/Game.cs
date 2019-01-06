@@ -1096,7 +1096,7 @@ namespace DiscordMafia
                                 {
                                     if (player != playerToCancelActivity)
                                     {
-                                        playerToCancelActivity.CancelActivity(player);
+                                        playerToCancelActivity.CancelActivity(role.PlayerToInteract);
                                     }
                                 }
                                 player.AddPoints("ChuckNorrisAction");
@@ -1950,7 +1950,12 @@ namespace DiscordMafia
             var message = "";
             foreach (var player in PlayersList)
             {
-                message += String.Format("{0} {1} {3} ({4}) - {2}", Environment.NewLine, MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.StartRole.GetName(MainSettings.Language)), player.CurrentGamePoints, player.DbUser.TotalPoints);
+                string roleMessage = MessageBuilder.FormatRole(player.StartRole.GetName(MainSettings.Language));
+                if (player.StartRole is ThiefOfRoles)
+                {
+                    roleMessage += $" ({MessageBuilder.FormatRole(player.Role.GetName(MainSettings.Language))})";
+                }
+                message += String.Format("{0} {1} {3} ({4}) - {2}", Environment.NewLine, MessageBuilder.FormatName(player), roleMessage, player.CurrentGamePoints, player.DbUser.TotalPoints);
                 if (!player.IsAlive)
                 {
                     message += " (💀)";

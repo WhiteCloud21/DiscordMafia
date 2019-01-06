@@ -366,14 +366,14 @@ Remaining Players:
   <Item>
     <string>GameStart_Role_Default</string>
     <ArrayOfString>
-      <string>Your status is {role}.</string>
+      <string>Your status is {currentRole}.</string>
     </ArrayOfString>
   </Item>
   <Item>
     <string>GameStart_Role_Doctor</string>
     <ArrayOfString>
-      <string>Your task is to save lives. You are the {role}.</string>
-      <string>Your status is {role}.</string>
+      <string>Your task is to save lives. You are the {currentRole}.</string>
+      <string>Your status is {currentRole}.</string>
     </ArrayOfString>
   </Item>
   <Item>

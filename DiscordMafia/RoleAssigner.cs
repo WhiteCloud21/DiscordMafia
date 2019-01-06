@@ -78,7 +78,7 @@ namespace DiscordMafia
                     }
                     remainingPlayerCount++;
                     player.Role.Player = null;
-                    player.Role = new Citizen() { Player = player };
+                    player.StartRole = player.Role = new Citizen() { Player = player };
                 }
             }
 

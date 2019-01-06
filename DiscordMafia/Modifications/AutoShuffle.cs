@@ -1,5 +1,6 @@
 ﻿using DiscordMafia.Base.Game;
 using DiscordMafia.Base.Modifications;
+using DiscordMafia.Roles;
 using DiscordMafia.Services;
 using System;
 using System.Runtime.Serialization;
@@ -44,6 +45,7 @@ namespace DiscordMafia.Modifications
                     CurrentGameCycles %= GameCyclesBeforeShuffle;
                     if (CurrentGameCycles == 0)
                     {
+                        BaseRoleExtensions.ClearCache(_game);
                         _roleAssigner.ReassignRoles(_game.PlayersList);
                         _notifier.Welcome();
                     }
