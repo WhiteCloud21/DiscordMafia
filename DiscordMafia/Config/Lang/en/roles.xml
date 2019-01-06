@@ -11,6 +11,16 @@
     </Info>
   </Item>
   <Item>
+    <string>ChuckNorris</string>
+    <Info>
+      <Name>Chuck Norris</Name>
+      <NameCases>
+        <string>Chuck Norris</string>
+        <string>Chuck Norris's</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
     <string>Commissioner</string>
     <Info>
       <Name>Commissioner</Name>
@@ -247,6 +257,16 @@
       <NameCases>
         <string>spy</string>
         <string>spy's</string>
+      </NameCases>
+    </Info>
+  </Item>
+  <Item>
+    <string>ThiefOfRoles</string>
+    <Info>
+      <Name>Thief Of Roles</Name>
+      <NameCases>
+        <string>Thief Of Roles</string>
+        <string>Thief Of Roles's</string>
       </NameCases>
     </Info>
   </Item>

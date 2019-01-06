@@ -1,4 +1,4 @@
-﻿namespace DiscordMafia
+﻿namespace DiscordMafia.Base
 {
     public enum GameState
     {

@@ -15,11 +15,17 @@ using DiscordMafia.Lib;
 using Microsoft.EntityFrameworkCore;
 using static DiscordMafia.Config.MessageBuilder;
 using DiscordMafia.Extensions;
-using DiscordMafia.Activity;
+using DiscordMafia.Base.Events.Game;
+using DiscordMafia.Base.Game;
+using DiscordMafia.Base;
+using DiscordMafia.Base.Modifications;
+using Newtonsoft.Json;
+using System.IO;
+using DiscordMafia.Services;
 
 namespace DiscordMafia
 {
-    public class Game
+    public class Game : IGame
     {
         protected System.Threading.SynchronizationContext syncContext;
         protected Random randomGenerator = new Random();
@@ -33,7 +39,7 @@ namespace DiscordMafia
         public SocketTextChannel GameChannel { get; protected set; }
         public DateTime StartedAt { get; set; }
         public Config.MainSettings MainSettings { get; set; }
-        public string GameMode { get; set; } 
+        public string GameMode { get; set; }
         protected RoleAssigner RoleAssigner { get; private set; }
         protected Vote CurrentDayVote { get; set; }
         protected BooleanVote CurrentEveningVote { get; set; }
@@ -44,13 +50,18 @@ namespace DiscordMafia
         protected KillManager KillManager { get; set; }
         public Achievement.AchievementManager AchievementManager { get; private set; }
         public Achievement.AchievementAssigner AchievementAssigner { get; private set; }
+        public event EventHandler<GameStateChangedEventArgs> GameStateChanged;
+
         internal int PlayerCollectingRemainingTime = 0;
         internal DateTime LastNotification = new DateTime(0);
         private DB.Game _lastGame;
         private Services.Notifier _notifier;
+        private readonly DIContractResolver contractResolver;
+        private IEnumerable<Modification> _modifications;
 
-        public Game(System.Threading.SynchronizationContext syncContext, DiscordSocketClient client, Services.Notifier notifier, Config.MainSettings mainSettings)
+        public Game(System.Threading.SynchronizationContext syncContext, DiscordSocketClient client, Services.Notifier notifier, Config.MainSettings mainSettings, DIContractResolver contractResolver)
         {
+            this.contractResolver = contractResolver;
             MainSettings = mainSettings;
             GameChannel = client.GetChannel(mainSettings.GameChannel) as SocketTextChannel;
             AchievementManager = new Achievement.AchievementManager(this);
@@ -65,7 +76,6 @@ namespace DiscordMafia
             CurrentState = GameState.Stopped;
             CurrentPlayers = new Dictionary<ulong, InGamePlayerInfo>();
             PlayersList = new List<InGamePlayerInfo>();
-            LoadSettings();
             KillManager = new KillManager(this);
             _notifier = notifier;
             _notifier.SetGame(this);
@@ -92,6 +102,33 @@ namespace DiscordMafia
                     p.Nickname = Settings.Nickname;
                 });
                 Console.WriteLine("Nickname changed");
+            }
+            LoadModifications();
+        }
+
+        private void LoadModifications()
+        {
+            if (_modifications != null)
+            {
+                foreach (var modification in _modifications)
+                {
+                    modification.Dispose();
+                }
+            }
+            _modifications = null;
+            string filePath = Settings.GetFilePath("modifications.json");
+            if (File.Exists(filePath))
+             {
+                _modifications = JsonConvert.DeserializeObject<List<Modification>>(File.ReadAllText(filePath), new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All,
+                    ContractResolver = contractResolver,
+                });
+                Console.WriteLine("{0} modifications were loaded", _modifications.Count());
+            }
+            else
+            {
+                Console.WriteLine("Modifications were not loaded: file does not exist");
             }
         }
 
@@ -324,43 +361,7 @@ namespace DiscordMafia
                 RoleAssigner.AssignRoles(this.PlayersList, this.Settings);
                 // TODO подтверждение ролей
 
-                var mafiaMessage = "";
-                var yakuzaMessage = "";
-                foreach (var player in PlayersList)
-                {
-                    var roleWelcomeParam = String.Format("GameStart_Role_{0}", player.Role.GetType().Name);
-                    var photoName = player.Role.GetImage(MainSettings.Language);
-                    MessageBuilder.PrepareTextReplacePlayer(roleWelcomeParam, player, "GameStart_Role_Default").AddImage(photoName).SendPrivate(player);
-                    switch (player.Role.Team)
-                    {
-                        case Team.Mafia:
-                            mafiaMessage += String.Format("{0} - {1} (`{2}`)", MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.Role.GetName(MainSettings.Language)), player.GetName()) + Environment.NewLine;
-                            break;
-                        case Team.Yakuza:
-                            yakuzaMessage += String.Format("{0} - {1} (`{2}`)", MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.Role.GetName(MainSettings.Language)), player.GetName()) + Environment.NewLine;
-                            break;
-                    }
-                    if (player.Role is Sergeant)
-                    {
-                        var commissioner = (from p in PlayersList where p.Role is Commissioner select p).FirstOrDefault();
-                        if (commissioner != null)
-                        {
-                            MessageBuilder.PrepareTextReplacePlayer("CheckStatus", commissioner).SendPrivate(player);
-                            MessageBuilder.PrepareTextReplacePlayer("CheckStatus", player).SendPrivate(commissioner);
-                        }
-                    }
-                }
-                Pause();
-
-                // Состав мафий
-                MessageBuilder.PrepareText("MafiaWelcome", new Dictionary<string, object>
-                {
-                    ["players"] = mafiaMessage
-                }).SendToTeam(Team.Mafia);
-                MessageBuilder.PrepareText("YakuzaWelcome", new Dictionary<string, object>
-                {
-                    ["players"] = yakuzaMessage
-                }).SendToTeam(Team.Yakuza);
+                _notifier.Welcome();
 
                 if (Settings.StartFromNight)
                 {
@@ -521,6 +522,14 @@ namespace DiscordMafia
             return message;
         }
 
+        private void OnGameStateChanged()
+        {
+            if (GameStateChanged != null)
+            {
+                GameStateChanged?.Invoke(this, new GameStateChangedEventArgs(CurrentState));
+            }
+        }
+
         private void StartMorning()
         {
             foreach (var player in PlayersList)
@@ -532,6 +541,7 @@ namespace DiscordMafia
             MessageBuilder.PrepareText("StartMorning").SendPublic(GameChannel);
             CurrentState = GameState.Morning;
             timer.Start();
+            OnGameStateChanged();
         }
 
         private void StartDay()
@@ -552,6 +562,7 @@ namespace DiscordMafia
             CurrentState = GameState.Day;
             CurrentDayVote = new Vote();
             timer.Start();
+            OnGameStateChanged();
         }
 
         private void StartEvening()
@@ -576,6 +587,7 @@ namespace DiscordMafia
             CurrentState = GameState.Evening;
             CurrentEveningVote = new BooleanVote();
             timer.Start();
+            OnGameStateChanged();
         }
 
         private void StartNight()
@@ -596,6 +608,7 @@ namespace DiscordMafia
             CurrentMafiaVote = new Vote();
             CurrentYakuzaVote = new Vote();
             timer.Start();
+            OnGameStateChanged();
         }
 
         private void EndEvening()
@@ -944,6 +957,39 @@ namespace DiscordMafia
 
             foreach (var player in PlayerSorter.SortForActivityCheck(PlayersList, GameState.Night))
             {
+                #region Жулик
+                if (player.Role is ThiefOfRoles)
+                {
+                    var role = player.Role as ThiefOfRoles;
+                    if (role.PlayerToInteract != null)
+                    {
+                        var roleToSteal = role.PlayerToInteract.Role;
+                        MessageBuilder.PrepareTextReplacePlayer("ThiefOfRolesStealRole", role.PlayerToInteract).SendPublic(GameChannel);
+                        RoleAssigner.AssignRole(player, roleToSteal);
+                        switch (roleToSteal.Team)
+                        {
+                            case Team.Mafia:
+                                RoleAssigner.AssignRole(role.PlayerToInteract, new Mafioso());
+                                break;
+                            case Team.Yakuza:
+                                RoleAssigner.AssignRole(role.PlayerToInteract, new Yakuza());
+                                break;
+                            default:
+                                RoleAssigner.AssignRole(role.PlayerToInteract, new Citizen());
+                                break;
+                        }
+
+                        // Clone start role
+                        RoleAssigner.AssignStartRole(role.PlayerToInteract, Settings.Roles.GetRoleInstance(roleToSteal));
+
+                        _notifier.Welcome(player);
+                        _notifier.Welcome(role.PlayerToInteract);
+                        _notifier.WelcomeTeam(roleToSteal.Team);
+                        Pause();
+                    }
+                }
+                #endregion
+
                 #region Зеркало
                 if (player.Role is Mirror)
                 {
@@ -1023,6 +1069,52 @@ namespace DiscordMafia
                         {
                             playerToCancelActivity.CancelActivity(player);
                         }
+                    }
+                }
+                #endregion
+
+                #region Чак Норрис
+                if (player.Role is ChuckNorris)
+                {
+                    var role = player.Role as ChuckNorris;
+                    if (role.PlayerToInteract != null)
+                    {
+                        switch (role.Action)
+                        {
+                            case Roles.ChuckNorrisSpace.ChuckNorrisAction.None:
+                                player.AddPoints("ChuckNorrisAction");
+                                MessageBuilder.PrepareTextReplacePlayer("ChuckNorrisActionNone", role.PlayerToInteract).SendPublic(GameChannel);
+                                break;
+                            case Roles.ChuckNorrisSpace.ChuckNorrisAction.Kill:
+                                MessageBuilder.PrepareTextReplacePlayer("ChuckNorrisActionKill", role.PlayerToInteract).SendPublic(GameChannel);
+                                KillManager.Kill(role.PlayerToInteract);
+                                player.AddPoints("ChuckNorrisAction");
+                                break;
+                            case Roles.ChuckNorrisSpace.ChuckNorrisAction.Protect:
+                                MessageBuilder.PrepareTextReplacePlayer("ChuckNorrisActionProtect", role.PlayerToInteract).SendPublic(GameChannel);
+                                foreach (var playerToCancelActivity in PlayersList)
+                                {
+                                    if (player != playerToCancelActivity)
+                                    {
+                                        playerToCancelActivity.CancelActivity(role.PlayerToInteract);
+                                    }
+                                }
+                                player.AddPoints("ChuckNorrisAction");
+                                break;
+                            case Roles.ChuckNorrisSpace.ChuckNorrisAction.Block:
+                                MessageBuilder.PrepareTextReplacePlayer("ChuckNorrisActionBlock", role.PlayerToInteract).SendPublic(GameChannel);
+                                if (role.PlayerToInteract != player)
+                                {
+                                    role.PlayerToInteract.CancelActivity();
+                                }
+                                player.AddPoints("ChuckNorrisAction");
+                                break;
+                            case Roles.ChuckNorrisSpace.ChuckNorrisAction.Hack:
+                                MessageBuilder.PrepareTextReplacePlayer("ChuckNorrisActionHack", role.PlayerToInteract).SendPublic(GameChannel);
+                                player.AddPoints("ChuckNorrisAction");
+                                break;
+                        }
+                        Pause();
                     }
                 }
                 #endregion
@@ -1719,7 +1811,7 @@ namespace DiscordMafia
             }
         }
 
-        protected void Pause(int multipler = 1)
+        public void Pause(int multipler = 1)
         {
             Task.Delay(Settings.PauseTime * multipler).Wait();
         }
@@ -1858,7 +1950,12 @@ namespace DiscordMafia
             var message = "";
             foreach (var player in PlayersList)
             {
-                message += String.Format("{0} {1} {3} ({4}) - {2}", Environment.NewLine, MessageBuilder.FormatName(player), MessageBuilder.FormatRole(player.StartRole.GetName(MainSettings.Language)), player.CurrentGamePoints, player.DbUser.TotalPoints);
+                string roleMessage = MessageBuilder.FormatRole(player.StartRole.GetName(MainSettings.Language));
+                if (player.StartRole is ThiefOfRoles)
+                {
+                    roleMessage += $" ({MessageBuilder.FormatRole(player.Role.GetName(MainSettings.Language))})";
+                }
+                message += String.Format("{0} {1} {3} ({4}) - {2}", Environment.NewLine, MessageBuilder.FormatName(player), roleMessage, player.CurrentGamePoints, player.DbUser.TotalPoints);
                 if (!player.IsAlive)
                 {
                     message += " (💀)";

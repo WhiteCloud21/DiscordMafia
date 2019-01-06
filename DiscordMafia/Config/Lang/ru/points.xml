@@ -162,4 +162,10 @@
       <Description>Хакеру за проверку уникальной роли (не чижа, мафа или якудзы) (прибавляется к очкам за проверку)</Description>
     </Info>
   </Item>
+  <Item>
+    <string>ChuckNorrisAction</string>
+    <Info>
+      <Description>Чаку Норрису за любое действие</Description>
+    </Info>
+  </Item>
 </Messages>

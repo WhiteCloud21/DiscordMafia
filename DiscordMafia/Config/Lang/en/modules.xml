@@ -132,6 +132,12 @@
           </Info>
         </Item>
         <Item>
+          <string>steal</string>
+          <Info>
+            <Summary>Steal a player's identity.</Summary>
+          </Info>
+        </Item>
+        <Item>
           <string>go</string>
           <Info>
             <Summary>Go to location.</Summary>

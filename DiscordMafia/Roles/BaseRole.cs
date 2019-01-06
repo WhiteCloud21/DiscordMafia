@@ -1,5 +1,5 @@
 ﻿using DiscordMafia.Activity;
-using System;
+using DiscordMafia.Base;
 using System.ComponentModel;
 
 namespace DiscordMafia.Roles

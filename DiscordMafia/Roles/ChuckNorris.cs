@@ -1,9 +1,15 @@
-﻿using DiscordMafia.Base;
+﻿using System;
+using DiscordMafia.Base;
+using DiscordMafia.Roles.ChuckNorrisSpace;
 
 namespace DiscordMafia.Roles
 {
-    public abstract class NeutralKiller : UniqueRole, ITargetedRole
+    public class ChuckNorris : UniqueRole, ITargetedRole
     {
+        private Random _personalRandomGenerator = new Random();
+        private InGamePlayerInfo _playerToInteract;
+        private ChuckNorrisAction _action;
+
         public override Team Team
         {
             get
@@ -12,8 +18,25 @@ namespace DiscordMafia.Roles
             }
         }
 
-        public InGamePlayerInfo PlayerToInteract { get; set; }
-        
+        public InGamePlayerInfo PlayerToInteract
+        {
+            get => _playerToInteract;
+            set
+            {
+                _action = GetRandomAction();
+                _playerToInteract = value;
+            }
+        }
+
+        public ChuckNorrisAction Action { get => _action; }
+
+        private ChuckNorrisAction GetRandomAction()
+        {
+
+            var values = Enum.GetValues(typeof(ChuckNorrisAction));
+            return (ChuckNorrisAction)values.GetValue(_personalRandomGenerator.Next(values.Length));
+        }
+
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
             if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)

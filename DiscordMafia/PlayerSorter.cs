@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DiscordMafia.Base;
 using DiscordMafia.Roles;
 
 namespace DiscordMafia
@@ -16,8 +17,10 @@ namespace DiscordMafia
         {
             _nightSortPositions = new string[]
             {
+                typeof(ThiefOfRoles).Name,
                 typeof(Mirror).Name,
                 typeof(Ninja).Name,
+                typeof(ChuckNorris).Name,
                 typeof(Hoodlum).Name,
                 typeof(Wench).Name,
                 typeof(Hacker).Name,

@@ -87,6 +87,13 @@ namespace DiscordMafia.Config
                 { "role3", FormatRole(player.StartRole?.GetNameCases(Language)[3]) },
                 { "role4", FormatRole(player.StartRole?.GetNameCases(Language)[4]) },
                 { "role5", FormatRole(player.StartRole?.GetNameCases(Language)[5]) },
+                { "currentRole", FormatRole(player.Role?.GetName(Language)) },
+                { "currentRole0", FormatRole(player.Role?.GetNameCases(Language)[0]) },
+                { "currentRole1", FormatRole(player.Role?.GetNameCases(Language)[1]) },
+                { "currentRole2", FormatRole(player.Role?.GetNameCases(Language)[2]) },
+                { "currentRole3", FormatRole(player.Role?.GetNameCases(Language)[3]) },
+                { "currentRole4", FormatRole(player.Role?.GetNameCases(Language)[4]) },
+                { "currentRole5", FormatRole(player.Role?.GetNameCases(Language)[5]) },
             };
 
             messageTemplate = GenderRegex.Replace(messageTemplate, player.DbUser.Settings.Gender == DB.User.Gender.Male ? "$1" : "$2");

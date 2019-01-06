@@ -105,7 +105,7 @@ namespace DiscordMafia.Config
             }
         }
 
-        protected string GetFilePath(string fileName)
+        public string GetFilePath(string fileName)
         {
             if (GameType != null && File.Exists(Path.Combine(ConfigPath, $"Local/Gametypes/{GameType}/{fileName}")))
             {

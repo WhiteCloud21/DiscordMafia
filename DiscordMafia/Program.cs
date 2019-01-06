@@ -9,6 +9,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using SimpleMigrations.DatabaseProvider;
 using DiscordMafia.Client;
+using DiscordMafia.Services;
 
 namespace DiscordMafia
 {
@@ -54,9 +55,12 @@ namespace DiscordMafia
                 serviceCollection.AddSingleton<Services.Notifier>();
                 serviceCollection.AddSingleton<System.Threading.SynchronizationContext>(SyncContext);
                 serviceCollection.AddSingleton<Game>();
+                serviceCollection.AddSingleton<Base.Game.IGame>(p => p.GetRequiredService<Game>());
+                serviceCollection.AddSingleton<DIContractResolver>();
 
                 services = serviceCollection.BuildServiceProvider();
                 _game = services.GetRequiredService<Game>();
+                _game.LoadSettings();
 
                 await InstallCommands();
 
@@ -141,13 +145,13 @@ namespace DiscordMafia
             });
         }
 
-        private static Task Log(LogMessage msg)
+        public static Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
         }
 
-        private static Task AnnouncerLog(LogMessage msg)
+        public static Task AnnouncerLog(LogMessage msg)
         {
             Console.WriteLine($"{msg} [Announcer]");
             return Task.CompletedTask;

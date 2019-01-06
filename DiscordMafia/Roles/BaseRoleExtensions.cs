@@ -13,7 +13,7 @@ namespace DiscordMafia.Roles
         private static Random r = new Random();
         public static void ClearCache(Game game)
         {
-            var rolesToRemove = variantsCache.Where(kvp => kvp.Key.Player.Game == game).Select(kvp => kvp.Key).ToList();
+            var rolesToRemove = variantsCache.Where(kvp => kvp.Key.Player == null || kvp.Key.Player.Game == game).Select(kvp => kvp.Key).ToList();
             foreach (var role in rolesToRemove)
             {
                 variantsCache.Remove(role);

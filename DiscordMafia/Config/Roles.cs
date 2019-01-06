@@ -115,6 +115,11 @@ namespace DiscordMafia.Config
             return null;
         }
 
+        public BaseRole GetRoleInstance(BaseRole role)
+        {
+            return GetRoleInstance(role.GetType().GetTypeInfo().GetConstructor(Type.EmptyTypes));
+        }
+
         public static BaseRole GetRoleInstance(ConstructorInfo ctor)
         {
             if (ctor != null)

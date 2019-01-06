@@ -13,6 +13,7 @@ using static DiscordMafia.Config.MessageBuilder;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
+using DiscordMafia.Base;
 
 namespace DiscordMafia.Modules
 {
@@ -378,6 +379,11 @@ namespace DiscordMafia.Modules
                     (currentPlayer.Role as NeutralKiller).PerformNightAction(player);
                     return;
                 }
+                if (currentPlayer.Role is ChuckNorris)
+                {
+                    (currentPlayer.Role as ChuckNorris).PerformNightAction(player);
+                    return;
+                }
                 _game.NightVote(currentPlayer, player);
                 _game.CheckNextCheckpoint();
             }
@@ -485,6 +491,16 @@ namespace DiscordMafia.Modules
             if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
             {
                 (currentPlayer.Role as Judge).PerformNightAction(player);
+            }
+            await Task.CompletedTask;
+        }
+
+        [Command("steal"), RequireContext(ContextType.DM), RequirePlayer(typeof(ThiefOfRoles)), RequireGameState(GameState.Night)]
+        public async Task Steal([Summary("номер игрока")] InGamePlayerInfo player, [Remainder] string ignored = null)
+        {
+            if (_game.CurrentPlayers.TryGetValue(Context.User.Id, out InGamePlayerInfo currentPlayer))
+            {
+                (currentPlayer.Role as ThiefOfRoles).PerformNightAction(player);
             }
             await Task.CompletedTask;
         }

@@ -1,9 +1,12 @@
-﻿using DiscordMafia.Base;
+﻿using System;
+using DiscordMafia.Base;
 
 namespace DiscordMafia.Roles
 {
-    public abstract class NeutralKiller : UniqueRole, ITargetedRole
+    public class ThiefOfRoles : UniqueRole, ITargetedRole
     {
+        private InGamePlayerInfo _playerToInteract;
+
         public override Team Team
         {
             get
@@ -12,8 +15,19 @@ namespace DiscordMafia.Roles
             }
         }
 
-        public InGamePlayerInfo PlayerToInteract { get; set; }
-        
+        public InGamePlayerInfo PlayerToInteract
+        {
+            get => _playerToInteract;
+            set
+            {
+                if (value == Player)
+                {
+                    throw new ArgumentException("Нельзя воровать у себя.");
+                }
+                _playerToInteract = value;
+            }
+        }
+
         public override void ClearActivity(bool cancel, InGamePlayerInfo onlyAgainstTarget = null)
         {
             if (onlyAgainstTarget == null || PlayerToInteract == onlyAgainstTarget)
